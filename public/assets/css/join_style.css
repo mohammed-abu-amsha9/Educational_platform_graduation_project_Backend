@@ -1,0 +1,124 @@
+body {
+    font-family: "Cairo", sans-serif;
+}
+
+/* تخصيص شكل السكرول بار */
+.custom-scrollbar::-webkit-scrollbar {
+    height: 6px;
+    /* التحكم في سُمك السكرول الأفقي */
+}
+
+/* خلفية المجرى (Track) */
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    /* لون رمادي خفيف جداً */
+    border-radius: 10px;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-track {
+    background: #1e293b;
+    /* لون يتناسب مع dark:bg-slate-800 */
+}
+
+/* المقبض المتحرك (Thumb) */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    /* لون المقبض */
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+    /* عند تمرير الماوس فوقه */
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #475569;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+/* تخصيص السكرول بار للمتصفحات (Chrome, Safari, Edge, Opera) */
+::-webkit-scrollbar {
+    width: 8px;
+    /* عرض السكرول بار العمودي */
+    height: 8px;
+    /* ارتفاع السكرول بار الأفقي */
+}
+
+/* خلفية المجرى (Track) */
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    /* لون رمادي خفيف جداً متناسق مع bg-slate-50 */
+}
+
+/* خلفية المجرى في الوضع الداكن */
+.dark ::-webkit-scrollbar-track {
+    background: #0f172a;
+    /* متناسق مع bg-slate-900 */
+}
+
+/* المقبض المتحرك (Thumb) */
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    /* لون رمادي متوسط عند وضع السكون */
+    border-radius: 100px;
+    /* جعل الحواف دائرية وناعمة */
+}
+
+/* لون المقبض عند مرور الماوس عليه (Hover) */
+::-webkit-scrollbar-thumb:hover {
+    background: #0d9488;
+    /* يتحول للون التيل (Teal-600) المتناسق مع هويتك البصرية */
+}
+
+/* تخصيص متصفح الفايرفوكس (Firefox) */
+@supports (scrollbar-color: auto) {
+    html {
+        scrollbar-width: thin;
+        scrollbar-color: #01685f #f1f5f9;
+    }
+
+    html.dark {
+        scrollbar-color: #475569 #0f172a;
+    }
+}
+
+/* 1. الوزن العادي (Regular) */
+@font-face {
+    font-family: 'Cairo';
+    src: url('/assets/Cairo/static/Cairo-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* 2. الوزن شبه العريض (SemiBold) */
+@font-face {
+    font-family: 'Cairo';
+    src: url('/assets/Cairo/static/Cairo-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+/* 3. الوزن العريض (Bold) */
+@font-face {
+    font-family: 'Cairo';
+    src: url('/assets/Cairo/static/Cairo-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* 4. الوزن الأسود العريض جداً (Black) */
+@font-face {
+    font-family: 'Cairo-Blac';
+    src: url('/assets/Cairo/static/Cairo-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+/* تطبيق الخط كخط افتراضي للموقع بالكامل */
+body {
+    font-family: 'Cairo', sans-serif;
+}
