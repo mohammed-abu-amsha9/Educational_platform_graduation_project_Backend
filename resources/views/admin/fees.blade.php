@@ -15,28 +15,55 @@
 
                 <form class="space-y-4" onsubmit="event.preventDefault()">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1.5">اسم أو رقم
-                            الطالب</label>
-
-                        <input list="studentsList" type="text" placeholder="ابحث باسم الطالب أو رقمه..."
+                        <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1.5">
+                            اسم أو رقم الطالب
+                        </label>
+                        <input list="studentsList" id="studentInput" type="text" placeholder="ابحث باسم الطالب أو رقمه..."
                             class="w-full border border-gray-200 dark:border-slate-800 focus:ring-2 focus:ring-teal-600 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-xs outline-none dark:text-zinc-200" />
 
                         <datalist id="studentsList">
-                            <option value="1001 - أحمد محمد علي"></option>
-                            <option value="1002 - خالد عبد الرحمن"></option>
-                            <option value="1003 - يوسف عمر البكري"></option>
-                            <option value="1004 - فاطمة زياد طليمات"></option>
+                            <option value="1001 - أحمد محمد علي" data-level="المرحلة الإعدادية" data-total="500"
+                                data-paid="150"></option>
+                            <option value="1002 - خالد عبد الرحمن" data-level="المرحلة الثانوية" data-total="700"
+                                data-paid="700"></option>
+                            <option value="1003 - يوسف عمر البكري" data-level="المرحلة الابتدائية" data-total="400"
+                                data-paid="0"></option>
+                            <option value="1004 - فاطمة زياد طليمات" data-level="المرحلة الإعدادية" data-total="500"
+                                data-paid="450"></option>
                         </datalist>
                     </div>
+
+                    <div id="studentInfoCard"
+                        class="hidden bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 p-3 rounded-xl space-y-2 text-xs">
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">المرحلة الدراسية:</span>
+                            <span id="infoLevel" class="font-bold text-slate-800 dark:text-zinc-200">--</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">القسط الشهري المطلوب للمرحلة:</span>
+                            <span id="infoTotal" class="font-bold text-slate-800 dark:text-zinc-200">0 ₪</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">المدفوع سابقاً هذا الشهر:</span>
+                            <span id="infoPaid" class="font-bold text-blue-600">0 ₪</span>
+                        </div>
+                        <div
+                            class="flex justify-between border-t border-dashed border-slate-200 dark:border-slate-700 pt-2 font-bold">
+                            <span class="text-slate-700 dark:text-zinc-300">المبلغ المتبقي عليه حالياً:</span>
+                            <span id="infoRemaining" class="text-rose-600">0 ₪</span>
+                        </div>
+                    </div>
+
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1.5">المبلغ
-                            (₪)</label>
-                        <input type="number"
+                        <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1.5">
+                            المبلغ المراد دفعه الآن (₪)
+                        </label>
+                        <input type="number" id="amountInput" placeholder="أدخل المبلغ المسدّد حالياً..."
                             class="w-full border border-gray-200 dark:border-slate-800 focus:ring-2 focus:ring-teal-600 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-xs outline-none dark:text-zinc-200" />
                     </div>
+
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1.5">طريقة
-                            الدفع</label>
+                        <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1.5">طريقة الدفع</label>
                         <select
                             class="w-full border border-gray-200 dark:border-slate-800 focus:ring-2 focus:ring-teal-600 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-xs outline-none pointer dark:text-zinc-200">
                             <option>نقداً 💵</option>
@@ -44,10 +71,11 @@
                             <option>محفظة إلكترونية 📱</option>
                         </select>
                     </div>
+
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1.5">ملاحظات</label>
                         <textarea
-                            class="w-full border border-gray-200 dark:border-slate-800 focus:ring-2 focus:ring-teal-600 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-xs outline-none h-20 resize-none dark:text-zinc-200"></textarea>
+                            class="w-full border border-gray-200 dark:border-slate-800 focus:ring-2 focus:ring-teal-600 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-xs outline-none h-16 resize-none dark:text-zinc-200"></textarea>
                     </div>
 
                     <button
@@ -55,6 +83,8 @@
                         <span>💾 تسجيل الدفعة</span>
                     </button>
                 </form>
+
+
             </div>
         </div>
 
@@ -238,6 +268,62 @@
                 localStorage.setItem("theme", isDark ? "dark" : "light");
                 updateThemeUI(isDark);
             });
+        });
+    </script>
+    <script>
+        // كود جافاسكريبت للربط الذكي والحساب التلقائي للمتبقي والمرحلة
+        document.getElementById('studentInput').addEventListener('input', function() {
+            var val = this.value;
+            var opts = document.getElementById('studentsList').childNodes;
+
+            var card = document.getElementById('studentInfoCard');
+            var levelSpan = document.getElementById('infoLevel');
+            var totalSpan = document.getElementById('infoTotal');
+            var paidSpan = document.getElementById('infoPaid');
+            var remainingSpan = document.getElementById('infoRemaining');
+            var amountInput = document.getElementById('amountInput');
+
+            var found = false;
+
+            for (var i = 0; i < opts.length; i++) {
+                if (opts[i].nodeName === "OPTION" && opts[i].value === val) {
+                    // 1. جلب البيانات من الـ Attributes الخاصة بالخيار المحدد
+                    var level = opts[i].getAttribute('data-level');
+                    var total = parseFloat(opts[i].getAttribute('data-total'));
+                    var paid = parseFloat(opts[i].getAttribute('data-paid'));
+
+                    // 2. الحسبة البرمجية: المتبقي = القسط الإجمالي للمرحلة - المدفوع سابقاً
+                    var remaining = total - paid;
+
+                    // 3. حقن البيانات المجلوبة والمحسوبة داخل واجهة العرض
+                    levelSpan.textContent = level;
+                    totalSpan.textContent = total + " ₪";
+                    paidSpan.textContent = paid + " ₪";
+                    remainingSpan.textContent = remaining + " ₪";
+
+                    // 4. وضع المبلغ المتبقي كقيمة افتراضية (Placeholder) لتوجيه المحاسب
+                    amountInput.placeholder = "المتبقي " + remaining + " ₪ ، أدخل المبلغ المستلم...";
+
+                    // تغيير لون حقل المتبقي إذا كان مسدداً بالكامل
+                    if (remaining === 0) {
+                        remainingSpan.className = "text-green-600 font-bold";
+                        remainingSpan.textContent = "مسدّد بالكامل 👍";
+                    } else {
+                        remainingSpan.className = "text-rose-600 font-bold";
+                    }
+
+                    // إظهار بطاقة معلومات الطالب
+                    card.classList.remove('hidden');
+                    found = true;
+                    break;
+                }
+            }
+
+            // إخفاء البطاقة وتصفير المدخلات إذا قام المحاسب بمسح حقل البحث
+            if (!found) {
+                card.classList.add('hidden');
+                amountInput.placeholder = "أدخل المبلغ المسدّد حالياً...";
+            }
         });
     </script>
 @endsection

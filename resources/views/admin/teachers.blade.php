@@ -29,13 +29,6 @@
                             <div>
                                 <label
                                     class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-1.5 uppercase">رقم
-                                    الموظف</label>
-                                <input type="text" placeholder="ID-000"
-                                    class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-teal-600 font-mono text-gray-400 dark:text-zinc-400" />
-                            </div>
-                            <div>
-                                <label
-                                    class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-1.5 uppercase">رقم
                                     الهاتف</label>
                                 <input type="text" placeholder="0599999999"
                                     class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-teal-600 font-mono text-gray-400 dark:text-zinc-400" />
@@ -63,7 +56,10 @@
                                 <div
                                     class="border border-gray-100 dark:border-slate-800 rounded-xl p-3 max-h-32 overflow-y-auto space-y-2 text-xs custom-scroll bg-slate-50/50 dark:bg-slate-800/30">
                                     <label class="flex items-center justify-between"><span
-                                            class="text-gray-600 dark:text-zinc-300">الصف الأول
+                                            class="text-gray-600 dark:text-zinc-300">الصف الاول شعبة (أ)
+                                            الابتدائي</span><input type="checkbox" class="accent-teal-600" /></label>
+                                    <label class="flex items-center justify-between"><span
+                                            class="text-gray-600 dark:text-zinc-300">الصف الاول شعبة (ب)
                                             الابتدائي</span><input type="checkbox" class="accent-teal-600" /></label>
                                     <label class="flex items-center justify-between"><span
                                             class="text-gray-600 dark:text-zinc-300">الصف الثاني

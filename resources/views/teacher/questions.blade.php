@@ -5,15 +5,7 @@
         <div
             class="bg-white dark:bg-slate-900 border border-gray-100 hover:border-emerald-400 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm flex flex-col md:flex-row items-center justify-between gap-4 transition-all">
             <div class="w-full md:w-auto flex flex-col sm:flex-row items-center gap-4 flex-1 justify-start">
-                <div class="w-full sm:w-64">
-                    <label class="block text-[10px] font-bold text-gray-700 dark:text-slate-400 mb-1">المادة
-                        والصف</label>
-                    <select
-                        class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 text-xs outline-none focus:border-teal-500 cursor-pointer">
-                        <option value="1">اللغة العربية - الصف الأول الإعدادي</option>
-                        <option value="2">اللغة العربية - الصف الثاني الإعدادي</option>
-                    </select>
-                </div>
+
                 <div class="w-full sm:w-48">
                     <label class="block text-[10px] font-bold text-gray-700 dark:text-slate-400 mb-1">نوع
                         السؤال</label>
@@ -101,6 +93,15 @@
                 </div>
 
                 <form action="#" method="POST" class="p-6 space-y-4 text-xs">
+                    <div class="w-full ">
+                        <label class="block text-[10px] font-bold text-gray-700 dark:text-slate-400 mb-1">المادة
+                            والصف</label>
+                        <select
+                            class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 text-xs outline-none focus:border-teal-500 cursor-pointer">
+                            <option value="1">اللغة العربية - الصف الأول الإعدادي</option>
+                            <option value="2">اللغة العربية - الصف الثاني الإعدادي</option>
+                        </select>
+                    </div>
                     <div>
                         <label class="block font-bold text-gray-500 dark:text-slate-400 mb-1">نص السؤال *</label>
                         <textarea rows="3" required placeholder="اكتب هنا نص السؤال التقييمي..."
@@ -203,6 +204,15 @@
                 </div>
 
                 <form action="#" method="POST" class="p-6 space-y-4 text-xs">
+                    <div class="w-full ">
+                        <label class="block text-[10px] font-bold text-gray-700 dark:text-slate-400 mb-1">المادة
+                            والصف</label>
+                        <select
+                            class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 text-xs outline-none focus:border-teal-500 cursor-pointer">
+                            <option value="1">اللغة العربية - الصف الأول الإعدادي</option>
+                            <option value="2">اللغة العربية - الصف الثاني الإعدادي</option>
+                        </select>
+                    </div>
                     <div>
                         <label class="block font-bold text-gray-500 dark:text-slate-400 mb-1">نص السؤال المراد
                             تعديله *</label>

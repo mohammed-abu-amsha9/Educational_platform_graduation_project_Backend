@@ -52,7 +52,7 @@
                   .getElementById('mainTabTrack')
                   .classList.add('text-gray-500');
               "
-                    class="text-xs font-bold px-4 py-2 rounded-xl cursor-pointer bg-white dark:bg-slate-900 text-teal-600 shadow-sm transition-all">
+                    class="text-xs font-bold px-4 py-2 rounded-xl cursor-pointer bg-white dark:bg-slate-900 text-teal-600 shadow-sm ">
                     <i class="fa-solid fa-plus-circle ml-1"></i> إنشاء واجب جديد
                 </button>
 
@@ -88,7 +88,7 @@
                   .getElementById('mainTabCreate')
                   .classList.add('text-gray-500');
               "
-                    class="text-xs font-bold px-4 py-2 rounded-xl cursor-pointer text-gray-500 transition-all">
+                    class="text-xs font-bold px-4 py-2 rounded-xl cursor-pointer text-gray-500 ">
                     <i class="fa-solid fa-graduation-cap ml-1"></i> تصحيح ومتابعة
                     الواجبات
                 </button>
@@ -151,11 +151,17 @@
                                 class="w-full border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2 px-4 focus:border-teal-500 cursor-pointer" />
                         </div>
                     </div>
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-300 mb-1.5">درجة الواجب الإجمالية *</label>
+                        <input type="number" min="1" max="100" placeholder="أدخل الدرجة الإجمالية (مثال: 10)"
+                            class="w-full border border-slate-800 focus:ring-2 focus:ring-teal-600 bg-slate-950 rounded-xl py-2.5 px-4 text-xs outline-none text-zinc-200" />
+                    </div>
                 </div>
+
 
                 <div class="flex justify-end">
                     <button type="submit"
-                        class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-3 rounded-xl transition shadow-lg shadow-teal-600/10 cursor-pointer">
+                        class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-3 rounded-xl  shadow-lg shadow-teal-600/10 cursor-pointer">
                         نشر وتكليف الطلاب فوراً
                     </button>
                 </div>
@@ -182,7 +188,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 dark:divide-slate-800/60">
-                            <tr class="hover:bg-gray-50/50 dark:hover:bg-slate-950/30 transition-colors">
+                            <tr class="hover:bg-gray-50/50 dark:hover:bg-slate-950/30 ">
                                 <td class="py-4 pl-4 font-medium text-slate-800 dark:text-zinc-200">
                                     واجب النحو: الفاعل والمفعول به
                                 </td>
@@ -201,7 +207,7 @@
                             .classList.remove('hidden');
                         "
                                         type="button"
-                                        class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl font-bold cursor-pointer transition-colors shadow-sm">
+                                        class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl font-bold cursor-pointer  shadow-sm">
                                         عرض تسليمات الطلاب
                                         <i class="fa-solid fa-arrow-left mr-1 text-[10px]"></i>
                                     </button>
@@ -239,11 +245,12 @@
                                 <th class="pb-3 pl-4">اسم الطالب</th>
                                 <th class="pb-3 px-4">الملف المرفوع (PDF)</th>
                                 <th class="pb-3 px-4">حالة التقييم</th>
+                                <th class="pb-3 px-4">موعد تسليم الطالب</th>
                                 <th class="pb-3 pr-4 text-left">الإجراءات</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 dark:divide-slate-800/60">
-                            <tr class="hover:bg-gray-50/50 dark:hover:bg-slate-950/30 transition-colors">
+                            <tr class="hover:bg-gray-50/50 dark:hover:bg-slate-950/30 ">
                                 <td class="py-4 pl-4 font-bold text-slate-800 dark:text-zinc-100">
                                     أحمد محمد علي
                                 </td>
@@ -257,6 +264,11 @@
                                         class="text-rose-500 font-bold bg-rose-50 dark:bg-rose-950/30 px-2 py-0.5 rounded">لم
                                         يصحح</span>
                                 </td>
+                                <td class="py-4 px-4">
+                                    <span
+                                        class="text-teal-600 font-bold   px-2 py-0.5 rounded">
+                                        16/5/2026</span>
+                                </td>
                                 <td class="py-4 pr-4 text-left">
                                     <button
                                         onclick="
@@ -265,12 +277,12 @@
                             .classList.remove('hidden')
                         "
                                         type="button"
-                                        class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-zinc-200 hover:bg-teal-600 hover:text-white px-3 py-1.5 rounded-lg font-bold cursor-pointer transition-all">
+                                        class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-zinc-200 hover:bg-teal-600 hover:text-white px-3 py-1.5 rounded-lg font-bold cursor-pointer ">
                                         فحص وتصحيح
                                     </button>
                                 </td>
                             </tr>
-                            <tr class="hover:bg-gray-50/50 dark:hover:bg-slate-950/30 transition-colors">
+                            <tr class="hover:bg-gray-50/50 dark:hover:bg-slate-950/30 ">
                                 <td class="py-4 pl-4 font-bold text-slate-800 dark:text-zinc-100">
                                     سارة عبد الله
                                 </td>
@@ -284,6 +296,11 @@
                                         class="text-rose-500 font-bold bg-rose-50 dark:bg-rose-950/30 px-2 py-0.5 rounded">لم
                                         يصحح</span>
                                 </td>
+                                <td class="py-4 px-4">
+                                    <span
+                                        class="text-rose-500 font-bold bg-rose-50 dark:bg-rose-950/30 px-2 py-0.5 rounded">
+                                        متأخر</span>
+                                </td>
                                 <td class="py-4 pr-4 text-left">
                                     <button
                                         onclick="
@@ -292,7 +309,7 @@
                             .classList.remove('hidden')
                         "
                                         type="button"
-                                        class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-zinc-200 hover:bg-teal-600 hover:text-white px-3 py-1.5 rounded-lg font-bold cursor-pointer transition-all">
+                                        class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-zinc-200 hover:bg-teal-600 hover:text-white px-3 py-1.5 rounded-lg font-bold cursor-pointer ">
                                         فحص وتصحيح
                                     </button>
                                 </td>
@@ -311,12 +328,12 @@
                 .getElementById('finalCorrectionModal')
                 .classList.add('hidden')
             "
-                class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm transition-opacity"></div>
+                class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm "></div>
 
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
             <div
-                class="inline-block align-bottom bg-white dark:bg-slate-900 border border-gray-100 hover:border-emerald-400 dark:border-slate-800/80 rounded-3xl text-right overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full text-xs relative z-50">
+                class="inline-block align-bottom bg-white dark:bg-slate-900 border border-gray-100 hover:border-emerald-400 dark:border-slate-800/80 rounded-3xl text-right overflow-hidden shadow-2xl transform  sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full text-xs relative z-50">
                 <div
                     class="bg-gray-50 dark:bg-slate-950/60 px-6 py-4 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between">
                     <div class="flex items-center gap-2">
@@ -347,7 +364,7 @@
                                     class="fa-solid fa-file-pdf text-rose-500 text-base ml-1"></i>
                                 إجابة الطالب المرفوعة (PDF)</span>
                             <a href="#" target="_blank"
-                                class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-4 py-2 rounded-xl text-center transition-colors">فتح
+                                class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-4 py-2 rounded-xl text-center ">فتح
                                 وتدقيق ملف الطالب
                                 <i class="fa-solid fa-external-link mr-1 text-[10px]"></i></a>
                         </div>

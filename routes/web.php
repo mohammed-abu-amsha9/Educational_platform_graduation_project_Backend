@@ -2,12 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::view('/','login')->name('login');
 Route::view('admin_control_panel','admin.control_panel')->name('admin_control_panel');
 Route::view('admin_students','admin.students')->name('admin_students');
 Route::view('admin_teachers','admin.teachers')->name('admin_teachers');
 Route::view('admin_fees','admin.fees')->name('admin_fees');
 Route::view('admin_role_permistions','admin.role_permistions')->name('admin_role_permistions');
-Route::view('login','login')->name('login');
 
 Route::view('teacher_control_panel','teacher.control_panel')->name('teacher_control_panel');
 Route::view('teacher_lessons','teacher.lessons')->name('teacher_lessons');
