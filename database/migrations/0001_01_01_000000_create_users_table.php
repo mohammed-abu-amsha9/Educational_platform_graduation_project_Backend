@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // جدول المستخدمين
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->id(); //رقم الهوية الشخصي الفريد للمستخدم كمفتاح دخول أساسي
+            $table->string('name'); // الاسم المستخدم عند تسجيل الدخول للنظام
+            $table->string('password', 255); // كلمة المرور السرية المخزنة بشكل تلقائي من بيانات الطالب  اللي هيا نفس قيمة id اللي رقم الهوية
+            $table->string('role', 30); // فئة وصلاحية الحساب لتوجيه الواجهات (admin/student/teacher)
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
             $table->rememberToken();
             $table->timestamps();
         });

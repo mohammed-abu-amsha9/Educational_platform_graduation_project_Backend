@@ -13,23 +13,29 @@
                     </h3>
                 </div>
 
-                <form class="space-y-4" onsubmit="event.preventDefault()">
+                <form action="{{ route('fees.store') }}" method="POST" class="space-y-4">
+                    @csrf
+
+                    <input type="hidden" id="student_id_hidden" name="student_id">
+                    <input type="hidden" id="academic_level_hidden" name="academic_level">
+                    <input type="hidden" name="billing_month" value="{{ date('m-Y') }}">
+
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1.5">
                             اسم أو رقم الطالب
                         </label>
-                        <input list="studentsList" id="studentInput" type="text" placeholder="ابحث باسم الطالب أو رقمه..."
+                        <input list="studentsList" id="studentInput" type="text"
+                            placeholder="ابحث باسم الطالب أو رقمه..."
                             class="w-full border border-gray-200 dark:border-slate-800 focus:ring-2 focus:ring-teal-600 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-xs outline-none dark:text-zinc-200" />
 
                         <datalist id="studentsList">
-                            <option value="1001 - أحمد محمد علي" data-level="المرحلة الإعدادية" data-total="500"
-                                data-paid="150"></option>
-                            <option value="1002 - خالد عبد الرحمن" data-level="المرحلة الثانوية" data-total="700"
-                                data-paid="700"></option>
-                            <option value="1003 - يوسف عمر البكري" data-level="المرحلة الابتدائية" data-total="400"
-                                data-paid="0"></option>
-                            <option value="1004 - فاطمة زياد طليمات" data-level="المرحلة الإعدادية" data-total="500"
-                                data-paid="450"></option>
+                            @foreach ($students as $student)
+                                <option value="{{ $student->student_code }} - {{ $student->full_name }}"
+                                    data-id="{{ $student->id }}" data-level="{{ $student->academic_level }}"
+                                    data-total="{{ $student->total_required_fees }}"
+                                    data-paid="{{ $student->total_paid_amount }}">
+                                </option>
+                            @endforeach
                         </datalist>
                     </div>
 
@@ -37,20 +43,20 @@
                         class="hidden bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 p-3 rounded-xl space-y-2 text-xs">
                         <div class="flex justify-between">
                             <span class="text-slate-500">المرحلة الدراسية:</span>
-                            <span id="infoLevel" class="font-bold text-slate-800 dark:text-zinc-200">--</span>
+                            <span id="infoLevel" class="font-bold text-slate-800 dark:text-zinc-200"></span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-slate-500">القسط الشهري المطلوب للمرحلة:</span>
-                            <span id="infoTotal" class="font-bold text-slate-800 dark:text-zinc-200">0 ₪</span>
+                            <span id="infoTotal" class="font-bold text-slate-800 dark:text-zinc-200"></span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-slate-500">المدفوع سابقاً هذا الشهر:</span>
-                            <span id="infoPaid" class="font-bold text-blue-600">0 ₪</span>
+                            <span id="infoPaid" class="font-bold text-blue-600"></span>
                         </div>
                         <div
                             class="flex justify-between border-t border-dashed border-slate-200 dark:border-slate-700 pt-2 font-bold">
                             <span class="text-slate-700 dark:text-zinc-300">المبلغ المتبقي عليه حالياً:</span>
-                            <span id="infoRemaining" class="text-rose-600">0 ₪</span>
+                            <span id="infoRemaining" class="text-rose-600"></span>
                         </div>
                     </div>
 
@@ -58,27 +64,29 @@
                         <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1.5">
                             المبلغ المراد دفعه الآن (₪)
                         </label>
-                        <input type="number" id="amountInput" placeholder="أدخل المبلغ المسدّد حالياً..."
+                        <input type="number" step="0.01" id="amountInput" name="paid_amount"
+                            placeholder="أدخل المبلغ المسدّد حالياً..."
                             class="w-full border border-gray-200 dark:border-slate-800 focus:ring-2 focus:ring-teal-600 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-xs outline-none dark:text-zinc-200" />
+                        <input type="hidden" id="monthlyAmountInput" name="monthly_amount">
                     </div>
 
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1.5">طريقة الدفع</label>
-                        <select
+                        <select name="payment_method"
                             class="w-full border border-gray-200 dark:border-slate-800 focus:ring-2 focus:ring-teal-600 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-xs outline-none pointer dark:text-zinc-200">
-                            <option>نقداً 💵</option>
-                            <option>تحويل بنكي 🏦</option>
-                            <option>محفظة إلكترونية 📱</option>
+                            <option value="نقداً">نقداً 💵</option>
+                            <option value="تحويل بنكي">تحويل بنكي 🏦</option>
+                            <option value="محفظة إلكترونية">محفظة إلكترونية 📱</option>
                         </select>
                     </div>
 
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1.5">ملاحظات</label>
-                        <textarea
+                        <textarea name="notes"
                             class="w-full border border-gray-200 dark:border-slate-800 focus:ring-2 focus:ring-teal-600 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-xs outline-none h-16 resize-none dark:text-zinc-200"></textarea>
                     </div>
 
-                    <button
+                    <button type="submit"
                         class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 text-xs rounded-xl shadow-md shadow-teal-600/10 flex items-center justify-center gap-2">
                         <span>💾 تسجيل الدفعة</span>
                     </button>
@@ -271,7 +279,6 @@
         });
     </script>
     <script>
-        // كود جافاسكريبت للربط الذكي والحساب التلقائي للمتبقي والمرحلة
         document.getElementById('studentInput').addEventListener('input', function() {
             var val = this.value;
             var opts = document.getElementById('studentsList').childNodes;
@@ -281,48 +288,57 @@
             var totalSpan = document.getElementById('infoTotal');
             var paidSpan = document.getElementById('infoPaid');
             var remainingSpan = document.getElementById('infoRemaining');
-            var amountInput = document.getElementById('amountInput');
+            var amountInput = document.getElementById('amountInput'); // حقل إدخال المبلغ الجديد بالنموذج
+
+            // الحقول المخفية المجهزة للإرسال للـ Controller
+            var studentIdHidden = document.getElementById('student_id_hidden');
+            var academicLevelHidden = document.getElementById('academic_level_hidden');
+            var monthlyAmountHidden = document.getElementById('monthlyAmountInput');
 
             var found = false;
 
             for (var i = 0; i < opts.length; i++) {
                 if (opts[i].nodeName === "OPTION" && opts[i].value === val) {
-                    // 1. جلب البيانات من الـ Attributes الخاصة بالخيار المحدد
+                    var id = opts[i].getAttribute('data-id');
                     var level = opts[i].getAttribute('data-level');
                     var total = parseFloat(opts[i].getAttribute('data-total'));
                     var paid = parseFloat(opts[i].getAttribute('data-paid'));
 
-                    // 2. الحسبة البرمجية: المتبقي = القسط الإجمالي للمرحلة - المدفوع سابقاً
                     var remaining = total - paid;
 
-                    // 3. حقن البيانات المجلوبة والمحسوبة داخل واجهة العرض
+                    // تحديث نصوص البطاقة لتظهر كما في لقطة الشاشة تماماً بقيمها الحقيقية
                     levelSpan.textContent = level;
                     totalSpan.textContent = total + " ₪";
                     paidSpan.textContent = paid + " ₪";
                     remainingSpan.textContent = remaining + " ₪";
 
-                    // 4. وضع المبلغ المتبقي كقيمة افتراضية (Placeholder) لتوجيه المحاسب
-                    amountInput.placeholder = "المتبقي " + remaining + " ₪ ، أدخل المبلغ المستلم...";
+                    // تعبئة البيانات المخفية للـ Controller
+                    if (studentIdHidden) studentIdHidden.value = id;
+                    if (academicLevelHidden) academicLevelHidden.value = level;
+                    if (monthlyAmountHidden) monthlyAmountHidden.value = total;
 
-                    // تغيير لون حقل المتبقي إذا كان مسدداً بالكامل
-                    if (remaining === 0) {
-                        remainingSpan.className = "text-green-600 font-bold";
-                        remainingSpan.textContent = "مسدّد بالكامل 👍";
-                    } else {
-                        remainingSpan.className = "text-rose-600 font-bold";
+                    // إدارة حقل الدفع بناءً على المتبقي
+                    if (amountInput) {
+                        amountInput.max = remaining;
+                        if (remaining <= 0) {
+                            remainingSpan.className = "text-green-600 font-bold";
+                            remainingSpan.innerHTML = "مسدّد بالكامل 👍";
+                            amountInput.disabled = true;
+                        } else {
+                            remainingSpan.className = "text-rose-600 font-bold";
+                            amountInput.disabled = false;
+                        }
                     }
 
-                    // إظهار بطاقة معلومات الطالب
                     card.classList.remove('hidden');
                     found = true;
                     break;
                 }
             }
 
-            // إخفاء البطاقة وتصفير المدخلات إذا قام المحاسب بمسح حقل البحث
             if (!found) {
                 card.classList.add('hidden');
-                amountInput.placeholder = "أدخل المبلغ المسدّد حالياً...";
+                if (studentIdHidden) studentIdHidden.value = "";
             }
         });
     </script>

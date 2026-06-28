@@ -27,17 +27,6 @@
                                     class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-teal-600 -all text-gray-400 dark:text-zinc-400" />
                             </div>
                             <div>
-                                <label class="block text-[11px] font-bold text-slate-700 dark:text-zinc-300 mb-1.5">المعلم
-                                    المرتبط</label>
-                                <select
-                                    class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-xs outline-none cursor-pointer focus:border-teal-500">
-                                    <option value="">اختر المعلم المرتبط هان...</option>
-                                    <option value="1">خالد النجار</option>
-                                    <option value="2">سارة الدهان</option>
-                                    <option value="3">يوسف العامري</option>
-                                </select>
-                            </div>
-                            <div>
                                 <label
                                     class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-1.5 uppercase">الصلاحيات</label>
                                 <div
@@ -267,6 +256,10 @@
                                 <button type="button" onclick="closeModal('editRoleModal')"
                                     class="px-5 py-2.5 text-xs font-bold text-gray-500 dark:text-slate-400 bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:hover:text-white rounded-xl transition-all cursor-pointer">
                                     إلغاء
+                                </button>
+                                <button type="button" onclick="closeModal('editRoleModal')"
+                                    class="px-5 py-2.5 text-xs font-bold  bg-red-50 dark:bg-red-900/50 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-slate-700 rounded-xl transition-all cursor-pointer">
+                                    حذف
                                 </button>
                                 <button type="submit" onclick="closeModal('editRoleModal')"
                                     class="px-5 py-2.5 text-xs font-bold text-white dark:text-slate-950 bg-teal-600 hover:bg-teal-700 dark:bg-teal-400 dark:hover:bg-teal-500 rounded-xl transition-all shadow-md shadow-teal-500/10 cursor-pointer">

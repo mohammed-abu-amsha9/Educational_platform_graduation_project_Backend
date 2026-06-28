@@ -55,45 +55,16 @@
                                     المسندة</label>
                                 <div
                                     class="border border-gray-100 dark:border-slate-800 rounded-xl p-3 max-h-32 overflow-y-auto space-y-2 text-xs custom-scroll bg-slate-50/50 dark:bg-slate-800/30">
-                                    <label class="flex items-center justify-between"><span
-                                            class="text-gray-600 dark:text-zinc-300">الصف الاول شعبة (أ)
-                                            الابتدائي</span><input type="checkbox" class="accent-teal-600" /></label>
-                                    <label class="flex items-center justify-between"><span
-                                            class="text-gray-600 dark:text-zinc-300">الصف الاول شعبة (ب)
-                                            الابتدائي</span><input type="checkbox" class="accent-teal-600" /></label>
-                                    <label class="flex items-center justify-between"><span
-                                            class="text-gray-600 dark:text-zinc-300">الصف الثاني
-                                            الابتدائي</span><input type="checkbox" class="accent-teal-600" /></label>
-                                    <label class="flex items-center justify-between"><span
-                                            class="text-gray-600 dark:text-zinc-300">الصف الثالث
-                                            الابتدائي</span><input type="checkbox" class="accent-teal-600" /></label>
-                                    <label class="flex items-center justify-between"><span
-                                            class="text-gray-600 dark:text-zinc-300">الصف الرابع
-                                            الابتدائي</span><input type="checkbox" class="accent-teal-600" /></label>
-                                    <label class="flex items-center justify-between"><span
-                                            class="text-gray-600 dark:text-zinc-300">الصف الخامس
-                                            الإعدادي</span><input type="checkbox" class="accent-teal-600" /></label>
-                                    <label class="flex items-center justify-between"><span
-                                            class="text-gray-600 dark:text-zinc-300">الصف السادس
-                                            الإعدادي</span><input type="checkbox" class="accent-teal-600" /></label>
-                                    <label class="flex items-center justify-between"><span
-                                            class="text-gray-600 dark:text-zinc-300">الصف السابع
-                                            الإعدادي</span><input type="checkbox" class="accent-teal-600" /></label>
-                                    <label class="flex items-center justify-between"><span
-                                            class="text-gray-600 dark:text-zinc-300">الصف الثامن
-                                            الإعدادي</span><input type="checkbox" class="accent-teal-600" /></label>
-                                    <label class="flex items-center justify-between"><span
-                                            class="text-gray-600 dark:text-zinc-300">الصف التاسع
-                                            الإعدادي</span><input type="checkbox" class="accent-teal-600" /></label>
-                                    <label class="flex items-center justify-between"><span
-                                            class="text-gray-600 dark:text-zinc-300">الصف العاشر
-                                            الإعدادي</span><input type="checkbox" class="accent-teal-600" /></label>
-                                    <label class="flex items-center justify-between"><span
-                                            class="text-gray-600 dark:text-zinc-300">الصف الحادي عشر </span><input
-                                            type="checkbox" class="accent-teal-600" /></label>
-                                    <label class="flex items-center justify-between"><span
-                                            class="text-gray-600 dark:text-zinc-300">الصف التوجيهي</span><input
-                                            type="checkbox" class="accent-teal-600" /></label>
+                                    <label class="flex items-center justify-between">
+                                        <span class="text-gray-600 dark:text-zinc-300">الصف الاول شعبة (أ) الابتدائي</span>
+                                        <input type="checkbox" name="sections[]" value="الصف الاول|شعبة (أ) الابتدائي"
+                                            class="accent-teal-600" />
+                                    </label>
+                                    <label class="flex items-center justify-between">
+                                        <span class="text-gray-600 dark:text-zinc-300">الصف الاول شعبة (أ) الابتدائي</span>
+                                        <input type="checkbox" name="sections[]" value="الصف الاول|شعبة (أ) الابتدائي"
+                                            class="accent-teal-600" />
+                                    </label>
                                 </div>
                             </div>
 
