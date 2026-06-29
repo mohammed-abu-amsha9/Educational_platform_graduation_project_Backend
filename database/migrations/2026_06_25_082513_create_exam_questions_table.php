@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('exam_id')->constrained()->onDelete('cascade'); // المفتاح الأجنبي المرتبط بجدول الامتحانات الرأسية
             $table->foreignId('question_bank_id')->constrained()->onDelete('cascade'); // المفتاح الأجنبي المرتبط بالسؤال الأصلي المستدعى من البنك
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

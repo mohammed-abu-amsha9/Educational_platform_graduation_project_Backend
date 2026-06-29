@@ -218,7 +218,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-slate-800/60 text-sm">
-                        @foreach ($data as $student)
+                        @forelse ($data as $student)
                             <tr onclick="openStudentModal({{ json_encode($student) }})"
                                 class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 cursor-pointer transition-colors">
 
@@ -236,9 +236,12 @@
                                 </td>
 
                                 <td class="p-4 font-mono text-xs text-gray-500 dark:text-zinc-400">
-                                    {{ $student->student_code }}</td>
-                                <td class="p-4 text-gray-600 dark:text-zinc-300">{{ $student->academic_level }} -
-                                    {{ $student->section_name }}</td>
+                                    {{ $student->student_code }}
+                                </td>
+
+                                <td class="p-4 text-gray-600 dark:text-zinc-300">
+                                    {{ $student->academic_level }} - {{ $student->section_name }}
+                                </td>
 
                                 <td class="p-4">
                                     <div class="flex items-center gap-2">
@@ -267,8 +270,10 @@
                                     @endif
                                 </td>
 
-                                <td class="p-4 font-bold text-slate-700 dark:text-zinc-300">₪
-                                    {{ $student->remaining_fees }}</td>
+                                <td class="p-4 font-bold text-slate-700 dark:text-zinc-300">
+                                    ₪ {{ $student->remaining_fees }}
+                                </td>
+
                                 <td class="p-4">
                                     <span
                                         class="px-2.5 py-1 text-xs font-bold rounded-lg bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400">
@@ -276,9 +281,16 @@
                                     </span>
                                 </td>
                             </tr>
-                        @endforeach
-
+                        @empty
+                            <tr>
+                                <td colspan="7" class="text-center py-16 text-gray-400 text-sm">
+                                    <i class="fa-solid fa-users-slash text-3xl mb-3 block"></i>
+                                    لا يوجد طلاب مسجلون بعد
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
+
                 </table>
             </div>
         </div>

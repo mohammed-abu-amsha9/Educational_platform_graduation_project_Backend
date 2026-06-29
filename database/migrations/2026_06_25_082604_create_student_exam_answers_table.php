@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreignId('question_bank_id')->constrained()->onDelete('cascade'); // معرف السؤال الدقيق الذي تتم الإجابة عليه الآن من الطالب
             $table->foreignId('selected_option_id')->constrained('question_options')->onDelete('cascade'); // رقم الخيار الدقيق والمحفوظ الذي ضغط عليه الطالب كحل للسؤال
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

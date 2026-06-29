@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ChatRoom extends Model
 {
     /** @use HasFactory<\Database\Factories\ChatRoomFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     // واحد لمتعدد. الغرفة الواحدة تحتوي على رسائل كثيرة.
     public function messages()

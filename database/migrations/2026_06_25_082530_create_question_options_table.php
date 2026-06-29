@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('option_text', 255); // النص أو الحقل الرقمي المعروض كخيار للحل أمام الطالب
             $table->boolean('is_correct'); // علم منطقي (true/false) يعتمد الإجابة الصحيحة للتصحيح الفوري تلقائياً
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

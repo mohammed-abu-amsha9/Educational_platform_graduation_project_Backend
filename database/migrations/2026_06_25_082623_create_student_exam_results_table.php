@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('status', 50); // حالة رصد النتيجة وتدقيقها (مصحح تلقائياً، تم رصده، غياب تلقائي)
             $table->string('submission_method', 100); // طريقة تقديم الطالب للامتحان (حساب الطالب الإلكتروني أو لم يدخل)
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

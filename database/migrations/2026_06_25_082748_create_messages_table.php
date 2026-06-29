@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('attachment_url', 255)->nullable(); // رابط أو مسار ملف أو صورة مرفقة بشكل اختياري بداخل حزمة الرسالة
             $table->boolean('is_read')->default(false); // حقل منطقي لتفعيل علامة المقروئية والنقطة الزرقاء بواجهة التطبيق
             $table->timestamps(); // سينتج عنها created_at وقت إرسال الرسالة بدقة متناهية لغايات ترتيب خط الدردشة الزمني
+            $table->softDeletes();
+
         });
     }
 

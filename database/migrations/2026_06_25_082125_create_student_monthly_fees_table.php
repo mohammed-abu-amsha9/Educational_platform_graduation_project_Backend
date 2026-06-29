@@ -23,6 +23,8 @@ return new class extends Migration
             $table->timestamp('payment_date')->nullable(); // تاريخ ووقت تسجيل آخر عملية دفع بدقة متناهية
             $table->text('notes')->nullable(); // مربع الملاحظات الإدارية والمالية الخاصة بالحركة المكتوبة بالفورم
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

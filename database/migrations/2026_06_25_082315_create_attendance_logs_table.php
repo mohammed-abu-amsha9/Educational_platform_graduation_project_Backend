@@ -19,6 +19,8 @@ return new class extends Migration
             $table->date('date'); // التاريخ الفعلي والرسمي لليوم الدراسي الحاضر
             $table->enum('status', ['present', 'absent', 'late'])->default('present'); // حالة الانضباط المرصودة للطالب (حاضر - غائب - متأخر)
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

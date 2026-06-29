@@ -19,6 +19,8 @@ return new class extends Migration
             $table->text('payload_json'); // حزمة البيانات المدخرة بصيغة نصية مكثفة JSON لرفعها فوراً لخوادم السيرفر الرئيسي
             $table->timestamp('timestamp')->useCurrent(); // تاريخ ووقت تسجيل الحركة محلياً لفرز وترتيب واجهة طابور المزامنة المنتظر
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

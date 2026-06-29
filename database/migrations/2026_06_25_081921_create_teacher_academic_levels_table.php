@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('academic_level', 50); // الصف الأكاديمي المسند تدريسه للمعلم
             $table->string('section_name', 50); // الشعبة، مثل: شعبة (أ)
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

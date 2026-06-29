@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade'); // يرتبط بالدرس المستهدف نشره لعدة شعب
             $table->string('section_name', 20); // اسم الشعبة المخول لطلابها مشاهدة الدرس (مثل: شعبة أ)
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

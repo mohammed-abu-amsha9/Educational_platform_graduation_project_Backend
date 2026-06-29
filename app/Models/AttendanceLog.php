@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AttendanceLog extends Model
 {
     /** @use HasFactory<\Database\Factories\AttendanceLogFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     // السجل ينتمي لطالب محدد ومعلم محدد قام برصده.
     public function student()

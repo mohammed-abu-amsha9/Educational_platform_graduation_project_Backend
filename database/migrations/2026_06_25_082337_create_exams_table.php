@@ -20,6 +20,8 @@ return new class extends Migration
             $table->integer('duration_minutes'); // مدة الاختبار بالدقائق لضبط ساعة العداد التنازلي البرمجي
             $table->integer('total_questions'); // عدد الأسئلة الإجمالي التي سيتعرض لها الطالب في الامتحان
             $table->timestamps(); // سينتج عنها created_at وهو وقت وتاريخ إصدار ونشر الامتحان للطلاب على المنصة
+            $table->softDeletes();
+
         });
     }
 

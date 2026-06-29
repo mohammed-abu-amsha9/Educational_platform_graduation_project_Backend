@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentMonthlyFeeController;
+use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'login')->name('login');
@@ -31,3 +33,5 @@ Route::resource('students', StudentController::class);
 Route::put('students/edit-class/{student}', [StudentController::class, 'editClassStudent'])->name('editClassStudent');
 Route::put('students/edit-fees/{student}', [StudentController::class, 'editFeesStudent'])->name('editFeesStudent');
 Route::resource('fees', StudentMonthlyFeeController::class);
+Route::resource('roles', RolePermissionController::class);
+Route::resource('teachers', TeacherController::class);

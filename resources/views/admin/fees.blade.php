@@ -103,65 +103,80 @@
                     آخر المعاملات المالية
                 </h3>
 
-                <div class="space-y-3">
-                    <div
-                        class="flex items-center justify-between p-4 bg-slate-100/75 dark:bg-slate-800/40 rounded-2xl text-xs">
-                        <div>
-                            <p class="font-bold text-slate-800 dark:text-zinc-200">
-                                فاطمة زياد طليمات
-                            </p>
-                            <p class="text-[10px] text-gray-400 mt-1">
-                                2024-09-12 - تحويل بنكي
-                            </p>
+                @forelse ($data as $fees)
+                    <div class="space-y-3">
+                        <div
+                            class="flex items-center justify-between p-4 bg-slate-100/75 dark:bg-slate-800/40 rounded-2xl text-xs">
+                            <div>
+                                <p cla4ss="font-bold text-slate-800 dark:text-zinc-200">
+                                    {{ $fees->student->full_name }}
+                                </p>
+                                <p class="text-[10px] text-gray-400 mt-1">
+                                    {{ $fees->payment_date }} - {{ $fees->payment_method }}
+                                </p>
+                            </div>
+                            <span class="font-bold text-teal-600">₪ {{ $fees->paid_amount }}</span>
                         </div>
-                        <span class="font-bold text-teal-600">₪ 800</span>
                     </div>
-                </div>
+                @empty
+                    <div class="col-span-2 text-center py-16 text-gray-400 text-sm">
+                        <i class="fa-solid fa-users-slash text-3xl mb-3 block"></i>
+                        لا توجد معاملات مسجلة بعد
+                    </div>
+                @endforelse
             </div>
 
-            <div
-                class="bg-white dark:bg-slate-900 border border-gray-200/60 hover:border-emerald-400 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm">
-                <div class="flex items-center justify-between mb-5">
-                    <h3 class="text-sm font-black text-slate-800 dark:text-zinc-100">
-                        توزيع طرق الدفع
-                    </h3>
-                    <span class="text-xs text-slate-400 font-bold">الإجمالي: ₪3,200</span>
-                </div>
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="text-sm font-black text-slate-800 dark:text-zinc-100">
+                    توزيع طرق الدفع
+                </h3>
+                <span class="text-xs text-slate-400 font-bold">
+                    الإجمالي: ₪{{ number_format($totalPaid, 2) }}
+                </span>
+            </div>
 
-                <div class="space-y-4">
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between text-xs font-bold">
-                            <span class="text-slate-700 dark:text-zinc-300 flex items-center gap-1.5">💵
-                                نقداً</span>
-                            <span class="text-teal-600">₪1,600 (50%)</span>
-                        </div>
-                        <div class="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
-                            <div class="bg-teal-500 h-full rounded-full" style="width: 50%"></div>
-                        </div>
+            <div class="space-y-4">
+
+                @php
+                    $cashPct = $totalPaid > 0 ? round(($cashAmount / $totalPaid) * 100) : 0;
+                    $bankPct = $totalPaid > 0 ? round(($bankAmount / $totalPaid) * 100) : 0;
+                    $walletPct = $totalPaid > 0 ? round(($walletAmount / $totalPaid) * 100) : 0;
+                @endphp
+
+                {{-- نقداً --}}
+                <div class="space-y-1.5">
+                    <div class="flex justify-between text-xs font-bold">
+                        <span class="text-slate-700 dark:text-zinc-300 flex items-center gap-1.5">💵 نقداً</span>
+                        <span class="text-teal-600">₪{{ number_format($cashAmount) }} ({{ $cashPct }}%)</span>
                     </div>
-
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between text-xs font-bold">
-                            <span class="text-slate-700 dark:text-zinc-300 flex items-center gap-1.5">🏦 تحويل
-                                بنكي</span>
-                            <span class="text-blue-600">₪1,300 (40%)</span>
-                        </div>
-                        <div class="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
-                            <div class="bg-blue-500 h-full rounded-full" style="width: 40%"></div>
-                        </div>
-                    </div>
-
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between text-xs font-bold">
-                            <span class="text-slate-700 dark:text-zinc-300 flex items-center gap-1.5">📱 محفظة
-                                إلكترونية</span>
-                            <span class="text-purple-600">₪300 (10%)</span>
-                        </div>
-                        <div class="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
-                            <div class="bg-purple-500 h-full rounded-full" style="width: 10%"></div>
-                        </div>
+                    <div class="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                        <div class="bg-teal-500 h-full rounded-full" style="width: {{ $cashPct }}%"></div>
                     </div>
                 </div>
+
+                {{-- تحويل بنكي --}}
+                <div class="space-y-1.5">
+                    <div class="flex justify-between text-xs font-bold">
+                        <span class="text-slate-700 dark:text-zinc-300 flex items-center gap-1.5">🏦 تحويل بنكي</span>
+                        <span class="text-blue-600">₪{{ number_format($bankAmount, 2) }} ({{ $bankPct }}%)</span>
+                    </div>
+                    <div class="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                        <div class="bg-blue-500 h-full rounded-full" style="width: {{ $bankPct }}%"></div>
+                    </div>
+                </div>
+
+                {{-- محفظة إلكترونية --}}
+                <div class="space-y-1.5">
+                    <div class="flex justify-between text-xs font-bold">
+                        <span class="text-slate-700 dark:text-zinc-300 flex items-center gap-1.5">📱 محفظة إلكترونية</span>
+                        <span class="text-purple-600">₪{{ number_format($walletAmount, 2) }}
+                            ({{ $walletPct }}%)</span>
+                    </div>
+                    <div class="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                        <div class="bg-purple-500 h-full rounded-full" style="width: {{ $walletPct }}%"></div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

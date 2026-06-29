@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('teacher_id')->constrained()->onDelete('cascade'); // المعلم المشترك بداخل هذه المحادثة الفردية الحالية
             $table->foreignId('student_id')->constrained()->onDelete('cascade'); // الطالب (أو حساب ولي أمره المتابع) المشترك في نفس الغرفة
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

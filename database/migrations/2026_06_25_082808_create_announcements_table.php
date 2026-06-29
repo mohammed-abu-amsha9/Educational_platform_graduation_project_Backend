@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('action_url', 255); // رابط انتقال سريع مدمج (Deep Link) ينقل المستخدم للشاشة المعنية عند النقر
             $table->boolean('is_read')->default(false); // حقل منطقي لتحديد قراءة التنبيه لإخفاء علامة النقطة التنبيهية الحمراء
             $table->timestamps(); // سينتج عنها created_at وقت وتاريخ إصدار وبث الإعلان والتنبيه السحابي للمستخدم
+            $table->softDeletes();
+
         });
     }
 

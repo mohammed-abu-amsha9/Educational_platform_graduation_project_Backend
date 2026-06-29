@@ -14,7 +14,30 @@ class StudentMonthlyFeeController extends Controller
      */
     public function index()
     {
-        //
+        $studentFee = StudentMonthlyFee::with('student')->get();
+        $students = Student::all();
+
+        // حساب إجمالي المدفوع
+        $totalPaid = $studentFee->sum('paid_amount');
+
+        // // فرز وتجميع إجمالي المبالغ المدفوعة تلقائياً حسب وسيلة الدفع (نقداً، بنك، محفظة) مع تأمين القيم الغائبة بـ 0
+        $paymentMethods = $studentFee
+            ->whereNotNull('payment_method')
+            ->groupBy('payment_method')
+            ->map(fn($group) => $group->sum('paid_amount'));
+
+        $cashAmount    = $paymentMethods['نقداً'] ?? 0;
+        $bankAmount    = $paymentMethods['تحويل بنكي'] ?? 0;
+        $walletAmount  = $paymentMethods['محفظة إلكترونية'] ?? 0;
+
+        return view('admin.fees', [
+            'data'         => $studentFee,
+            'students'     => $students,
+            'totalPaid'    => $totalPaid,
+            'cashAmount'   => $cashAmount,
+            'bankAmount'   => $bankAmount,
+            'walletAmount' => $walletAmount,
+        ]);
     }
 
     /**
@@ -22,13 +45,7 @@ class StudentMonthlyFeeController extends Controller
      */
     public function create()
     {
-        // جلب الطلاب مع حساب مجموع مدفوعاتهم الحالية لتغذية الجافاسكربت
-        $currentMonth = date('m-Y'); // الشهر الحالي مثل 06-2026
-
-        // جلب الطلاب مع حساب إجمالي ما دفعوه في جدول student_monthly_fees لهذا الشهر
-        $student = Student::all();
-
-        return view('admin.fees', ['students' => $student]);
+        //
     }
 
     /**

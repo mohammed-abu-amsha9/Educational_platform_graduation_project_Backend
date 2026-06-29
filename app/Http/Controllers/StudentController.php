@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
@@ -46,7 +48,8 @@ class StudentController extends Controller
 
         // 2. توليد رقم الطالب التسلسلي تلقائياً (student_code)
         // نأتي بآخر طالب تم تسجيله للحصول على الكود الخاص به
-        $lastStudent = Student::orderBy('student_code', 'desc')->first();
+        $lastStudent = Student::withTrashed()->orderBy('id', 'desc')->first();
+
 
         // preg_match => تبحث عن نمبط معين داخل النص
         if ($lastStudent && preg_match('/STU_(\d+)/', $lastStudent->student_code, $matches)) {
@@ -64,8 +67,6 @@ class StudentController extends Controller
 
         // 3. إنشاء طالب جديد وحفظ البيانات
         $student = new Student();
-
-        // إسناد رقم الهوية كمعرف أساسي للـ id
         $student->id = $request->input('id');
         $student->full_name = $request->input('full_name');
         $student->student_code = $studentCode;
@@ -75,10 +76,18 @@ class StudentController extends Controller
         $student->parent_id = $request->input('parent_id');
         $student->parent_phone = $request->input('parent_phone');
         $student->parent_backup_phone = $request->input('parent_backup_phone') ?? '';
+        $student->save();
+
+        // انشاء حساب طالب
+        $user = new User();
+        $user->id = $student->id;
+        $user->name = $student->full_name;
+        $user->password = Hash::make($request->input('id'));
+        $user->role = 'student';
+        $user->save();
 
         // حقل account_status سيأخذ القيمة الافتراضية 'active' تلقائياً من الـ migration
 
-        $student->save();
 
         // 4. إعادة التوجيه مع رسالة نجاح
         return redirect()->back()->with('success', 'تم إضافة بيانات الطالب وتثبيته بنجاح!');

@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('attachment_url', 255)->nullable(); // رابط أو مسار ملف الأسئلة الاختياري المرفق مع الواجب من المعلم
             $table->integer('total_grade'); // درجة الواجب الإجمالية (مثلاً: الواجب من 10 درجات أو 20 درجة)
             $table->timestamps(); // سينتج عنها created_at وهو وقت إطلاق ونشر المهمة على لوحة تحكم حسابات الطلاب
+            $table->softDeletes();
+
         });
     }
 

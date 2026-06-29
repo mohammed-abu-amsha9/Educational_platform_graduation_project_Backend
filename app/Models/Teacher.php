@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Teacher extends Model
 {
     /** @use HasFactory<\Database\Factories\TeacherFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     // واحد لمتعدد (One-to-Many). الدور الواحد يمتلكه العديد من المعلمين
     public function role()

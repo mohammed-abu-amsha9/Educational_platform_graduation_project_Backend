@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('status', 50); // حالة تصحيح التسليم الحالي لمتابعة الواجهات (لم يتم التصحيح، تم التصحيح)
             $table->timestamp('submitted_at')->useCurrent(); // الوقت والتاريخ الدقيق والآلي لقيام الطالب بضغط زر إرسال للحل
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 
