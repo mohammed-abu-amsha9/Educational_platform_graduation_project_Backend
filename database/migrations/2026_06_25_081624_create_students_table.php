@@ -13,7 +13,7 @@ return new class extends Migration
     {
         // جدول بيانات الطلاب
         Schema::create('students', function (Blueprint $table) {
-            $table->string('id',20); // المفتاح الأساسي والمعرف الفريد لكل طالب
+            $table->id(); // المفتاح الأساسي والمعرف الفريد لكل طالب
             $table->string('full_name', 150); // الاسم الكامل للطالب المستخدم في القوائم والشهادات
             $table->string('student_code', 50)->unique(); // الرقم التسلسلي الفريد والخاص بالطالب داخل المنصة
             $table->string('academic_level', 50); // الصف أو المستوى الدراسي الحالي للطالب
