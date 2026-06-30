@@ -5,10 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>منصة صمود - لوحة تحكم الإدارة - @yield('title')</title>
-    <link rel="icon" type="image/png" href="{{ secure_asset('assets/img/Logo.png') }}" />
-    <link rel="stylesheet" href="{{ secure_asset('assets/css/output.css') }}" />
-    <link rel="stylesheet" href="{{ secure_asset('assets/fontawesome-free-7.2.0-web/css/all.min.css') }}" />
-    <link rel="stylesheet" href="{{ secure_asset('assets/css/join_style.css') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/Logo.png') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/output.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/fontawesome-free-7.2.0-web/css/all.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/join_style.css') }}" />
 
     @yield('styles')
 </head>
@@ -256,16 +256,16 @@
             class="bg-white border border-gray-200/60 rounded-2xl p-2.5 shadow-sm dark:bg-slate-800 dark:border-slate-800">
             <div class="flex flex-row items-center gap-2 overflow-x-auto custom-scrollbar">
 
-                <a href="{{ secure_url('admin_control_panel') }}"
+                <a href="{{ route('admin_control_panel') }}"
                     class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-                {{ request()->is('admin_control_panel') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+            {{ request()->routeIs('admin_control_panel') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
                     <i class="fa-solid fa-chart-pie text-base"></i>
                     <span>نظرة عامة</span>
                 </a>
 
-                <a href="{{ secure_url('students.index') }}"
+                <a href="{{ route('students.index') }}"
                     class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->is('students.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+            {{ request()->routeIs('students.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
                     <i class="fa-solid fa-graduation-cap text-base"></i>
                     <span>الطلاب</span>
                 </a>
