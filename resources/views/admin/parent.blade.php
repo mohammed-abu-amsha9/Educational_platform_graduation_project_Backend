@@ -270,23 +270,23 @@
                     <span>الطلاب</span>
                 </a>
 
-                <a href="{{ secure_url('teachers.index') }}"
+                <a href="{{ route('teachers.index') }}"
                     class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->is('teachers.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+            {{ request()->routeIs('teachers.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
                     <i class="fa-solid fa-chalkboard-user text-base"></i>
                     <span>المعلمون</span>
                 </a>
 
-                <a href="{{ secure_url('fees.index') }}"
+                <a href="{{ route('fees.index') }}"
                     class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->is('fees.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+            {{ request()->routeIs('fees.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
                     <i class="fa-solid fa-wallet text-base"></i>
                     <span>الرسوم</span>
                 </a>
 
-                <a href="{{ secure_url('roles.index') }}"
+                <a href="{{ route('roles.index') }}"
                     class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->is('roles.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+            {{ request()->routeIs('roles.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
                     <i class="fa-solid fa-shield-halved text-base"></i>
                     <span>الأدوار والصلاحيات</span>
                 </a>
@@ -417,7 +417,7 @@
             });
         }
     </script>
-    <script src="{{ secure_asset('assets/js/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 

@@ -12,6 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         //
+        $middleware->trustProxies(at: '*'); // يخبر Laravel بالوثوق في بروكسي Railway لتمرير الـ HTTPS
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
