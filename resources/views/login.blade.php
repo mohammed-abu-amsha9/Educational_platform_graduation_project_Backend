@@ -61,7 +61,7 @@
 
             <div class="relative z-10 flex items-center mb-10">
                 <div class="w-12 h-12 flex items-center justify-center font-extrabold text-xl overflow-hidden p-0.5">
-                    <img src="{{asset('assets/img/Logo.png')}}" alt="لوجو منصة صمود"
+                    <img src="{{secure_asset('assets/img/Logo.png')}}" alt="لوجو منصة صمود"
                         class="w-full h-full object-cover rounded-xl" />
                 </div>
                 <div class="mx-5">
@@ -168,7 +168,7 @@
                 </p>
             </div>
 
-            <form class="space-y-5" action="{{route('admin_control_panel')}}">
+            <form class="space-y-5" action="{{secure_url('admin_control_panel')}}">
                 <div>
                     <label class="block text-md font-bold text-gray-700 dark:text-zinc-300 mb-2">اسم المستخدم</label>
                     <div class="relative">
