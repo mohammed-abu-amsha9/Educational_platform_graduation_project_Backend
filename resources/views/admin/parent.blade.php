@@ -5,10 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>منصة صمود - لوحة تحكم الإدارة - @yield('title')</title>
-    <link rel="icon" type="image/png" href="{{ asset('assets/img/Logo.png') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/css/output.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/fontawesome-free-7.2.0-web/css/all.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/css/join_style.css') }}" />
+    <link rel="icon" type="image/png" href="{{ secure_asset('assets/img/Logo.png') }}" />
+    <link rel="stylesheet" href="{{ secure_asset('assets/css/output.css') }}" />
+    <link rel="stylesheet" href="{{ secure_asset('assets/fontawesome-free-7.2.0-web/css/all.min.css') }}" />
+    <link rel="stylesheet" href="{{ secure_asset('assets/css/join_style.css') }}" />
 
     @yield('styles')
 </head>
@@ -256,37 +256,37 @@
             class="bg-white border border-gray-200/60 rounded-2xl p-2.5 shadow-sm dark:bg-slate-800 dark:border-slate-800">
             <div class="flex flex-row items-center gap-2 overflow-x-auto custom-scrollbar">
 
-                <a href="{{ route('admin_control_panel') }}"
+                <a href="{{ secure_url('admin_control_panel') }}"
                     class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('admin_control_panel') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+                {{ request()->is('admin_control_panel') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
                     <i class="fa-solid fa-chart-pie text-base"></i>
                     <span>نظرة عامة</span>
                 </a>
 
-                <a href="{{ route('students.index') }}"
+                <a href="{{ secure_url('students.index') }}"
                     class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('students.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+            {{ request()->is('students.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
                     <i class="fa-solid fa-graduation-cap text-base"></i>
                     <span>الطلاب</span>
                 </a>
 
-                <a href="{{ route('teachers.index') }}"
+                <a href="{{ secure_url('teachers.index') }}"
                     class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('teachers.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+            {{ request()->is('teachers.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
                     <i class="fa-solid fa-chalkboard-user text-base"></i>
                     <span>المعلمون</span>
                 </a>
 
-                <a href="{{ route('fees.index') }}"
+                <a href="{{ secure_url('fees.index') }}"
                     class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('fees.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+            {{ request()->is('fees.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
                     <i class="fa-solid fa-wallet text-base"></i>
                     <span>الرسوم</span>
                 </a>
 
-                <a href="{{ route('roles.index') }}"
+                <a href="{{ secure_url('roles.index') }}"
                     class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('roles.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+            {{ request()->is('roles.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
                     <i class="fa-solid fa-shield-halved text-base"></i>
                     <span>الأدوار والصلاحيات</span>
                 </a>
@@ -417,7 +417,7 @@
             });
         }
     </script>
-    <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ secure_asset('assets/js/sweetalert2.all.min.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
