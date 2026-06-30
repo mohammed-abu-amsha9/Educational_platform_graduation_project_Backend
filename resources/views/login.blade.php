@@ -5,10 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>منصة صمود التعليمية - تسجيل الدخول</title>
-    <link rel="icon" type="image/png" href="{{ asset('assets/img/Logo.png') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/css/output.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/fontawesome-free-7.2.0-web/css/all.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/css/join_style.css') }}" />
+    <link rel="icon" type="image/png" href="{{ secure_asset('assets/img/Logo.png') }}" />
+    <link rel="stylesheet" href="{{ secure_asset('assets/css/output.css') }}" />
+    <link rel="stylesheet" href="{{ secure_asset('assets/fontawesome-free-7.2.0-web/css/all.min.css') }}" />
+    <link rel="stylesheet" href="{{ secure_asset('assets/css/join_style.css') }}" />
     <style>
         .gradient-panel {
             background: linear-gradient(135deg,
