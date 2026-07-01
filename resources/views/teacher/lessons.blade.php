@@ -139,13 +139,10 @@
                                             @endforeach
                                         </span>
                                     </p>
-                                    <div class="flex items-center gap-3 pt-1 text-[9px] text-gray-400 font-bold">
-                                        <span><i class="fa-solid fa-eye text-teal-600"></i> 42
-                                            مشاهدة</span>
-                                    </div>
                                 </div>
                             </div>
-                            <form method="POST" action="{{route('lessons.destroy', $lessonAndSections->id)}}" class="inline-block">
+                            <form method="POST" action="{{ route('lessons.destroy', $lessonAndSections->id) }}"
+                                class="inline-block">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
@@ -156,36 +153,6 @@
 
                         </div>
                     @endforeach
-
-
-                    <div
-                        class="p-3.5 border border-gray-100 dark:border-slate-800/60 bg-gray-50/10 dark:bg-slate-950/20 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-9 h-9 rounded-xl bg-rose-50 text-rose-500 dark:bg-rose-955 flex items-center justify-center text-sm shrink-0">
-                                <i class="fa-solid fa-file-pdf"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-800 dark:text-zinc-200">
-                                    ملخص الشرح PDF: كبسولة مراجعة الجملة الفعلية والأوزان
-                                </h4>
-                                <p class="text-[10px] text-gray-400">
-                                    المادة:
-                                    <span class="text-teal-600 font-bold">اللغة العربية</span>
-                                    • الشُعب:
-                                    <span class="font-medium text-slate-600 dark:text-zinc-300">شعبة (أ) فقط</span>
-                                </p>
-                                <div class="flex items-center gap-3 pt-1 text-[9px] text-gray-400 font-bold">
-                                    <span><i class="fa-solid fa-download text-indigo-500"></i> 31
-                                        تحميلاً</span>
-                                </div>
-                            </div>
-                        </div>
-                        <button onclick="alert('حذف الملف...')"
-                            class="bg-white dark:bg-slate-800 text-rose-500 border border-gray-200 dark:border-slate-700 font-bold px-2.5 py-1.5 rounded-xl hover:bg-rose-50 cursor-pointer text-[10px] shrink-0 w-fit">
-                            <i class="fa-solid fa-trash-can"></i> حذف المحاضرة
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>

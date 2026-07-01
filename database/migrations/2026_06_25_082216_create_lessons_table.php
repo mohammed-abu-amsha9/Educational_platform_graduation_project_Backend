@@ -19,8 +19,6 @@ return new class extends Migration
             $table->string('title', 200); // عنوان المحاضرة (مثل: الكيمياء الأساسية وعناصر الجدول الدوري)
             $table->string('file_type', 50); // نوع الملف المرفق لدعم الواجهة (فيديو شرح، ملف PDF)
             $table->string('file_url', 255); // المسار السحابي أو رابط تخزين الملف على خوادم المنصة
-            $table->integer('views_count')->default(0); // عداد إجمالي عدد المشاهدات والزيارات للدرس من الطلاب
-            $table->integer('downloads_count')->default(0); // عداد لتتبع عدد مرات تحميل الملف النصي المرفق
             $table->timestamps(); // سينتج عنها تلقائياً حقل created_at وهو وقت وتاريخ نشر وإتاحة المحتوى على لوحة الطالب
             $table->softDeletes();
         });
