@@ -34,13 +34,13 @@
             </div>
 
             <nav class="hidden md:flex items-center gap-1 bg-gray-100 dark:bg-slate-800 p-1.5 rounded-xl">
-                <a href="{{route('admin_control_panel')}}"
+                <a href="{{ route('admin_control_panel') }}"
                     class="px-5 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">لوحة
                     الإدارة</a>
-                <a href="{{route('teacher_control_panel')}}"
+                <a href="{{ route('teacher_control_panel') }}"
                     class="px-5 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">بوابة
                     المعلم</a>
-                <a href="{{route('student_control_panel')}}"
+                <a href="{{ route('student_control_panel') }}"
                     class="px-5 py-2 rounded-lg text-sm font-semibold bg-teal-700 text-white shadow-sm">بوابة الطالب</a>
             </nav>
 
@@ -178,7 +178,7 @@
 
                     <div id="user-dropdown"
                         class="hidden absolute left-0 mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-xl z-50 py-1 dark:bg-slate-900 dark:border-slate-800 text-right">
-                        <a href="{{route('login')}}"
+                        <a href="{{ route('login') }}"
                             class="flex items-center gap-2.5 px-4 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/3">
                             <i class="fa-solid fa-arrow-right-from-bracket text-base"></i>
                             <span>تسجيل الخروج</span>
@@ -197,13 +197,13 @@
 
         <div id="mobile-menu"
             class="hidden md:hidden border-t border-gray-100 bg-gray-50 dark:bg-slate-900 dark:border-slate-800 px-4 pt-2 pb-4 space-y-2 shadow-inner">
-            <a href="{{route('admin_control_panel')}}"
+            <a href="{{ route('admin_control_panel') }}"
                 class="block px-4 py-2.5 rounded-xl text-sm font-bold text-gray-600 hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">لوحة
                 الإدارة</a>
-            <a href="{{route('teacher_control_panel')}}"
+            <a href="{{ route('teacher_control_panel') }}"
                 class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-600 hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">بوابة
                 المعلم</a>
-            <a href="{{route('student_control_panel')}}"
+            <a href="{{ route('student_control_panel') }}"
                 class="block px-4 py-2.5 rounded-xl text-sm font-semibold bg-teal-700 text-white shadow-sm">بوابة
                 الطالب</a>
 
@@ -223,7 +223,7 @@
 
                 <div id="mobile-user-dropdown"
                     class="hidden bg-white dark:bg-slate-950 rounded-xl mt-1 mx-2 border border-gray-100 dark:border-slate-800 overflow-hidden shadow-inner">
-                    <a href="{{route('login')}}"
+                    <a href="{{ route('login') }}"
                         class="flex items-center gap-2.5 px-6 py-2.5 text-sm text-red-600 font-medium hover:bg-red-50 dark:hover:bg-red-950/20">
                         <i class="fa-solid fa-arrow-right-from-bracket text-base"></i>
                         <span>تسجيل الخروج</span>

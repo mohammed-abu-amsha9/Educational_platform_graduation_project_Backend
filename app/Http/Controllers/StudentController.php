@@ -62,7 +62,6 @@ class StudentController extends Controller
         }
 
         // تشكيل الكود الجديد ليصبح مثل STU_001, STU_002... إلخ
-        // str_pad => تأخذ الرقم (مثلاً 1) وتجعل طوله 3 خانات بوضع أصفار على يساره
         $studentCode = 'STU_' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
 
         // 3. إنشاء طالب جديد وحفظ البيانات

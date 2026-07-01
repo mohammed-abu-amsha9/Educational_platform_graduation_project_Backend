@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id(); // المعرف الفريد لسجل الربط
             $table->foreignId('teacher_id')->constrained()->onDelete('cascade'); // يرتبط بالمعلم المعني بالصف الدراسي
             $table->string('academic_level', 50); // الصف الأكاديمي المسند تدريسه للمعلم
+            $table->string('subject_name', 50); // اسم المادة
             $table->string('section_name', 50); // الشعبة، مثل: شعبة (أ)
             $table->timestamps();
             $table->softDeletes();

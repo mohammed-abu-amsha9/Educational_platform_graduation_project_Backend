@@ -38,7 +38,7 @@
                 <a href="{{ route('teacher_control_panel') }}"
                     class="px-5 py-2 rounded-lg text-sm font-semibold bg-teal-700 text-white shadow-sm dark:text-zinc-100">بوابة
                     المعلم</a>
-                <a href="{{route('student_control_panel')}}"
+                <a href="{{ route('student_control_panel') }}"
                     class="px-5 py-2 rounded-lg text-sm font-semibold text-gray-600  hover:text-teal-700 dark:text-zinc-100">بوابة
                     الطالب</a>
             </nav>
@@ -185,13 +185,13 @@
 
         <div id="mobile-menu"
             class="hidden md:hidden border-t border-gray-100 bg-slate-100 dark:bg-slate-800 px-4 pt-2 pb-4 space-y-2 shadow-inner">
-            <a href="{{route('admin_control_panel')}}"
+            <a href="{{ route('admin_control_panel') }}"
                 class="block px-4 py-2.5 rounded-xl text-sm font-bold text-gray-600  hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">لوحة
                 الإدارة</a>
-            <a href="{{route('teacher_control_panel')}}"
+            <a href="{{ route('teacher_control_panel') }}"
                 class="block px-4 py-2.5 rounded-xl text-sm font-semibold bg-teal-700 text-white shadow-sm dark:text-zinc-100">بوابة
                 المعلم</a>
-            <a href="{{route('student_control_panel')}}"
+            <a href="{{ route('student_control_panel') }}"
                 class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-600  hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">بوابة
                 الطالب</a>
 
@@ -209,7 +209,7 @@
 
                 <div id="mobile-user-dropdown"
                     class="hidden bg-gray-50/60 dark:bg-slate-900/40 rounded-2xl mt-1 mx-2 border border-gray-100 overflow-hidden ">
-                    <a style="color: #dc2626" href="{{route('login')}}"
+                    <a style="color: #dc2626" href="{{ route('login') }}"
                         class="flex items-center gap-2.5 px-6 py-2.5 text-sm text-red-600 dark:bg-slate-950 dark:text-zinc-100">
                         <i class="fa-solid fa-arrow-right-from-bracket text-base"></i>
                         <span>تسجيل الخروج</span>
@@ -266,9 +266,9 @@
                     <span>لوحة المعلم</span>
                 </a>
 
-                <a href="{{ route('teacher_lessons') }}"
+                <a href="{{ route('lessons.index') }}"
                     class="flex items-center justify-center sm:justify-start gap-1.5 px-4 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('teacher_lessons') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'dark:text-zinc-100 text-gray-600 font-semibold hover:text-teal-700' }}">
+            {{ request()->routeIs('lessons.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'dark:text-zinc-100 text-gray-600 font-semibold hover:text-teal-700' }}">
                     <i class="fa-solid fa-gauge-high text-base"></i>
                     <span>الدروس</span>
                 </a>
@@ -327,6 +327,54 @@
             </p>
         </div>
     </footer>
+    <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // 1. حالة النجاح (Success Toast)
+            @if (session('success'))
+                Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    customClass: {
+                        popup: 'dark:bg-slate-800 dark:text-white'
+                    }
+                }).fire({
+                    icon: 'success',
+                    title: "{{ session('success') }}"
+                });
+            @endif
+
+            // 2. حالة وجود أخطاء في المدخلات (Validation Errors Toast)
+            @if ($errors->any())
+                // تجميع كافة الأخطاء في نص واحد مفصول بأسطر
+                let errorMessages = "";
+                @foreach ($errors->all() as $error)
+                    errorMessages += "• {{ $error }}\n";
+                @endforeach
+
+                Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 10000, // زيادة الوقت قليلاً ليتمكن المستخدم من قراءة الأخطاء
+                    timerProgressBar: true,
+                    customClass: {
+                        popup: 'dark:bg-slate-800 dark:text-white text-right'
+                    }
+                }).fire({
+                    icon: 'error',
+                    title: 'يرجى تصحيح الأخطاء التالية:',
+                    html: '<pre style="font-family: inherit; text-align: right; direction: rtl; white-space: pre-line;" class="text-xs text-red-500 font-bold">' +
+                        errorMessages + '</pre>'
+                });
+            @endif
+
+        });
+    </script>
     <script>
         // استهداف كل الأزرار التي تحمل كلاس theme-toggle
         const themeToggleBtns = document.querySelectorAll(".theme-toggle");

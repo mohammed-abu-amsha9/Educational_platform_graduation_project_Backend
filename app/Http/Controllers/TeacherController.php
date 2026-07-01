@@ -36,7 +36,7 @@ class TeacherController extends Controller
         $request->validate([
             'full_name'    => 'required|string|max:150',
             'phone_number' => 'required|string|max:20',
-            'subject'      => 'required|string|max:100',
+            'subjects'      => 'required|array',
             'role_id'      => 'required|exists:role_permissions,id',
         ]);
 
@@ -54,18 +54,24 @@ class TeacherController extends Controller
         $teacher->full_name    = $request->input('full_name');
         $teacher->teacher_code = $teacherCode;
         $teacher->phone_number = $request->input('phone_number');
-        $teacher->subject      = $request->input('subject');
         $teacher->role_id      = $request->input('role_id');
         $teacher->save();
 
-        foreach ($request->input('sections', []) as $section) {
-            [$academicLevel, $sectionName] = explode('|', $section);
+        // 3. تخزين الصفوف والشعب والمواد في جدول teacher_academic_levels
+        // سنقوم بالمرور على كل مادة تم اختيارها، وربطها بكل شعبة تم تحديدها
+        foreach ($request->input('subjects', []) as $subjectName) {
+            foreach ($request->input('sections', []) as $section) {
 
-            $teacherAcademicLevel = new TeacherAcademicLevel();
-            $teacherAcademicLevel->teacher_id    = $teacher->id;
-            $teacherAcademicLevel->academic_level = $academicLevel;
-            $teacherAcademicLevel->section_name  = $sectionName;
-            $teacherAcademicLevel->save();
+                // تفكيك قيمة الشعبة القادمة من الواجهة (الصف الدراسي | اسم الشعبة)
+                [$academicLevel, $sectionName] = explode('|', $section);
+
+                $teacherAcademicLevel = new TeacherAcademicLevel();
+                $teacherAcademicLevel->teacher_id    = $teacher->id;
+                $teacherAcademicLevel->academic_level = $academicLevel;
+                $teacherAcademicLevel->section_name  = $sectionName;
+                $teacherAcademicLevel->subject_name   = $subjectName; // 🔥 تم حقن المادة ديناميكياً لكل سجل
+                $teacherAcademicLevel->save();
+            }
         }
 
         // إنشاء حساب المستخدم
@@ -104,30 +110,33 @@ class TeacherController extends Controller
         $request->validate([
             'full_name'    => 'required|string|max:150',
             'phone_number' => 'required|string|max:20',
-            'subject'      => 'required|string|max:100',
+            'subjects'      => 'required|array',
             'role_id'      => 'required|exists:role_permissions,id',
         ]);
 
         // 2. تحديث بيانات المعلم الحالي بنجاح
         $teacher->full_name    = $request->input('full_name');
         $teacher->phone_number = $request->input('phone_number');
-        $teacher->subject      = $request->input('subject');
         $teacher->role_id      = $request->input('role_id');
         $teacher->save();
 
         // 3. تحديث الأقسام (نحذف الأقسام القديمة للمعلم أولاً لتجنب التكرار)
         $teacherAcademicLevel->where('teacher_id', $teacher->id)->delete();
 
-        foreach ($request->input('sections', []) as $section) {
-            if (str_contains($section, '|')) {
+        // 3. تخزين الصفوف والشعب والمواد في جدول teacher_academic_levels
+        // سنقوم بالمرور على كل مادة تم اختيارها، وربطها بكل شعبة تم تحديدها
+        foreach ($request->input('subjects', []) as $subjectName) {
+            foreach ($request->input('sections', []) as $section) {
+
+                // تفكيك قيمة الشعبة القادمة من الواجهة (الصف الدراسي | اسم الشعبة)
                 [$academicLevel, $sectionName] = explode('|', $section);
 
-                // نستخدم كائن جديد هنا داخل اللوب لكل قسم لكي لا يتم تعديل نفس السجل مراراً
-                $newSection = new TeacherAcademicLevel();
-                $newSection->teacher_id    = $teacher->id;
-                $newSection->academic_level = $academicLevel;
-                $newSection->section_name  = $sectionName;
-                $newSection->save();
+                $teacherAcademicLevel = new TeacherAcademicLevel();
+                $teacherAcademicLevel->teacher_id    = $teacher->id;
+                $teacherAcademicLevel->academic_level = $academicLevel;
+                $teacherAcademicLevel->section_name  = $sectionName;
+                $teacherAcademicLevel->subject_name   = $subjectName; // 🔥 تم حقن المادة ديناميكياً لكل سجل
+                $teacherAcademicLevel->save();
             }
         }
 

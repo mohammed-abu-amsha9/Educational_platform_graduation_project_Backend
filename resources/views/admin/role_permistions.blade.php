@@ -155,7 +155,7 @@
                     @empty
                         <div class="col-span-2 text-center py-16 text-gray-400 text-sm">
                             <i class="fa-solid fa-users-slash text-3xl mb-3 block"></i>
-                            لا يوجدأدوار مسجلة بعد 
+                            لا يوجدأدوار مسجلة بعد
                         </div>
                     @endforelse
 
@@ -282,7 +282,7 @@
         function openEditRoleModal(modalId, role) {
             openModal(modalId);
             document.getElementById('edit_role_name').value = role.role_name;
-            document.getElementById('editRoleForm').action = `/roles/${role.id}`;
+            document.getElementById('editRoleForm').action = `/admin/roles/${role.id}`;
 
             document.querySelectorAll('.role-permission').forEach(checkbox => {
                 // role[checkbox.value] بيرجع 1 أو 0 مباشرة من الـ object

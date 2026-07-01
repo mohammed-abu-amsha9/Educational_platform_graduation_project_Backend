@@ -622,21 +622,21 @@
             document.getElementById('input_parent_id').value = student.parent_id;
             document.getElementById('input_parent_phone').value = student.parent_phone;
             document.getElementById('form_edit_data').action =
-                `/students/${student.id}`; // قم بتغيير مسار الـ Route حسب التسمية لديك
+                `/admin/students/${student.id}`; // قم بتغيير مسار الـ Route حسب التسمية لديك
 
             // 3. تجهيز فورم تعديل الصف والشعبة
             document.getElementById('input_academic_level').value = student.academic_level;
             document.getElementById('input_section_name').value = student.section_name;
             document.getElementById('form_edit_class').action =
-                `/students/edit-class/${student.id}`; // عدّل الـ URL حسب الـ routes عندك
+                `/admin/students/edit-class/${student.id}`; // عدّل الـ URL حسب الـ routes عندك
 
             // 4. تجهيز فورم تعديل الرسوم
             // تغيير التجهيز ليقرأ "إجمالي المطلوب الحقيقي" المحدث من السيرفر
             document.getElementById('input_total_paid_amount').value = student.total_required_fees;
 
-            document.getElementById('form_edit_fees').action = `/students/edit-fees/${student.id}`;
+            document.getElementById('form_edit_fees').action = `/admin/students/edit-fees/${student.id}`;
             // سيقوم بتحويل الرابط ديناميكياً إلى /students/5 مثلاً
-            document.getElementById('form_delete_student').action = `/students/${student.id}`; // 5. إظهار المودال الرئيسي
+            document.getElementById('form_delete_student').action = `/admin/students/${student.id}`; // 5. إظهار المودال الرئيسي
             openModal('mainStudentModal');
         }
 

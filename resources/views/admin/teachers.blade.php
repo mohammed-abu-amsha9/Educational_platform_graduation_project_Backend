@@ -38,17 +38,54 @@
 
                             <div>
                                 <label
-                                    class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-1.5 uppercase">المادة</label>
-                                <select name="subject"
-                                    class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-teal-600 cursor-pointer">
-                                    <option value="الرياضيات">الرياضيات</option>
-                                    <option value="اللغة العربية">اللغة العربية</option>
-                                    <option value="العلوم">العلوم</option>
-                                    <option value="اللغة الانجليزية">اللغة الانجليزية</option>
-                                    <option value="الكيمياء">الكيمياء</option>
-                                    <option value="الاحياء">الاحياء</option>
-                                    <option value="التربية الاسلامية">التربية الاسلامية</option>
-                                </select>
+                                    class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-2 uppercase">المواد
+                                    الموكلة للمعلم:</label>
+                                <div
+                                    class="grid grid-cols-2 gap-2 border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl p-3 max-h-40 overflow-y-auto">
+
+                                    <label class="flex items-center gap-2 cursor-pointer py-1">
+                                        <input type="checkbox" name="subjects[]" value="الرياضيات"
+                                            class="w-4 h-4 accent-teal-600 cursor-pointer" />
+                                        <span class="text-xs text-slate-700 dark:text-zinc-300">الرياضيات</span>
+                                    </label>
+
+                                    <label class="flex items-center gap-2 cursor-pointer py-1">
+                                        <input type="checkbox" name="subjects[]" value="اللغة العربية"
+                                            class="w-4 h-4 accent-teal-600 cursor-pointer" />
+                                        <span class="text-xs text-slate-700 dark:text-zinc-300">اللغة العربية</span>
+                                    </label>
+
+                                    <label class="flex items-center gap-2 cursor-pointer py-1">
+                                        <input type="checkbox" name="subjects[]" value="العلوم"
+                                            class="w-4 h-4 accent-teal-600 cursor-pointer" />
+                                        <span class="text-xs text-slate-700 dark:text-zinc-300">العلوم</span>
+                                    </label>
+
+                                    <label class="flex items-center gap-2 cursor-pointer py-1">
+                                        <input type="checkbox" name="subjects[]" value="اللغة الانجليزية"
+                                            class="w-4 h-4 accent-teal-600 cursor-pointer" />
+                                        <span class="text-xs text-slate-700 dark:text-zinc-300">اللغة الانجليزية</span>
+                                    </label>
+
+                                    <label class="flex items-center gap-2 cursor-pointer py-1">
+                                        <input type="checkbox" name="subjects[]" value="الكيمياء"
+                                            class="w-4 h-4 accent-teal-600 cursor-pointer" />
+                                        <span class="text-xs text-slate-700 dark:text-zinc-300">الكيمياء</span>
+                                    </label>
+
+                                    <label class="flex items-center gap-2 cursor-pointer py-1">
+                                        <input type="checkbox" name="subjects[]" value="الاحياء"
+                                            class="w-4 h-4 accent-teal-600 cursor-pointer" />
+                                        <span class="text-xs text-slate-700 dark:text-zinc-300">الاحياء</span>
+                                    </label>
+
+                                    <label class="flex items-center gap-2 cursor-pointer py-1">
+                                        <input type="checkbox" name="subjects[]" value="التربية الاسلامية"
+                                            class="w-4 h-4 accent-teal-600 cursor-pointer" />
+                                        <span class="text-xs text-slate-700 dark:text-zinc-300">التربية الاسلامية</span>
+                                    </label>
+
+                                </div>
                             </div>
 
                             <div>
@@ -242,18 +279,54 @@
                 </div>
 
                 <div>
-                    <label
-                        class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-1.5 uppercase">المادة</label>
-                    <select name="subject"
-                        class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-teal-600 cursor-pointer">
-                        <option value="الرياضيات">الرياضيات</option>
-                        <option value="اللغة العربية">اللغة العربية</option>
-                        <option value="العلوم">العلوم</option>
-                        <option value="اللغة الانجليزية">اللغة الانجليزية</option>
-                        <option value="الكيمياء">الكيمياء</option>
-                        <option value="الاحياء">الاحياء</option>
-                        <option value="التربية الاسلامية">التربية الاسلامية</option>
-                    </select>
+                    <label class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-2 uppercase">المواد
+                        الموكلة للمعلم:</label>
+                    <div
+                        class="grid grid-cols-2 gap-2 border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl p-3 max-h-40 overflow-y-auto">
+
+                        <label class="flex items-center gap-2 cursor-pointer py-1">
+                            <input type="checkbox" name="subjects[]" value="الرياضيات"
+                                class="subject-checkbox w-4 h-4 accent-teal-600 cursor-pointer" />
+                            <span class="text-xs text-slate-700 dark:text-zinc-300">الرياضيات</span>
+                        </label>
+
+                        <label class="flex items-center gap-2 cursor-pointer py-1">
+                            <input type="checkbox" name="subjects[]" value="اللغة العربية"
+                                class="subject-checkbox w-4 h-4 accent-teal-600 cursor-pointer" />
+                            <span class="text-xs text-slate-700 dark:text-zinc-300">اللغة العربية</span>
+                        </label>
+
+                        <label class="flex items-center gap-2 cursor-pointer py-1">
+                            <input type="checkbox" name="subjects[]" value="العلوم"
+                                class="subject-checkbox w-4 h-4 accent-teal-600 cursor-pointer" />
+                            <span class="text-xs text-slate-700 dark:text-zinc-300">العلوم</span>
+                        </label>
+
+                        <label class="flex items-center gap-2 cursor-pointer py-1">
+                            <input type="checkbox" name="subjects[]" value="اللغة الانجليزية"
+                                class="subject-checkbox w-4 h-4 accent-teal-600 cursor-pointer" />
+                            <span class="text-xs text-slate-700 dark:text-zinc-300">اللغة الانجليزية</span>
+                        </label>
+
+                        <label class="flex items-center gap-2 cursor-pointer py-1">
+                            <input type="checkbox" name="subjects[]" value="الكيمياء"
+                                class="subject-checkbox w-4 h-4 accent-teal-600 cursor-pointer" />
+                            <span class="text-xs text-slate-700 dark:text-zinc-300">الكيمياء</span>
+                        </label>
+
+                        <label class="flex items-center gap-2 cursor-pointer py-1">
+                            <input type="checkbox" name="subjects[]" value="الاحياء"
+                                class="subject-checkbox w-4 h-4 accent-teal-600 cursor-pointer" />
+                            <span class="text-xs text-slate-700 dark:text-zinc-300">الاحياء</span>
+                        </label>
+
+                        <label class="flex items-center gap-2 cursor-pointer py-1">
+                            <input type="checkbox" name="subjects[]" value="التربية الاسلامية"
+                                class="subject-checkbox w-4 h-4 accent-teal-600 cursor-pointer" />
+                            <span class="text-xs text-slate-700 dark:text-zinc-300">التربية الاسلامية</span>
+                        </label>
+
+                    </div>
                 </div>
 
                 <div>
@@ -342,33 +415,49 @@
 @section('scripts')
     <script>
         function openViewModal(teacher) {
-            // تعبئة بيانات العرض
+            // 1. تعبئة بيانات العرض
             document.getElementById('vAvatar').innerText = teacher.full_name.charAt(0);
             document.getElementById('vName').innerText = teacher.full_name;
-            document.getElementById('vSubject').innerText = teacher.subject;
+
+            // عرض المواد بشكل نصي منفصل بفاصلة في شاشة العرض (مثال: الرياضيات, العلوم)
+            if (teacher.academic_levels && teacher.academic_levels.length > 0) {
+                // جلب أسماء المواد الفريدة المرتبطة بالمعلم
+                const uniqueSubjects = [...new Set(teacher.academic_levels.map(lvl => lvl.subject_name))];
+                document.getElementById('vSubject').innerText = uniqueSubjects.join('، ');
+            } else {
+                document.getElementById('vSubject').innerText = teacher.subject ?? '-';
+            }
+
             document.getElementById('vPhone').innerText = teacher.phone_number;
-            document.getElementById('vClasses').innerText = (teacher.academic_levels?.length ?? 0) + ' صفوف';
+            document.getElementById('vClasses').innerText = (teacher.academic_levels?.length ?? 0) + ' صفوف وشعب';
             document.getElementById('vPerms').innerText = teacher.role?.role_name ?? '-';
 
-            // تعبئة فورم التعديل
+            // 2. تعبئة فورم التعديل (النصوص الأساسية)
             document.getElementById('edit_full_name').value = teacher.full_name;
             document.getElementById('edit_phone').value = teacher.phone_number;
-            document.getElementById('editTeacherForm').action = `/teachers/${teacher.id}`;
+            document.getElementById('editTeacherForm').action = `/admin/teachers/${teacher.id}`;
 
             // تحديد الدور
             document.getElementById('edit_role_id').value = teacher.role_id;
 
-            // تحديد الصفوف المسندة
+            // 🔥 3. إضافة منطق تحديد المواد الموكلة للمعلم (جديد)
+            document.querySelectorAll('.subject-checkbox').forEach(cb => {
+                cb.checked = teacher.academic_levels?.some(
+                    lvl => cb.value === lvl.subject_name
+                ) ?? false;
+            });
+
+            // 4. تحديد الصفوف المسندة تلقائياً
             document.querySelectorAll('.section-checkbox').forEach(cb => {
                 cb.checked = teacher.academic_levels?.some(
                     lvl => cb.value === lvl.academic_level + '|' + lvl.section_name
                 ) ?? false;
             });
 
-            // ربط فورم الحذف بالـ ID
+            // 5. ربط فورم الحذف بالـ ID
             document.getElementById('deleteTeacherForm').action = `/teachers/${teacher.id}`;
 
-            // فتح المودال
+            // فتح المودال مع تأثير الحركة (Animation)
             const modal = document.getElementById('viewModal');
             const content = document.getElementById('viewContent');
             modal.classList.remove('hidden');

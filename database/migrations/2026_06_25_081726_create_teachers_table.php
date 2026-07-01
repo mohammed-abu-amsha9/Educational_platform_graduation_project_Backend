@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('full_name', 150); // الاسم الكامل للأستاذ الظاهر في واجهات المناهج
             $table->string('teacher_code', 50)->unique(); // الرقم الوظيفي التسلسلي الخاص بالمعلم
             $table->string('phone_number', 20); // رقم هاتف المعلم للتواصل الإداري والتنسيق
-            $table->string('subject', 100); // المادة الأساسية الموكلة للأستاذ لتدريسها
             $table->foreignId('role_id')->constrained('role_permissions'); // يربط المعلم بجدول الصلاحيات والأدوار المسموحة له
             $table->timestamps();
             $table->softDeletes();

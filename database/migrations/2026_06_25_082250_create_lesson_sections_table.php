@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('lesson_sections', function (Blueprint $table) {
             $table->id(); // المعرف الفريد لحركة الربط للشعبة
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade'); // يرتبط بالدرس المستهدف نشره لعدة شعب
+            $table->string('academic_level', 50); // الصف الأكاديمي المسند تدريسه للمعلم
             $table->string('section_name', 20); // اسم الشعبة المخول لطلابها مشاهدة الدرس (مثل: شعبة أ)
             $table->timestamps();
             $table->softDeletes();
