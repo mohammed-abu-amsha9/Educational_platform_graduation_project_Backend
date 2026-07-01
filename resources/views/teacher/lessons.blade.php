@@ -115,7 +115,7 @@
                 </div>
 
                 <div class="space-y-3 flex-1 overflow-y-auto max-h-[440px] pl-1">
-                    @foreach ($lessons as $lessonAndSections)
+                    @forelse ($lessons as $lessonAndSections)
                         <div
                             class="p-3.5 border border-gray-100 dark:border-slate-800/60 bg-gray-50/10 dark:bg-slate-950/20 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                             <div class="flex items-center gap-3">
@@ -152,7 +152,14 @@
                             </form>
 
                         </div>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center py-16 text-gray-400 text-sm">
+                                <i class="fa-solid fa-video-slash text-3xl mb-3 block"></i>
+                                لا يوجد دروس مرفوعة بعد
+                            </td>
+                        </tr>
+                    @endforelse
                 </div>
             </div>
         </div>
