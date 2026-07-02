@@ -27,8 +27,7 @@
 @endsection
 @section('content')
     {{-- تدوين الحقول داخل فورم واحد يرسل البيانات لـ Controller --}}
-    <form method="POST" action="{{ route('attendance.store') }}" class="mx-auto my-6 space-y-6"
-        dir="rtl">
+    <form method="POST" action="{{ route('attendance.store') }}" class="mx-auto my-6 space-y-6" dir="rtl">
         @csrf
         {{-- حقول مخفية لحفظ التاريخ الحالي المختار لإرساله مع الحضور --}}
         <input type="hidden" name="date" value="{{ request('date', date('Y-m-d')) }}">
@@ -38,8 +37,7 @@
                 <div class="w-full sm:w-64">
                     <label class="block text-[10px] font-bold text-gray-700 dark:text-slate-400 mb-1">الصف الدراسي</label>
                     {{-- إضافة id وتفعيل Submit تلقائي عند تغيير الصف لتحديث القائمة --}}
-                    <select name="class_section"
-                    {{-- تحديث الصفحة تلقائياً وجلب بيانات الطلاب بمجرد أن يختار المعلم "الصف" أو يغير "التاريخ"، بدون الحاجة لوجود زر "بحث" يضغط عليه المعلم. --}}
+                    <select name="class_section" {{-- تحديث الصفحة تلقائياً وجلب بيانات الطلاب بمجرد أن يختار المعلم "الصف" أو يغير "التاريخ"، بدون الحاجة لوجود زر "بحث" يضغط عليه المعلم. --}}
                         onchange="this.form.method='GET'; this.form.action='{{ route('attendance.index') }}'; this.form.submit();"
                         class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 text-xs outline-none focus:border-emerald-600 cursor-pointer">
                         <option value="">-- اختر الصف والشعبة --</option>
@@ -167,14 +165,21 @@
         @endif
     </form>
 @endsection
-@section('content')
+@section('scripts')
     {{-- كود الجافاسكريبت لتشغيل ميزة "تحديد الكل حاضر" كبسة زر واحدة --}}
     <script>
         function checkAllPresent() {
-            // جلب جميع حقول الراديو الخاصة بالحاضر وتفعيلها دفعة واحدة
+            // 1. جلب جميع حقول الراديو الخاصة بكلمة "حاضر"
             const presentRadios = document.querySelectorAll('.present-radio');
+
             presentRadios.forEach(radio => {
+                // 2. تفعيل الخيار برمجياً
                 radio.checked = true;
+
+                // 3. إطلاق حدث 'change' يدوياً لكي يشعر المتصفح بالتغيير ويقوم الـ CSS بتلوين الزر باللون الأخضر
+                radio.dispatchEvent(new Event('change', {
+                    bubbles: true
+                }));
             });
         }
     </script>
