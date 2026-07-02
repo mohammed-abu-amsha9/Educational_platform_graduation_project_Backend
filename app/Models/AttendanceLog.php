@@ -10,7 +10,7 @@ class AttendanceLog extends Model
 {
     /** @use HasFactory<\Database\Factories\AttendanceLogFactory> */
     use HasFactory, SoftDeletes;
-
+    protected $guarded = [];
     // السجل ينتمي لطالب محدد ومعلم محدد قام برصده.
     public function student()
     {

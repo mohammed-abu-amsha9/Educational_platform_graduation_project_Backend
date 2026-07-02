@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceLogController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\StudentController;
@@ -40,4 +41,5 @@ Route::prefix('admin')->group(function () {
 });
 Route::prefix('teacher')->group(function () {
     Route::resource('lessons', LessonController::class);
+    Route::resource('attendance', AttendanceLogController::class);
 });

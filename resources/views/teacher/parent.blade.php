@@ -273,9 +273,9 @@
                     <span>الدروس</span>
                 </a>
 
-                <a href="{{ route('teacher_attendance') }}"
+                <a href="{{ route('attendance.index') }}"
                     class="flex items-center justify-center sm:justify-start gap-1.5 px-4 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('teacher_attendance') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'dark:text-zinc-100 text-gray-600 font-semibold hover:text-teal-700' }}">
+            {{ request()->routeIs('attendance.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'dark:text-zinc-100 text-gray-600 font-semibold hover:text-teal-700' }}">
                     <i class="fa-solid fa-user-check text-base"></i>
                     <span>الحضور</span>
                 </a>

@@ -48,8 +48,7 @@ class StudentController extends Controller
 
         // 2. توليد رقم الطالب التسلسلي تلقائياً (student_code)
         // نأتي بآخر طالب تم تسجيله للحصول على الكود الخاص به
-        $lastStudent = Student::withTrashed()->orderBy('id', 'desc')->first();
-
+        $lastStudent = Student::withTrashed()->latest('created_at')->first();
 
         // preg_match => تبحث عن نمبط معين داخل النص
         if ($lastStudent && preg_match('/STU_(\d+)/', $lastStudent->student_code, $matches)) {
@@ -161,7 +160,7 @@ class StudentController extends Controller
      * Remove the specified resource from storage.
      */
     // حذف الطالب ووضعه في الارشيف
-    public function destroy( $id)
+    public function destroy($id)
     {
         // العثور على الطالب وحذفه
         $student = Student::findOrFail($id);
@@ -169,6 +168,5 @@ class StudentController extends Controller
 
         // إعادة التوجيه مع رسالة نجاح
         return redirect()->back()->with('success', 'تم حذف الطالب بنجاح');
-
     }
 }
