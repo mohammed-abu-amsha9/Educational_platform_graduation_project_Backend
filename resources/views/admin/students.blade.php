@@ -277,7 +277,7 @@
                                 <td class="p-4">
                                     <span
                                         class="px-2.5 py-1 text-xs font-bold rounded-lg bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400">
-                                        {{ $student->account_status == 'active' ? 'نشط' : 'موقف' }}
+                                        {{ $student->account_status == 'active' ? 'نشط' : 'غير نشط' }}
                                     </span>
                                 </td>
                             </tr>

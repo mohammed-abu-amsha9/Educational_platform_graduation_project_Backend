@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AttendanceLogController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\QuestionBankController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentMonthlyFeeController;
@@ -13,7 +14,10 @@ Route::view('admin_control_panel', 'admin.control_panel')->name('admin_control_p
 Route::view('admin_students', 'admin.students')->name('admin_students');
 Route::view('admin_teachers', 'admin.teachers')->name('admin_teachers');
 Route::view('admin_fees', 'admin.fees')->name('admin_fees');
-Route::view('admin_role_permistions', 'admin.role_permistions')->name('admin_role_permistions');
+Route::view('admin_role', 'admin.roles')->name('admin_roles');
+Route::view('admin_permistions', 'admin.permistions')->name('admin_permistions');
+Route::view('admin_classes', 'admin.classes')->name('admin_classes');
+Route::view('admin_sections', 'admin.sections')->name('admin_sections');
 
 Route::view('teacher_control_panel', 'teacher.control_panel')->name('teacher_control_panel');
 Route::view('teacher_lessons', 'teacher.lessons')->name('teacher_lessons');
@@ -42,4 +46,5 @@ Route::prefix('admin')->group(function () {
 Route::prefix('teacher')->group(function () {
     Route::resource('lessons', LessonController::class);
     Route::resource('attendance', AttendanceLogController::class);
+    Route::resource('questions', QuestionBankController::class);
 });

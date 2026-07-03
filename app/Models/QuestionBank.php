@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class QuestionBank extends Model
 {
     /** @use HasFactory<\Database\Factories\QuestionBankFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     // واحد لمتعدد (One-to-Many). السؤال الواحد يمتلك عدة خيارات (4 خيارات مثلاً)
     public function options()

@@ -21,7 +21,6 @@ return new class extends Migration
             $table->boolean('is_read')->default(false); // حقل منطقي لتفعيل علامة المقروئية والنقطة الزرقاء بواجهة التطبيق
             $table->timestamps(); // سينتج عنها created_at وقت إرسال الرسالة بدقة متناهية لغايات ترتيب خط الدردشة الزمني
             $table->softDeletes();
-
         });
     }
 

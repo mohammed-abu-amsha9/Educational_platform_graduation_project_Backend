@@ -171,11 +171,9 @@
         function checkAllPresent() {
             // 1. جلب جميع حقول الراديو الخاصة بكلمة "حاضر"
             const presentRadios = document.querySelectorAll('.present-radio');
-
             presentRadios.forEach(radio => {
                 // 2. تفعيل الخيار برمجياً
                 radio.checked = true;
-
                 // 3. إطلاق حدث 'change' يدوياً لكي يشعر المتصفح بالتغيير ويقوم الـ CSS بتلوين الزر باللون الأخضر
                 radio.dispatchEvent(new Event('change', {
                     bubbles: true

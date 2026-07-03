@@ -164,6 +164,8 @@ class StudentController extends Controller
     {
         // العثور على الطالب وحذفه
         $student = Student::findOrFail($id);
+        $student->account_status = 'no active';
+        $student->save();
         $student->delete();
 
         // إعادة التوجيه مع رسالة نجاح

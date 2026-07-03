@@ -284,11 +284,29 @@
                     <span>الرسوم</span>
                 </a>
 
-                <a href="{{ route('roles.index') }}"
+                <a href="{{ route('admin_roles') }}"
                     class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('roles.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+            {{ request()->routeIs('admin_roles') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+                    <i class="fa-solid fa-user-tag text-base"></i>
+                    <span>الأدوار</span>
+                </a>
+                <a href="{{ route('admin_permistions') }}"
+                    class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
+            {{ request()->routeIs('admin_permistions') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
                     <i class="fa-solid fa-shield-halved text-base"></i>
-                    <span>الأدوار والصلاحيات</span>
+                    <span> الصلاحيات</span>
+                </a>
+                <a href="{{ route('admin_classes') }}"
+                    class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
+            {{ request()->routeIs('admin_classes') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+                    <i class="fa-solid fa-chalkboard text-base"></i>
+                    <span>الصفوف</span>
+                </a>
+                <a href="{{ route('admin_sections') }}"
+                    class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
+            {{ request()->routeIs('admin_sections') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+                    <i class="fa-solid fa-cubes text-base"></i>
+                    <span>الشعب</span>
                 </a>
             </div>
         </div>

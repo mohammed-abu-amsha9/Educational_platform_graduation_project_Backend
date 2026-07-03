@@ -9,5 +9,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class QuestionOption extends Model
 {
     /** @use HasFactory<\Database\Factories\QuestionOptionFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 }
