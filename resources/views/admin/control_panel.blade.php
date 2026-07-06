@@ -13,7 +13,8 @@
             <div class="flex justify-between items-start">
                 <div class="flex flex-col gap-1 text-right">
                     <span class="text-xs font-bold text-slate-700 dark:text-zinc-400">إجمالي الطلاب</span>
-                    <span class="text-sm text-teal-600 dark:text-teal-400 font-semibold">20 نشط</span>
+                    <span class="text-sm text-teal-600 dark:text-teal-400 font-semibold">{{ $totalStudentsActive }}
+                        نشط</span>
                 </div>
                 <div
                     class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-sm">
@@ -22,7 +23,7 @@
             </div>
             <div class="text-right mt-4">
                 <h3 class="text-2xl font-bold text-slate-800 dark:text-zinc-100">
-                    20
+                    {{ $totalStudents }}
                 </h3>
             </div>
         </div>
@@ -35,7 +36,7 @@
             <div class="flex justify-between items-start">
                 <div class="flex flex-col gap-1 text-right">
                     <span class="text-xs font-bold text-slate-700 dark:text-zinc-400">إجمالي المعلمين</span>
-                    <span class="text-sm text-blue-600 dark:text-blue-400 font-semibold">5 نشط</span>
+                    <span class="text-sm text-blue-600 dark:text-blue-400 font-semibold">{{ $activeTeachers }} نشط</span>
                 </div>
                 <div
                     class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-sm">
@@ -44,7 +45,7 @@
             </div>
             <div class="text-right mt-4">
                 <h3 class="text-2xl font-bold text-slate-800 dark:text-zinc-100">
-                    5
+                    {{ $activeTeachers }}
                 </h3>
             </div>
         </div>
@@ -66,7 +67,7 @@
             </div>
             <div class="text-right mt-4 flex items-baseline gap-1 justify-start dir-rtl">
                 <h3 class="text-2xl font-bold text-slate-800 dark:text-zinc-100">
-                    11,100
+                    {{ $totalPaid }}
                 </h3>
                 <span class="text-sm font-semibold text-gray-500 dark:text-zinc-400">₪</span>
             </div>
@@ -89,7 +90,7 @@
             </div>
             <div class="text-right mt-4 flex items-baseline gap-1 justify-start dir-rtl">
                 <h3 class="text-2xl font-bold text-slate-800 dark:text-zinc-100">
-                    3,900
+                    {{ $totalRemaining }}
                 </h3>
                 <span class="text-sm font-semibold text-gray-500 dark:text-zinc-400">₪</span>
             </div>
@@ -102,17 +103,17 @@
             </div>
             <div class="flex justify-between items-start">
                 <div class="flex flex-col gap-1 text-right">
-                    <span class="text-xs font-bold text-slate-700 dark:text-zinc-400">طلاب عليهم مستحقات</span>
-                    <span class="text-sm text-orange-600 dark:text-orange-400 font-semibold">يحتاج متابعة</span>
+                    <span class="text-xs font-bold text-slate-700 dark:text-zinc-400">إحصائية الصفوف الدراسية</span>
+                    <span class="text-sm text-orange-600 dark:text-orange-400 font-semibold">الصفوف النشطة</span>
                 </div>
                 <div
                     class="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-950/40 flex items-center justify-center text-orange-600 dark:text-orange-400 shadow-sm">
-                    <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                    <i class="fa-solid fa-layer-group text-lg"></i>
                 </div>
             </div>
             <div class="text-right mt-4">
                 <h3 class="text-2xl font-bold text-slate-800 dark:text-zinc-100">
-                    8
+                    {{ $totalGrade }}
                 </h3>
             </div>
         </div>
@@ -134,7 +135,7 @@
             </div>
             <div class="text-right mt-4">
                 <h3 class="text-2xl font-bold text-slate-800 dark:text-zinc-100">
-                    13
+                    {{ $totalFullyPaid }}
                 </h3>
             </div>
         </div>
@@ -192,136 +193,34 @@
                     <span>توزيع الطلاب على الصفوف</span>
                 </h3>
 
-                <div class="flex flex-row flex-wrap gap-4 justify-end dir-rtl">
-                    <div
-                        class="flex flex-col items-center p-4 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100 dark:border-slate-800 rounded-xl flex-1 min-w-[110px] max-w-[140px] text-center shadow-sm">
-                        <span class="text-xs font-bold text-slate-700 dark:text-zinc-400 mb-2">الأول
-                            الابتدائي</span>
+                <div class="flex flex-row flex-wrap gap-4 justify-end dir-rtl" style="direction: rtl;">
+                    @foreach ($grades as $classroom)
                         <div
-                            class="relative w-14 h-14 flex items-center justify-center rounded-full bg-teal-50 dark:bg-slate-800 ring-4 ring-teal-600/20">
-                            <span class="text-xs font-black text-teal-700 dark:text-teal-400">12 طالب</span>
-                        </div>
-                        <span class="text-[10px] text-gray-400 dark:text-zinc-400 mt-2 font-medium">نسبة 75%</span>
-                    </div>
+                            class="flex flex-col items-center p-4 rounded-xl flex-1 min-w-[110px] max-w-[140px] text-center shadow-sm border
+                    {{ $classroom->is_full
+                        ? 'bg-teal-50/30 dark:bg-slate-800/60 border-teal-200 dark:border-slate-700 ring-1 ring-teal-500/30'
+                        : 'bg-gray-50/50 dark:bg-slate-800/30 border-gray-100 dark:border-slate-800' }}">
 
-                    <div
-                        class="flex flex-col items-center p-4 bg-teal-50/30 dark:bg-slate-800/60 border border-teal-200 dark:border-slate-700 rounded-xl flex-1 min-w-[110px] max-w-[140px] text-center ring-1 ring-teal-500/30 shadow-sm">
-                        <span class="text-xs font-bold text-slate-700 dark:text-zinc-400 mb-2">الثاني
-                            الإبتدائي</span>
-                        <div
-                            class="relative w-14 h-14 flex items-center justify-center rounded-full bg-teal-50 dark:bg-slate-800 ring-4 ring-teal-600/20">
-                            <span class="text-xs font-black text-teal-700 dark:text-teal-400">20 طالب</span>
-                        </div>
-                        <span class="text-[10px] text-teal-600 dark:text-teal-400 mt-2 font-bold">نسبة كاملة</span>
-                    </div>
+                            <span class="text-xs font-bold text-slate-700 dark:text-zinc-400 mb-2">
+                                {{ $classroom->name }}
+                            </span>
 
-                    <div
-                        class="flex flex-col items-center p-4 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100 dark:border-slate-800 rounded-xl flex-1 min-w-[110px] max-w-[140px] text-center shadow-sm">
-                        <span class="text-xs font-bold text-slate-700 dark:text-zinc-400 mb-2">الثالث
-                            الابتدائي</span>
-                        <div
-                            class="relative w-14 h-14 flex items-center justify-center rounded-full bg-teal-50 dark:bg-slate-800 ring-4 ring-teal-600/20">
-                            <span class="text-xs font-black text-teal-700 dark:text-teal-400">15 طالب</span>
-                        </div>
-                        <span class="text-[10px] text-gray-400 dark:text-zinc-400 mt-2 font-medium">نسبة 90%</span>
-                    </div>
+                            <div
+                                class="relative w-14 h-14 flex items-center justify-center rounded-full bg-teal-50 dark:bg-slate-800 ring-4 ring-teal-600/20">
+                                <span class="text-xs font-black text-teal-700 dark:text-teal-400">
+                                    {{ $classroom->students_count }}
+                                    {{ $classroom->students_count >= 3 && $classroom->students_count <= 10 ? 'طلاب' : 'طالب' }}
+                                </span>
+                            </div>
 
-                    <div
-                        class="flex flex-col items-center p-4 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100 dark:border-slate-800 rounded-xl flex-1 min-w-[110px] max-w-[140px] text-center shadow-sm">
-                        <span class="text-xs font-bold text-slate-700 dark:text-zinc-400 mb-2">الرابع
-                            الابتدائي</span>
-                        <div
-                            class="relative w-14 h-14 flex items-center justify-center rounded-full bg-teal-50 dark:bg-slate-800 ring-4 ring-teal-600/20">
-                            <span class="text-xs font-black text-teal-700 dark:text-teal-400">8 طلاب</span>
+                            @if ($classroom->is_full)
+                                <span class="text-[10px] text-teal-600 dark:text-teal-400 mt-2 font-bold">نسبة كاملة</span>
+                            @else
+                                <span class="text-[10px] text-gray-400 dark:text-zinc-400 mt-2 font-medium">نسبة
+                                    {{ $classroom->percentage }}%</span>
+                            @endif
                         </div>
-                        <span class="text-[10px] text-gray-400 dark:text-zinc-400 mt-2 font-medium">نسبة 45%</span>
-                    </div>
-
-                    <div
-                        class="flex flex-col items-center p-4 bg-teal-50/30 dark:bg-slate-800/60 border border-teal-200 dark:border-slate-700 rounded-xl flex-1 min-w-[110px] max-w-[140px] text-center ring-1 ring-teal-500/30 shadow-sm">
-                        <span class="text-xs font-bold text-slate-700 dark:text-zinc-400 mb-2">الخامس
-                            الإبتدائي</span>
-                        <div
-                            class="relative w-14 h-14 flex items-center justify-center rounded-full bg-teal-50 dark:bg-slate-800 ring-4 ring-teal-600/20">
-                            <span class="text-xs font-black text-teal-700 dark:text-teal-400">20 طالب</span>
-                        </div>
-                        <span class="text-[10px] text-teal-600 dark:text-teal-400 mt-2 font-bold">نسبة كاملة</span>
-                    </div>
-
-                    <div
-                        class="flex flex-col items-center p-4 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100 dark:border-slate-800 rounded-xl flex-1 min-w-[110px] max-w-[140px] text-center shadow-sm">
-                        <span class="text-xs font-bold text-slate-700 dark:text-zinc-400 mb-2">السادس
-                            الابتدائي</span>
-                        <div
-                            class="relative w-14 h-14 flex items-center justify-center rounded-full bg-teal-50 dark:bg-slate-800 ring-4 ring-teal-600/20">
-                            <span class="text-xs font-black text-teal-700 dark:text-teal-400">14 طالب</span>
-                        </div>
-                        <span class="text-[10px] text-gray-400 dark:text-zinc-400 mt-2 font-medium">نسبة 82%</span>
-                    </div>
-
-                    <div
-                        class="flex flex-col items-center p-4 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100 dark:border-slate-800 rounded-xl flex-1 min-w-[110px] max-w-[140px] text-center shadow-sm">
-                        <span class="text-xs font-bold text-slate-700 dark:text-zinc-400 mb-2">السابع
-                            الأساسي</span>
-                        <div
-                            class="relative w-14 h-14 flex items-center justify-center rounded-full bg-teal-50 dark:bg-slate-800 ring-4 ring-teal-600/20">
-                            <span class="text-xs font-black text-teal-700 dark:text-teal-400">9 طلاب</span>
-                        </div>
-                        <span class="text-[10px] text-gray-400 dark:text-zinc-400 mt-2 font-medium">نسبة 52%</span>
-                    </div>
-
-                    <div
-                        class="flex flex-col items-center p-4 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100 dark:border-slate-800 rounded-xl flex-1 min-w-[110px] max-w-[140px] text-center shadow-sm">
-                        <span class="text-xs font-bold text-slate-700 dark:text-zinc-400 mb-2">الثامن
-                            الأساسي</span>
-                        <div
-                            class="relative w-14 h-14 flex items-center justify-center rounded-full bg-teal-50 dark:bg-slate-800 ring-4 ring-teal-600/20">
-                            <span class="text-xs font-black text-teal-700 dark:text-teal-400">7 طلاب</span>
-                        </div>
-                        <span class="text-[10px] text-gray-400 dark:text-zinc-400 mt-2 font-medium">نسبة 40%</span>
-                    </div>
-
-                    <div
-                        class="flex flex-col items-center p-4 bg-teal-50/30 dark:bg-slate-800/60 border border-teal-200 dark:border-slate-700 rounded-xl flex-1 min-w-[110px] max-w-[140px] text-center ring-1 ring-teal-500/30 shadow-sm">
-                        <span class="text-xs font-bold text-slate-700 dark:text-zinc-400 mb-2">التاسع
-                            الأساسي</span>
-                        <div
-                            class="relative w-14 h-14 flex items-center justify-center rounded-full bg-teal-50 dark:bg-slate-800 ring-4 ring-teal-600/20">
-                            <span class="text-xs font-black text-teal-700 dark:text-teal-400">20 طالب</span>
-                        </div>
-                        <span class="text-[10px] text-teal-600 dark:text-teal-400 mt-2 font-bold">نسبة كاملة</span>
-                    </div>
-
-                    <div
-                        class="flex flex-col items-center p-4 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100 dark:border-slate-800 rounded-xl flex-1 min-w-[110px] max-w-[140px] text-center shadow-sm">
-                        <span class="text-xs font-bold text-slate-700 dark:text-zinc-400 mb-2">العاشر
-                            الأساسي</span>
-                        <div
-                            class="relative w-14 h-14 flex items-center justify-center rounded-full bg-teal-50 dark:bg-slate-800 ring-4 ring-teal-600/20">
-                            <span class="text-xs font-black text-teal-700 dark:text-teal-400">16 طالب</span>
-                        </div>
-                        <span class="text-[10px] text-gray-400 dark:text-zinc-400 mt-2 font-medium">نسبة 95%</span>
-                    </div>
-
-                    <div
-                        class="flex flex-col items-center p-4 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100 dark:border-slate-800 rounded-xl flex-1 min-w-[110px] max-w-[140px] text-center shadow-sm">
-                        <span class="text-xs font-bold text-slate-700 dark:text-zinc-400 mb-2">الحادي عشر</span>
-                        <div
-                            class="relative w-14 h-14 flex items-center justify-center rounded-full bg-teal-50 dark:bg-slate-800 ring-4 ring-teal-600/20">
-                            <span class="text-xs font-black text-teal-700 dark:text-teal-400">6 طلاب</span>
-                        </div>
-                        <span class="text-[10px] text-gray-400 dark:text-zinc-400 mt-2 font-medium">نسبة 35%</span>
-                    </div>
-
-                    <div
-                        class="flex flex-col items-center p-4 bg-teal-50/30 dark:bg-slate-800/60 border border-teal-200 dark:border-slate-700 rounded-xl flex-1 min-w-[110px] max-w-[140px] text-center ring-1 ring-teal-500/30 shadow-sm">
-                        <span class="text-xs font-bold text-slate-700 dark:text-zinc-400 mb-2">التوجيهي 🎓</span>
-                        <div
-                            class="relative w-14 h-14 flex items-center justify-center rounded-full bg-teal-50 dark:bg-slate-800 ring-4 ring-teal-600/20">
-                            <span class="text-xs font-black text-teal-700 dark:text-teal-400">20 طالب</span>
-                        </div>
-                        <span class="text-[10px] text-teal-600 dark:text-teal-400 mt-2 font-bold">نسبة كاملة</span>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -333,7 +232,7 @@
                     إجراءات سريعة
                 </h3>
                 <div class="flex flex-col gap-3 justify-start">
-                    <a href="students.html"
+                    <a href="{{ route('students.index') }}"
                         class="flex items-center justify-between p-3.5 bg-gray-50/50 hover:bg-gray-50 hover:border-teal-200 dark:hover:border-slate-700 dark:bg-slate-800/40 dark:hover:bg-slate-800 border border-gray-100/70 dark:border-slate-800 rounded-xl active:scale-[0.98] group">
                         <div
                             class="w-9 h-9 rounded-lg bg-teal-50 dark:bg-teal-950/40 flex items-center justify-center text-teal-600 dark:text-teal-400 shadow-sm group-hover:scale-105">
@@ -349,7 +248,7 @@
                         </div>
                     </a>
 
-                    <a href="teachers.html"
+                    <a href="{{ route('teachers.index') }}"
                         class="flex items-center justify-between p-3.5 bg-gray-50/50 hover:bg-gray-50 hover:border-teal-200 dark:hover:border-slate-700 dark:bg-slate-800/40 dark:hover:bg-slate-800 border border-gray-100/70 dark:border-slate-800 rounded-xl active:scale-[0.98] group">
                         <div
                             class="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-sm group-hover:scale-105">
@@ -365,7 +264,7 @@
                         </div>
                     </a>
 
-                    <a href="fees.html"
+                    <a href="{{ route('fees.index') }}"
                         class="flex items-center justify-between p-3.5 bg-gray-50/50 hover:bg-gray-50 hover:border-teal-200 dark:hover:border-slate-700 dark:bg-slate-800/40 dark:hover:bg-slate-800 border border-gray-100/70 dark:border-slate-800 rounded-xl active:scale-[0.98] group">
                         <div
                             class="w-9 h-9 rounded-lg bg-amber-50 dark:bg-amber-950/40 flex items-center justify-center text-amber-600 dark:text-amber-400 shadow-sm group-hover:scale-105">
@@ -381,7 +280,7 @@
                         </div>
                     </a>
 
-                    <a href="role_permistions.html"
+                    <a href="{{ route('roles.index') }}"
                         class="flex items-center justify-between p-3.5 bg-gray-50/50 hover:bg-gray-50 hover:border-teal-200 dark:hover:border-slate-700 dark:bg-slate-800/40 dark:hover:bg-slate-800 border border-gray-100/70 dark:border-slate-800 rounded-xl active:scale-[0.98] group">
                         <div
                             class="w-9 h-9 rounded-lg bg-purple-50 dark:bg-purple-950/40 flex items-center justify-center text-purple-600 dark:text-purple-400 shadow-sm group-hover:scale-105">
@@ -530,14 +429,14 @@
                         class="flex items-center justify-between p-3.5 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100/70 dark:border-slate-800 rounded-xl">
                         <span class="text-sm font-bold text-slate-700 dark:text-zinc-300">المستخدمون النشطون</span>
                         <span
-                            class="text-sm font-black text-slate-800 dark:text-zinc-100 bg-gray-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">27</span>
+                            class="text-sm font-black text-slate-800 dark:text-zinc-100 bg-gray-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">{{$totalStudentsActive}}</span>
                     </div>
 
                     <div
                         class="flex items-center justify-between p-3.5 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100/70 dark:border-slate-800 rounded-xl">
                         <span class="text-sm font-bold text-slate-700 dark:text-zinc-300">إجمالي المواد</span>
                         <span
-                            class="text-sm font-black text-slate-800 dark:text-zinc-100 bg-gray-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">5</span>
+                            class="text-sm font-black text-slate-800 dark:text-zinc-100 bg-gray-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">{{$totalSubjects}}</span>
                     </div>
 
                     <div

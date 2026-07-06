@@ -20,54 +20,25 @@
                 <select name="academic_level" id="classFilter" onchange="document.getElementById('filterForm').submit()"
                     class="w-full sm:w-48 border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 text-sm rounded-xl py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-teal-600 text-slate-800 dark:text-zinc-100 cursor-pointer">
                     <option value="all"
-                        {{ request('academic_level') == 'all' || !request('academic_level') ? 'selected' : '' }}>جميع الصفوف
+                        {{ request('academic_level') == 'all' || !request('academic_level') ? 'selected' : '' }}>
+                        جميع الصفوف
                     </option>
-
-                    <optgroup label="المرحلة الابتدائية" class="text-xs text-gray-400 bg-gray-50 dark:bg-slate-900">
-                        <option value="الصف الأول الابتدائي"
-                            {{ request('academic_level') == 'الصف الأول الابتدائي' ? 'selected' : '' }}>الصف الأول الابتدائي
-                        </option>
-                        <option value="الصف الثاني الابتدائي"
-                            {{ request('academic_level') == 'الصف الثاني الابتدائي' ? 'selected' : '' }}>الصف الثاني
-                            الابتدائي</option>
-                        <option value="الصف الثالث الابتدائي"
-                            {{ request('academic_level') == 'الصف الثالث الابتدائي' ? 'selected' : '' }}>الصف الثالث
-                            الابتدائي</option>
-                        <option value="الصف الرابع الابتدائي"
-                            {{ request('academic_level') == 'الصف الرابع الابتدائي' ? 'selected' : '' }}>الصف الرابع
-                            الابتدائي</option>
-                        <option value="الصف الخامس الابتدائي"
-                            {{ request('academic_level') == 'الصف الخامس الابتدائي' ? 'selected' : '' }}>الصف الخامس
-                            الابتدائي</option>
-                        <option value="الصف السادس الابتدائي"
-                            {{ request('academic_level') == 'الصف السادس الابتدائي' ? 'selected' : '' }}>الصف السادس
-                            الابتدائي</option>
-                    </optgroup>
-
-                    <optgroup label="المرحلة الإعدادية" class="text-xs text-gray-400 bg-gray-50 dark:bg-slate-900">
-                        <option value="الصف السابع" {{ request('academic_level') == 'الصف السابع' ? 'selected' : '' }}>الصف
-                            السابع</option>
-                        <option value="الصف الثامن" {{ request('academic_level') == 'الصف الثامن' ? 'selected' : '' }}>الصف
-                            الثامن</option>
-                        <option value="الصف التاسع" {{ request('academic_level') == 'الصف التاسع' ? 'selected' : '' }}>الصف
-                            التاسع</option>
-                        <option value="الصف العاشر" {{ request('academic_level') == 'الصف العاشر' ? 'selected' : '' }}>الصف
-                            العاشر</option>
-                    </optgroup>
-
-                    <optgroup label="المرحلة الثانوية" class="text-xs text-gray-400 bg-gray-50 dark:bg-slate-900">
-                        <option value="الصف الحادي عشر"
-                            {{ request('academic_level') == 'الصف الحادي عشر' ? 'selected' : '' }}>الصف الحادي عشر</option>
-                        <option value="توجيهي" {{ request('academic_level') == 'توجيهي' ? 'selected' : '' }}>توجيهي (الثاني
-                            عشر)</option>
+                    <optgroup class="text-xs text-gray-400 bg-gray-50 dark:bg-slate-900">
+                        @foreach ($grades as $grade)
+                            <option value="{{ $grade->id }}"
+                                {{ request('academic_level') == $grade->id ? 'selected' : '' }}>
+                                {{ $grade->name }}
+                            </option>
+                        @endforeach
                     </optgroup>
                 </select>
 
                 <select name="financial_status" id="financeFilter" onchange="document.getElementById('filterForm').submit()"
                     class="w-full sm:w-44 border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 text-sm rounded-xl py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-teal-600 text-slate-800 dark:text-zinc-100 cursor-pointer">
                     <option value="all"
-                        {{ request('financial_status') == 'all' || !request('financial_status') ? 'selected' : '' }}>جميع
-                        الحالات المادية</option>
+                        {{ request('financial_status') == 'all' || !request('financial_status') ? 'selected' : '' }}>
+                        جميع الحالات المادية
+                    </option>
                     <option value="paid" {{ request('financial_status') == 'paid' ? 'selected' : '' }}>مدفوع</option>
                     <option value="partial" {{ request('financial_status') == 'partial' ? 'selected' : '' }}>جزئي</option>
                     <option value="unpaid" {{ request('financial_status') == 'unpaid' ? 'selected' : '' }}>غير مدفوع
@@ -110,37 +81,29 @@
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">الصف
-                                    الدراسي</label>
-                                <select name="academic_level" required
-                                    class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 rounded-xl py-2.5 px-3 text-sm focus:ring-2 focus:ring-teal-600 outline-none text-slate-800 dark:text-zinc-100">
-                                    <option value="">اختر الصف...</option>
-                                    <option value="الصف الأول الابتدائي">الصف الأول الابتدائي</option>
-                                    <option value="الصف الثاني الابتدائي">الصف الثاني الابتدائي</option>
-                                    <option value="الصف الثالث الابتدائي">الصف الثالث الابتدائي</option>
-                                    <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
-                                    <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
-                                    <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
-                                    <option value="الصف السابع">الصف السابع</option>
-                                    <option value="الصف الثامن">الصف الثامن</option>
-                                    <option value="الصف التاسع">الصف التاسع</option>
-                                    <option value="الصف العاشر">الصف العاشر</option>
-                                    <option value="الصف الحادي عشر">الصف الحادي عشر</option>
-                                    <option value="توجيهي">توجيهي (الثاني عشر)</option>
-                                </select>
-                            </div>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">الصف
+                                        الدراسي</label>
+                                    <select id="createGradeSelect" name="grade_id" required
+                                        class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 rounded-xl py-2.5 px-3 text-sm focus:ring-2 focus:ring-teal-600 outline-none text-slate-800 dark:text-zinc-100">
+                                        <option value="">اختر الصف...</option>
+                                        @foreach ($grades as $grade)
+                                            <option value="{{ $grade->id }}"
+                                                data-sections="{{ json_encode($grade->sections) }}">
+                                                {{ $grade->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">الشعبة</label>
-                                <select required name="section_name"
-                                    class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 rounded-xl py-2.5 px-3 text-sm focus:ring-2 focus:ring-teal-600 outline-none text-slate-800 dark:text-zinc-100">
-                                    <option value="">اختر الشعبة...</option>
-                                    <option value="شعبة (أ)">شعبة (أ)</option>
-                                    <option value="شعبة (ب)">شعبة (ب)</option>
-                                    <option value="شعبة (ج)">شعبة (ج)</option>
-                                    <option value="بدون شعبة">بدون شعبة / عام</option>
-                                </select>
+                                <div>
+                                    <label class="text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">الشعبة</label>
+                                    <select id="createSectionSelect" name="section_id" required
+                                        class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 rounded-xl py-2.5 px-3 text-sm focus:ring-2 focus:ring-teal-600 outline-none text-slate-800 dark:text-zinc-100">
+                                        <option value="">اختر الصف أولاً...</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div>
@@ -218,7 +181,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-slate-800/60 text-sm">
-                        @forelse ($data as $student)
+                        @forelse ($students as $student)
                             <tr onclick="openStudentModal({{ json_encode($student) }})"
                                 class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 cursor-pointer transition-colors">
 
@@ -240,7 +203,7 @@
                                 </td>
 
                                 <td class="p-4 text-gray-600 dark:text-zinc-300">
-                                    {{ $student->academic_level }} - {{ $student->section_name }}
+                                    {{ $student->grade->name }}
                                 </td>
 
                                 <td class="p-4">
@@ -636,7 +599,8 @@
 
             document.getElementById('form_edit_fees').action = `/admin/students/edit-fees/${student.id}`;
             // سيقوم بتحويل الرابط ديناميكياً إلى /students/5 مثلاً
-            document.getElementById('form_delete_student').action = `/admin/students/${student.id}`; // 5. إظهار المودال الرئيسي
+            document.getElementById('form_delete_student').action =
+                `/admin/students/${student.id}`; // 5. إظهار المودال الرئيسي
             openModal('mainStudentModal');
         }
 
@@ -653,5 +617,36 @@
             closeModal(closeId);
             openModal(openId);
         }
+    </script>
+    <script>
+        // عند اختيار الصف يتم جلب الشعب المتاحة له
+        document.getElementById('createGradeSelect').addEventListener('change', function() {
+            const sectionSelect = document.getElementById('createSectionSelect');
+
+            // 1. إعادة تعيين القائمة وتفريغ الخيارات القديمة
+            sectionSelect.innerHTML = '<option value="">اختر الشعبة...</option>';
+
+            // 2. جلب السطر (Option) الذي قام المستخدم باختياره حالياً
+            const selectedOption = this.options[this.selectedIndex];
+
+            // 3. التحقق مما إذا كان الصف المختار يحتوي على بيانات شعب مخزنة
+            if (selectedOption && selectedOption.dataset.sections) {
+                // تحويل النص المخزن (JSON) إلى مصفوفة جافا سكريبت حقيقية
+                const sections = JSON.parse(selectedOption.dataset.sections);
+
+                // 4. إذا كان الصف يحتوي على شعب، قم بإضافتها كخيارات داخل الـ Select
+                if (sections.length > 0) {
+                    sections.forEach(section => {
+                        const option = document.createElement('option');
+                        option.value = section.id; // معرّف الشعبة الذي سيُحفظ في قاعدة البيانات
+                        option.textContent = section.name; // اسم الشعبة الذي يظهر للمستخدم (مثل: شعبة أ)
+                        sectionSelect.appendChild(option);
+                    });
+                } else {
+                    // في حال كان الصف منشأ حديثاً ولا يحتوي على أي شعب بعد
+                    sectionSelect.innerHTML = '<option value="">لا توجد شعب لهذا الصف</option>';
+                }
+            }
+        });
     </script>
 @endsection

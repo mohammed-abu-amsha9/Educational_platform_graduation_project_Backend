@@ -41,7 +41,7 @@
                                         value="{{ $class->academic_level }}|{{ $class->section_name }}"
                                         class="accent-teal-600 rounded w-4 h-4" />
                                     <span class="font-bold text-xs text-slate-700 dark:text-zinc-300">
-                                        {{ $class->academic_level }} - {{ $class->section_name }}
+                                        <i class="zmdi zmdi-account-box-mail"></i>
                                     </span>
                                 </label>
                             @endforeach

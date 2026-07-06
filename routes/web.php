@@ -1,23 +1,24 @@
 <?php
 
 use App\Http\Controllers\AttendanceLogController;
+use App\Http\Controllers\dashboardController;
+use App\Http\Controllers\FeeController;
+use App\Http\Controllers\GradeController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\PermistionController;
 use App\Http\Controllers\QuestionBankController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentMonthlyFeeController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
+use App\Models\permistion;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'login')->name('login');
-Route::view('admin_control_panel', 'admin.control_panel')->name('admin_control_panel');
-Route::view('admin_students', 'admin.students')->name('admin_students');
-Route::view('admin_teachers', 'admin.teachers')->name('admin_teachers');
-Route::view('admin_fees', 'admin.fees')->name('admin_fees');
-Route::view('admin_role', 'admin.roles')->name('admin_roles');
-Route::view('admin_permistions', 'admin.permistions')->name('admin_permistions');
-Route::view('admin_classes', 'admin.classes')->name('admin_classes');
-Route::view('admin_sections', 'admin.sections')->name('admin_sections');
+Route::view('admin_control_panel', 'admin.control_panel')->name('admin');
 
 Route::view('teacher_control_panel', 'teacher.control_panel')->name('teacher_control_panel');
 Route::view('teacher_lessons', 'teacher.lessons')->name('teacher_lessons');
@@ -36,12 +37,17 @@ Route::view('student_chats', 'student.chats')->name('student_chats');
 Route::view('student_sync', 'student.sync')->name('student_sync');
 
 Route::prefix('admin')->group(function () {
+    Route::resource('dashboard', dashboardController::class);
+    Route::resource('grades', GradeController::class);
+    Route::resource('sections', SectionController::class);
+    Route::resource('permistions', PermistionController::class);
+    Route::resource('roles', RoleController::class);
+    Route::resource('fees', FeeController::class);
+    Route::resource('subjects', SubjectController::class);
+    Route::resource('teachers', TeacherController::class);
     Route::resource('students', StudentController::class);
     Route::put('students/edit-class/{student}', [StudentController::class, 'editClassStudent'])->name('editClassStudent');
     Route::put('students/edit-fees/{student}', [StudentController::class, 'editFeesStudent'])->name('editFeesStudent');
-    Route::resource('fees', StudentMonthlyFeeController::class);
-    Route::resource('roles', RolePermissionController::class);
-    Route::resource('teachers', TeacherController::class);
 });
 Route::prefix('teacher')->group(function () {
     Route::resource('lessons', LessonController::class);

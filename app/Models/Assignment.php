@@ -11,8 +11,15 @@ class Assignment extends Model
     /** @use HasFactory<\Database\Factories\AssignmentFactory> */
     use HasFactory, SoftDeletes;
 
+    /** المعلم الذي نشر هذا الواجب */
     public function teacher()
     {
         return $this->belongsTo(Teacher::class, 'teacher_id');
+    }
+
+    /** كافة الحلول والتسليمات المرفوعة من الطلاب على هذا الواجب */
+    public function submissions()
+    {
+        return $this->hasMany(AssignmentSubmission::class, 'assignment_id');
     }
 }

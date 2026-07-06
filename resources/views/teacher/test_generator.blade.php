@@ -97,45 +97,60 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
-                <div>
-                    <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">المادة والصف
-                        الدراسي</label>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 text-xs items-end">
+
+                <div class="lg:col-span-3">
+                    <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">المادة والصف الدراسي</label>
                     <select
-                        class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 outline-none cursor-pointer">
+                        class="w-full h-[38px] border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl px-3 outline-none cursor-pointer truncate">
                         <option value="1">اللغة العربية - الصف الأول الإعدادي</option>
                         <option value="2">اللغة العربية - الصف الثاني الإعدادي</option>
                     </select>
                 </div>
 
-                <div>
-                    <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">إجمالي عدد
-                        الأسئلة</label>
-                    <div class="relative flex items-center">
+                <div class="lg:col-span-2">
+                    <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">عدد الأسئلة</label>
+                    <div class="relative flex items-center h-[38px]">
                         <input type="number" min="1" max="50" value="10"
-                            class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 outline-none" />
-                        <span class="absolute left-4 text-[10px] text-gray-400 font-bold">سؤال</span>
+                            class="w-full h-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl px-3 outline-none pl-12" />
+                        <span class="absolute left-3 text-[10px] text-gray-400 font-bold">سؤال</span>
                     </div>
                 </div>
 
-                <div>
-                    <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">مدة الاختبار
-                        الزمنية</label>
+                <div class="lg:col-span-2">
+                    <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">مدة الاختبار</label>
                     <select
-                        class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 outline-none cursor-pointer">
+                        class="w-full h-[38px] border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl px-3 outline-none cursor-pointer text-center">
                         <option value="30">30 دقيقة</option>
                         <option value="45">45 دقيقة</option>
                         <option value="60">ساعة كاملة</option>
                     </select>
                 </div>
 
-                <div class="flex items-end">
+                <div class="lg:col-span-3">
+                    <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">فترة الإتاحة</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="flex flex-col gap-0.5">
+                            <span class="text-[10px] text-gray-400 dark:text-slate-500 font-bold pr-1">من:</span>
+                            <input type="time" value="09:00"
+                                class="w-full h-[38px] border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl px-3 outline-none cursor-pointer text-center" />
+                        </div>
+                        <div class="flex flex-col gap-0.5">
+                            <span class="text-[10px] text-gray-400 dark:text-slate-500 font-bold pr-1">إلى:</span>
+                            <input type="time" value="17:00"
+                                class="w-full h-[38px] border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl px-3 outline-none cursor-pointer text-center" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2">
                     <button id="generateQuizBtn" type="button"
-                        class="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-lg shadow-teal-600/10 cursor-pointer h-[38px]">
+                        class="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition shadow-lg shadow-teal-600/10 cursor-pointer h-[38px]">
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
-                        <span>توليد الاختبار وبدء المعاينة</span>
+                        <span class="whitespace-nowrap">توليد وبدء المعاينة</span>
                     </button>
                 </div>
+
             </div>
         </div>
 

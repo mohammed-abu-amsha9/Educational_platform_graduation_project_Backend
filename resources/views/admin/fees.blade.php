@@ -17,7 +17,6 @@
                     @csrf
 
                     <input type="hidden" id="student_id_hidden" name="student_id">
-                    <input type="hidden" id="academic_level_hidden" name="academic_level">
                     <input type="hidden" name="billing_month" value="{{ date('m-Y') }}">
 
                     <div>
@@ -31,7 +30,7 @@
                         <datalist id="studentsList">
                             @foreach ($students as $student)
                                 <option value="{{ $student->student_code }} - {{ $student->full_name }}"
-                                    data-id="{{ $student->id }}" data-level="{{ $student->academic_level }}"
+                                    data-id="{{ $student->id }}" data-level="{{ $student->grade->name }}"
                                     data-total="{{ $student->total_required_fees }}"
                                     data-paid="{{ $student->total_paid_amount }}">
                                 </option>
@@ -106,7 +105,7 @@
                 @forelse ($data as $fees)
                     <div class="space-y-3">
                         <div
-                            class="flex items-center justify-between p-4 bg-slate-100/75 dark:bg-slate-800/40 rounded-2xl text-xs">
+                            class="flex mt-2 items-center justify-between p-4 bg-slate-100/75 dark:bg-slate-800/40 rounded-2xl text-xs">
                             <div>
                                 <p cla4ss="font-bold text-slate-800 dark:text-zinc-200">
                                     {{ $fees->student->full_name }}
@@ -120,7 +119,7 @@
                     </div>
                 @empty
                     <div class="col-span-2 text-center py-16 text-gray-400 text-sm">
-                        <i class="fa-solid fa-users-slash text-3xl mb-3 block"></i>
+                        <i class="fa-solid fa-wallet text-3xl mb-3 block"></i>
                         لا توجد معاملات مسجلة بعد
                     </div>
                 @endforelse

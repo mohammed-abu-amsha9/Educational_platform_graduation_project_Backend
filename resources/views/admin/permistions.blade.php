@@ -17,17 +17,17 @@
                             </h2>
                         </div>
 
-                        <form class="space-y-4" onsubmit="event.preventDefault()">
+                        <form method="POST" action="{{ route('permistions.store') }}" class="space-y-4">
+                            @csrf
                             <div>
                                 <label
                                     class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-1.5 uppercase">اسم
-                                    الصلاحية
+                                    الصف
                                 </label>
-                                <input type="text" placeholder="مثال: تسجيل حضور"
+                                <input name="permistion_name" type="text" placeholder="مثال:تسجيل حضور"
                                     class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-teal-600 -all text-gray-400 dark:text-zinc-400" />
                             </div>
-
-                            <button
+                            <button type="submit"
                                 class="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-3 rounded-xl shadow-lg shadow-teal-700/20 -all flex items-center justify-center gap-2 mt-4">
                                 <i class="fa-solid fa-save"></i>
                                 <span>حفظ الصلاحية</span>
@@ -43,28 +43,51 @@
                             <span>الصلاحيات</span>
                             <span
                                 class="bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-400 text-xs px-2 py-1 rounded-full"
-                                id="teacherCount">5</span>
+                                id="teacherCount">{{ $permistions->count() }}</span>
                         </h2>
                     </div>
 
-                    <div
-                        class="group relative my-4 bg-white dark:bg-slate-900 border border-gray-200/60 hover:border-gray-300 dark:border-slate-800/80 p-5 rounded-2xl shadow-sm hover:shadow-md -all">
-                        <button onclick="openModal('editRoleModal')"
-                            class="absolute top-4 left-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-[11px] font-bold px-3 py-1.5 rounded-xl border border-gray-200/50 dark:border-slate-700 -all cursor-pointer flex items-center gap-1">
-                            <i class="fa-solid fa-pen-to-square text-gray-400 dark:text-slate-400 text-[10px]"></i>
-                            <span>تعديل</span>
-                        </button>
+                    @forelse ($permistions as $permistion)
+                        <div
+                            class="group mt-2 relative bg-white dark:bg-slate-900 border border-gray-200/60 hover:border-gray-300 dark:border-slate-800/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all">
 
-                        <div class="flex items-start gap-4">
-                            <div class="w-full">
-                                <h3 class="font-bold text-slate-800 dark:text-zinc-100 group-hover:text-teal-600">
-                                    رفع ملفات
-                                </h3>
+                            <div class="absolute top-4 left-4 flex items-center gap-2">
+                                <button
+                                    onclick="openEditModal('{{ $permistion->id }}', '{{ $permistion->permistion_name }}')"
+                                    class="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-[11px] font-bold px-3 py-1.5 rounded-xl border border-gray-200/50 dark:border-slate-700 transition-all cursor-pointer flex items-center gap-1">
+                                    <i class="fa-solid fa-pen-to-square text-gray-400 dark:text-slate-400 text-[10px]"></i>
+                                    <span>تعديل</span>
+                                </button>
+
+                                <form method="POST" class="m-0"
+                                    action="{{ route('permistions.destroy', $permistion->id) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="px-3 py-1.5 text-[11px] font-bold bg-red-50 dark:bg-red-900/50 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-900 border border-red-200/30 transition-all flex items-center gap-1 cursor-pointer">
+                                        <i class="fa-solid fa-trash-can text-[10px]"></i>
+                                        <span>حذف</span>
+                                    </button>
+                                </form>
                             </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-full">
+                                    <h3
+                                        class="font-bold text-slate-800 dark:text-zinc-100 group-hover:text-teal-600 transition-colors text-sm">
+                                        {{ $permistion->permistion_name }}
+                                    </h3>
+                                </div>
+                            </div>
+
                         </div>
-                    </div>
+                    @empty
+                        <div class="col-span-2 text-center py-16 text-gray-400 text-sm">
+                            <i class="fa-solid fa-shield-halved text-3xl mb-3 block"></i>
+                            لا توجد صلاحيات مسجلة بعد
+                        </div>
+                    @endforelse
                     <!-- مودال التعديل على الدور والصلاحيات -->
-                    <div id="editRoleModal"
+                    <div id="editPermistionModal"
                         class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm transition-opacity">
                         <div
                             class="bg-white dark:bg-slate-900 border border-emerald-400 rounded-3xl w-full max-w-lg shadow-2xl relative z-10 flex flex-col max-h-[90vh]">
@@ -74,28 +97,27 @@
                                     <i class="fa-solid fa-user-gear text-sm"></i> تعديل
                                     الصلاحية
                                 </h2>
-                                <button onclick="closeModal('editRoleModal')"
+                                <button onclick="closeModal('editPermistionModal')"
                                     class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors cursor-pointer text-sm">
                                     <i class="fa-solid fa-xmark"></i>
                                 </button>
                             </div>
 
-                            <form class="p-6 space-y-5 overflow-y-auto flex-1 max-h-[calc(100vh-16rem)]" id="editRoleForm"
-                                onsubmit="event.preventDefault()">
+                            <form method="POST" action=""
+                                class="p-6 space-y-5 overflow-y-auto flex-1 max-h-[calc(100vh-16rem)]"
+                                id="editPermistionForm">
+                                @csrf
+                                @method('PUT')
                                 <div>
                                     <label
                                         class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-1.5 uppercase">اسم
                                         الصلاحية
                                     </label>
-                                    <input type="text" placeholder="مثال: تسجيل حضور"
+                                    <input name="permistion_name" id="modalPermistionName" type="text"
+                                        placeholder="مثال: تسجيل حضور"
                                         class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-teal-600 -all text-gray-400 dark:text-zinc-400" />
                                 </div>
-
-                            </form>
-
-                            <form method="post" action=""
-                                class="p-6 pt-4 border-t border-gray-100 dark:border-slate-800 flex justify-end gap-2 shrink-0">
-                                <button type="button" onclick="closeModal('editRoleModal')"
+                                <button type="button" onclick="closeModal('editPermistionModal')"
                                     class="px-5 py-2.5 text-xs font-bold text-gray-500 dark:text-slate-400 bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:hover:text-white rounded-xl transition-all cursor-pointer">
                                     إلغاء
                                 </button>
@@ -110,4 +132,18 @@
             </div>
         </div>
     </div>
+@endsection
+@section('scripts')
+    <script>
+        function openEditModal(id, name) {
+            // 1. تحديد العناصر داخل المودال
+            const form = document.getElementById('editPermistionForm');
+            const inputName = document.getElementById('modalPermistionName');
+            form.action = `/admin/permistions/${id}`;
+            // 3. وضع اسم الصف الحالي داخل حقل الإدخال
+            inputName.value = name;
+            // 4. إظهار المودال (استدعاء دالتك القديمة لفتح المودال)
+            openModal('editPermistionModal');
+        }
+    </script>
 @endsection

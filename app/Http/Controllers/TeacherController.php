@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\RolePermission;
-use App\Models\Teacher;
-use App\Models\TeacherAcademicLevel;
+use App\Models\grade;
+use App\Models\grade_teacher;
+use App\Models\role;
+use App\Models\subject;
+use App\Models\subject_teacher;
+use App\Models\teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -16,9 +19,19 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        $teachers = Teacher::with(['academicLevels', 'role'])->get();
-        $roles = RolePermission::all();
-        return view('admin.teachers', ['teachers' => $teachers, 'roles' => $roles]);
+        $teachers = Teacher::with(['subjects', 'role'])->get();
+        $roles = Role::all();
+        $grades = Grade::with('sections')->get();
+
+        // 🟢 جلب المواد من قاعدة البيانات لتصبح ديناميكية
+        $subjects = subject::all();
+
+        return view('admin.teachers', [
+            'teachers' => $teachers,
+            'roles'    => $roles,
+            'grades'   => $grades,
+            'subjects' => $subjects // مررنا المواد هنا
+        ]);
     }
 
     /**
@@ -28,6 +41,7 @@ class TeacherController extends Controller
     {
         //
     }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -37,11 +51,12 @@ class TeacherController extends Controller
             'full_name'    => 'required|string|max:150',
             'phone_number' => 'required|string|max:20',
             'subjects'      => 'required|array',
-            'role_id'      => 'required|exists:role_permissions,id',
+            'role_id'      => 'required|exists:roles,id',
         ]);
 
         // اطلب من لارافيل فحص الجدول بالكامل حتى المحذوفين مؤقتاً
-        $lastTeacher = Teacher::withTrashed()->orderBy('id', 'desc')->first();
+        $lastTeacher = Teacher::withTrashed()->latest('created_at')->first();
+
 
         if ($lastTeacher && preg_match('/TCH_(\d+)/', $lastTeacher->teacher_code, $matches)) {
             $nextNumber = intval($matches[1]) + 1;
@@ -57,21 +72,13 @@ class TeacherController extends Controller
         $teacher->role_id      = $request->input('role_id');
         $teacher->save();
 
-        // 3. تخزين الصفوف والشعب والمواد في جدول teacher_academic_levels
-        // سنقوم بالمرور على كل مادة تم اختيارها، وربطها بكل شعبة تم تحديدها
-        foreach ($request->input('subjects', []) as $subjectName) {
-            foreach ($request->input('sections', []) as $section) {
-
-                // تفكيك قيمة الشعبة القادمة من الواجهة (الصف الدراسي | اسم الشعبة)
-                [$academicLevel, $sectionName] = explode('|', $section);
-
-                $teacherAcademicLevel = new TeacherAcademicLevel();
-                $teacherAcademicLevel->teacher_id    = $teacher->id;
-                $teacherAcademicLevel->academic_level = $academicLevel;
-                $teacherAcademicLevel->section_name  = $sectionName;
-                $teacherAcademicLevel->subject_name   = $subjectName; // 🔥 تم حقن المادة ديناميكياً لكل سجل
-                $teacherAcademicLevel->save();
-            }
+        // 4. إصلاح حفظ المواد في الجدول الوسيط (Many-to-Many)
+        // نقوم بعمل حلقة تكرار لحفظ كل مادة تم اختيارها في الفورم بشكل مستقل
+        foreach ($request->input('subjects') as $subjectId) {
+            $subjectTeacher = new subject_teacher();
+            $subjectTeacher->subject_id = $subjectId; // 🟢 المادة تأخذ ID المادة القادم من الفورم
+            $subjectTeacher->teacher_id = $teacher->id; // 🟢 المعلم يأخذ ID المعلم الذي تم إنشاؤه للتو
+            $subjectTeacher->save();
         }
 
         // إنشاء حساب المستخدم
@@ -79,8 +86,17 @@ class TeacherController extends Controller
         $user->id       = $teacher->id;
         $user->name     = $teacher->full_name;
         $user->password = Hash::make($teacher->id);
-        $user->role     = 'teacher';
+        $user->role_id     = $request->input('role_id');
         $user->save();
+        foreach ($request->input('sections') as $sectionValue) {
+            // 🟢 تنظيف القيمة: تحويل "grade_2" إلى رقم "2" فقط عبر حذف كلمة "grade_"
+            $gradeId = str_replace('grade_', '', $sectionValue);
+
+            $gradeTeacher = new grade_teacher(); // 💡 تم تعديل اسم الكائن ليكون معبراً بدلاً من $user
+            $gradeTeacher->teacher_id = $teacher->id;
+            $gradeTeacher->grade_id   = (int) $gradeId; // تحويله إلى رقم صحيح للتأكيد
+            $gradeTeacher->save();
+        }
 
         return redirect()->back()->with('success', 'تم إضافة المعلم بنجاح!');
     }
@@ -88,7 +104,7 @@ class TeacherController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Teacher $teacher)
+    public function show(teacher $teacher)
     {
         //
     }
@@ -96,7 +112,7 @@ class TeacherController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Teacher $teacher)
+    public function edit(teacher $teacher)
     {
         //
     }
@@ -104,80 +120,16 @@ class TeacherController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Teacher $teacher, User $user, TeacherAcademicLevel $teacherAcademicLevel)
+    public function update(Request $request, teacher $teacher)
     {
-        // 1. التحقق من البيانات (تأكد أن حقل الـ subject ممرر من الفورم)
-        $request->validate([
-            'full_name'    => 'required|string|max:150',
-            'phone_number' => 'required|string|max:20',
-            'subjects'      => 'required|array',
-            'role_id'      => 'required|exists:role_permissions,id',
-        ]);
-
-        // 2. تحديث بيانات المعلم الحالي بنجاح
-        $teacher->full_name    = $request->input('full_name');
-        $teacher->phone_number = $request->input('phone_number');
-        $teacher->role_id      = $request->input('role_id');
-        $teacher->save();
-
-        // 3. تحديث الأقسام (نحذف الأقسام القديمة للمعلم أولاً لتجنب التكرار)
-        $teacherAcademicLevel->where('teacher_id', $teacher->id)->delete();
-
-        // 3. تخزين الصفوف والشعب والمواد في جدول teacher_academic_levels
-        // سنقوم بالمرور على كل مادة تم اختيارها، وربطها بكل شعبة تم تحديدها
-        foreach ($request->input('subjects', []) as $subjectName) {
-            foreach ($request->input('sections', []) as $section) {
-
-                // تفكيك قيمة الشعبة القادمة من الواجهة (الصف الدراسي | اسم الشعبة)
-                [$academicLevel, $sectionName] = explode('|', $section);
-
-                $teacherAcademicLevel = new TeacherAcademicLevel();
-                $teacherAcademicLevel->teacher_id    = $teacher->id;
-                $teacherAcademicLevel->academic_level = $academicLevel;
-                $teacherAcademicLevel->section_name  = $sectionName;
-                $teacherAcademicLevel->subject_name   = $subjectName; // 🔥 تم حقن المادة ديناميكياً لكل سجل
-                $teacherAcademicLevel->save();
-            }
-        }
-
-        // 4. تحديث حساب المستخدم (هنا حل مشكلة Duplicate Entry)
-        // نبحث عن المستخدم الحالي المرتبط بالمعلم حتى يقوم بعمل Update بدلاً من Insert
-        $existingUser = $user->find($teacher->id);
-
-        if ($existingUser) {
-            // إذا كان المستخدم موجوداً، نحدث بياناته
-            $existingUser->name = $teacher->full_name;
-            // يفضل عدم تعديل الباسورد في التعديل العادي لكي لا يفقد المعلم حسابه
-            $existingUser->save();
-        } else {
-            // في حال لم يكن له حساب سابقاً لأي سبب، ننشئه له
-            $user->id       = $teacher->id;
-            $user->name     = $teacher->full_name;
-            $user->password = Hash::make($teacher->id);
-            $user->role     = 'teacher';
-            $user->save();
-        }
-
-        return redirect()->back()->with('success', 'تم تحديث بيانات المعلم بنجاح!');
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Teacher $teacher)
+    public function destroy(teacher $teacher)
     {
-        // الحصول على الـ id الحقيقي للمعلم لقطع الشك باليقين
-        $teacherId = $teacher->getKey();
-
-        // 1. حذف الأقسام الأكاديمية التابعة للمعلم
-        TeacherAcademicLevel::where('teacher_id', $teacherId)->delete();
-
-        // 2. حذف حساب المستخدم المرتبط به
-        User::where('id', $teacherId)->delete();
-
-        // 3. حذف المعلم نفسه
-        $teacher->delete();
-
-        return redirect()->back()->with('success', 'تم حذف المعلم وجميع البيانات المرتبطة به بنجاح!');
+        //
     }
 }

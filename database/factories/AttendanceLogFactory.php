@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\AttendanceLog;
+use App\Models\attendance_log;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<AttendanceLog>
+ * @extends Factory<attendance_log>
  */
 class AttendanceLogFactory extends Factory
 {

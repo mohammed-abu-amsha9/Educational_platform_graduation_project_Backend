@@ -24,16 +24,16 @@
                                 <label
                                     class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-1.5 uppercase">اسم
                                     المعلم</label>
-                                <input type="text" name="full_name" placeholder="الاسم الكامل"
-                                    class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-teal-600 text-gray-400 dark:text-zinc-400" />
+                                <input type="text" name="full_name" placeholder="الاسم الكامل" required
+                                    class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-teal-600 text-slate-800 dark:text-zinc-100" />
                             </div>
 
                             <div>
                                 <label
                                     class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-1.5 uppercase">رقم
                                     الهاتف</label>
-                                <input type="text" name="phone_number" placeholder="0599999999"
-                                    class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-teal-600 font-mono text-gray-400 dark:text-zinc-400" />
+                                <input type="text" name="phone_number" placeholder="0599999999" required
+                                    class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-teal-600 font-mono text-slate-800 dark:text-zinc-100" />
                             </div>
 
                             <div>
@@ -41,49 +41,20 @@
                                     class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-2 uppercase">المواد
                                     الموكلة للمعلم:</label>
                                 <div
-                                    class="grid grid-cols-2 gap-2 border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl p-3 max-h-40 overflow-y-auto">
+                                    class="grid grid-cols-2 gap-2 border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl p-3 max-h-40 overflow-y-auto custom-scroll">
 
-                                    <label class="flex items-center gap-2 cursor-pointer py-1">
-                                        <input type="checkbox" name="subjects[]" value="الرياضيات"
-                                            class="w-4 h-4 accent-teal-600 cursor-pointer" />
-                                        <span class="text-xs text-slate-700 dark:text-zinc-300">الرياضيات</span>
-                                    </label>
-
-                                    <label class="flex items-center gap-2 cursor-pointer py-1">
-                                        <input type="checkbox" name="subjects[]" value="اللغة العربية"
-                                            class="w-4 h-4 accent-teal-600 cursor-pointer" />
-                                        <span class="text-xs text-slate-700 dark:text-zinc-300">اللغة العربية</span>
-                                    </label>
-
-                                    <label class="flex items-center gap-2 cursor-pointer py-1">
-                                        <input type="checkbox" name="subjects[]" value="العلوم"
-                                            class="w-4 h-4 accent-teal-600 cursor-pointer" />
-                                        <span class="text-xs text-slate-700 dark:text-zinc-300">العلوم</span>
-                                    </label>
-
-                                    <label class="flex items-center gap-2 cursor-pointer py-1">
-                                        <input type="checkbox" name="subjects[]" value="اللغة الانجليزية"
-                                            class="w-4 h-4 accent-teal-600 cursor-pointer" />
-                                        <span class="text-xs text-slate-700 dark:text-zinc-300">اللغة الانجليزية</span>
-                                    </label>
-
-                                    <label class="flex items-center gap-2 cursor-pointer py-1">
-                                        <input type="checkbox" name="subjects[]" value="الكيمياء"
-                                            class="w-4 h-4 accent-teal-600 cursor-pointer" />
-                                        <span class="text-xs text-slate-700 dark:text-zinc-300">الكيمياء</span>
-                                    </label>
-
-                                    <label class="flex items-center gap-2 cursor-pointer py-1">
-                                        <input type="checkbox" name="subjects[]" value="الاحياء"
-                                            class="w-4 h-4 accent-teal-600 cursor-pointer" />
-                                        <span class="text-xs text-slate-700 dark:text-zinc-300">الاحياء</span>
-                                    </label>
-
-                                    <label class="flex items-center gap-2 cursor-pointer py-1">
-                                        <input type="checkbox" name="subjects[]" value="التربية الاسلامية"
-                                            class="w-4 h-4 accent-teal-600 cursor-pointer" />
-                                        <span class="text-xs text-slate-700 dark:text-zinc-300">التربية الاسلامية</span>
-                                    </label>
+                                    @foreach ($subjects as $subject)
+                                        <label class="flex items-center gap-2 cursor-pointer py-1 group">
+                                            <input type="checkbox" name="subjects[]" value="{{ $subject->id }}"
+                                                class="w-4 h-4 accent-teal-600 cursor-pointer" />
+                                            <span
+                                                class="text-xs text-slate-700 dark:text-zinc-300 group-hover:text-teal-600 transition-colors">
+                                                {{ $subject->name }}
+                                                <span
+                                                    class="text-[10px] text-gray-400">({{ $subject->grade->name ?? '' }})</span>
+                                            </span>
+                                        </label>
+                                    @endforeach
 
                                 </div>
                             </div>
@@ -93,36 +64,35 @@
                                     المسندة</label>
                                 <div class="border border-gray-200 dark:border-slate-800 rounded-xl p-3 space-y-1.5 text-xs bg-slate-50/50 dark:bg-slate-800/30 custom-scroll"
                                     style="height:150px; overflow-y:scroll;">
-                                    @php
-                                        $levels = [
-                                            'الصف الأول الابتدائي',
-                                            'الصف الثاني الابتدائي',
-                                            'الصف الثالث الابتدائي',
-                                            'الصف الرابع الابتدائي',
-                                            'الصف الخامس الابتدائي',
-                                            'الصف السادس الابتدائي',
-                                            'الصف السابع',
-                                            'الصف الثامن',
-                                            'الصف التاسع',
-                                            'الصف العاشر',
-                                            'الصف الحادي عشر',
-                                            'توجيهي',
-                                        ];
-                                        $sectionsList = ['شعبة (أ)', 'شعبة (ب)', 'شعبة (ج)', 'بدون شعبة'];
-                                    @endphp
-                                    @foreach ($levels as $level)
-                                        @foreach ($sectionsList as $section)
+
+                                    @foreach ($grades as $grade)
+                                        {{-- 1. الحالة الأولى: إذا كان الصف يحتوي على شعب فعلاً --}}
+                                        @if ($grade->sections->count() > 0)
+                                            @foreach ($grade->sections as $section)
+                                                <label
+                                                    class="flex items-center justify-between py-0.5 cursor-pointer group">
+                                                    <span
+                                                        class="text-slate-600 dark:text-zinc-400 group-hover:text-teal-600 transition-colors">
+                                                        {{ $grade->name }} — {{ $section->name }}
+                                                    </span>
+                                                    <input type="checkbox" name="sections[]" value="{{ $section->id }}"
+                                                        class="w-3.5 h-3.5 accent-teal-500 cursor-pointer" />
+                                                </label>
+                                            @endforeach
+
+                                            {{-- 2. الحالة الثانية: إذا كان الصف وحيداً بدون أي شعبة مسجلة له --}}
+                                        @else
                                             <label class="flex items-center justify-between py-0.5 cursor-pointer group">
                                                 <span
-                                                    class="text-slate-600 dark:text-zinc-400 group-hover:text-teal-600 transition-colors">
-                                                    {{ $level }} — {{ $section }}
+                                                    class="text-slate-600 dark:text-zinc-400 group-hover:text-teal-600 transition-colors font-bold">
+                                                    {{ $grade->name }} — (عام / بدون شعبة)
                                                 </span>
-                                                <input type="checkbox" name="sections[]"
-                                                    value="{{ $level }}|{{ $section }}"
+                                                <input type="checkbox" name="sections[]" value="grade_{{ $grade->id }}"
                                                     class="w-3.5 h-3.5 accent-teal-500 cursor-pointer" />
                                             </label>
-                                        @endforeach
-                                    @endforeach
+                                        @endif {{-- 🟢 التعديل هنا: قمنا بإغلاق الشرط أولاً --}}
+                                    @endforeach {{-- 🟢 التعديل هنا: ثم أغلقنا حلقة الصفوف --}}
+
                                 </div>
                             </div>
 
@@ -130,8 +100,8 @@
                                 <label
                                     class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-1.5 uppercase">الدور
                                     الوظيفي (الصلاحيات)</label>
-                                <select name="role_id"
-                                    class="w-full border border-gray-100 dark:border-slate-800 rounded-xl p-3 text-xs bg-slate-50/50 dark:bg-slate-800/30 text-gray-600 dark:text-zinc-300 focus:outline-none cursor-pointer">
+                                <select name="role_id" required
+                                    class="w-full border border-gray-200 dark:border-slate-800 rounded-xl p-3 text-xs bg-slate-50/50 dark:bg-slate-800/30 text-slate-800 dark:text-zinc-300 focus:outline-none cursor-pointer focus:ring-2 focus:ring-teal-600">
                                     <option value="" disabled selected>اختر الدور المرتبط بالمعلم...</option>
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->id }}">{{ $role->role_name }}</option>
@@ -140,7 +110,7 @@
                             </div>
 
                             <button type="submit"
-                                class="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-3 rounded-xl shadow-lg shadow-teal-700/20 flex items-center justify-center gap-2 mt-4">
+                                class="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-3 rounded-xl shadow-lg shadow-teal-700/20 flex items-center justify-center gap-2 mt-4 transition-all">
                                 <i class="fa-solid fa-save"></i>
                                 <span>حفظ المعلم</span>
                             </button>
@@ -163,35 +133,49 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @forelse($teachers as $teacher)
-                            <div onclick="openViewModal({{ $teacher->load('academicLevels', 'role')->toJson() }})"
-                                class="group relative bg-white dark:bg-slate-900 border border-gray-200/60 hover:border-gray-300 dark:border-slate-800/80 p-5 rounded-2xl shadow-sm hover:shadow-md cursor-pointer">
+                            {{-- 🟢 تحسين: تمرير كائن المعلم كاملاً بعد معالجته بأمان دون كسر كود الـ HTML بسبب علامات الاقتباس --}}
+                            <div onclick="openViewModal({{ json_encode($teacher) }})"
+                                class="group relative bg-white dark:bg-slate-900 border border-gray-200/60 hover:border-gray-300 dark:border-slate-800/80 p-5 rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition-all">
+
+                                {{-- حالة الحساب --}}
                                 <span
                                     class="absolute top-4 left-4 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded-full">نشط</span>
+
                                 <div class="flex items-center gap-4">
+                                    {{-- الحرف الأول من الاسم --}}
                                     <div
                                         class="w-14 h-14 rounded-full bg-teal-50 dark:bg-teal-950/40 flex items-center justify-center text-teal-600 dark:text-teal-400 font-black text-xl shadow-inner">
                                         {{ mb_substr($teacher->full_name, 0, 1) }}
                                     </div>
+
                                     <div>
                                         <h3 class="font-bold text-slate-800 dark:text-zinc-100 group-hover:text-teal-600">
                                             {{ $teacher->full_name }}
                                         </h3>
                                         <p class="text-xs text-gray-400 font-mono">{{ $teacher->teacher_code }}</p>
+
                                         <div
                                             class="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-[11px] text-gray-500 dark:text-zinc-400">
-                                            <span><i class="fa-solid fa-book-open ml-1 text-teal-500"></i>
-                                                {{ $teacher->subject }}</span>
-                                            <span><i class="fa-solid fa-school ml-1 text-blue-500"></i>
-                                                {{ $teacher->academicLevels->count() }} صفوف</span>
-                                            <span><i class="fa-solid fa-key ml-1 text-amber-500"></i>
-                                                {{ $teacher->role->role_name ?? '-' }}</span>
+                                            {{-- 🟢 1. جلب أسماء المواد الموكلة مدمجة معاً بفواصل بسلاسة --}}
+                                            <span>
+                                                <i class="fa-solid fa-book-open ml-1 text-teal-500"></i>
+                                                {{ $teacher->subjects->pluck('name')->implode('، ') ?: 'لم تحدد مواد' }}
+                                            </span>
+
+
+
+                                            {{-- الصلاحية --}}
+                                            <span>
+                                                <i class="fa-solid fa-key ml-1 text-amber-500"></i>
+                                                {{ $teacher->role->role_name ?? '-' }}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         @empty
                             <div class="col-span-2 text-center py-16 text-gray-400 text-sm">
-                                <i class="fa-solid fa-users-slash text-3xl mb-3 block"></i>
+                                <i class="fa-solid fa-chalkboard-user text-3xl mb-3 block"></i>
                                 لا يوجد معلمون مسجلون بعد
                             </div>
                         @endforelse
@@ -200,15 +184,14 @@
             </div>
         </div>
     </div>
-
-    {{-- مودال العرض --}}
-    <div id="viewModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    {{-- ==================== 1. مودال العرض ==================== viewModal --}}
+    <div id="" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal('viewModal')"></div>
         <div id="viewContent"
             class="bg-white border border-emerald-400 dark:bg-slate-900 rounded-3xl w-full max-w-md shadow-2xl relative z-10 p-6 transform scale-95 opacity-0 transition-all duration-300">
             <div class="flex justify-between items-start mb-6">
                 <h2 class="text-lg font-black text-teal-700">ملف المعلم</h2>
-                <button onclick="closeModal('viewModal')" class="text-gray-400 hover:text-rose-500 transition-colors">
+                <button onclick="closeModal('viewModal')", class="text-gray-400 hover:text-rose-500 transition-colors">
                     <i class="fa-solid fa-circle-xmark text-xl"></i>
                 </button>
             </div>
@@ -258,15 +241,17 @@
         </div>
     </div>
 
-    {{-- مودال التعديل --}}
-    <div id="editModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    {{-- ==================== 2. مودال التعديل (مدمج داخله الفورم المطور) ==================== editModal--}}
+    <div id="" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal('editModal')"></div>
         <div
             class="bg-white border border-emerald-400 dark:bg-slate-900 rounded-3xl w-full max-w-md shadow-2xl relative z-10 p-6 max-h-[90vh] flex flex-col">
+
             <h2 class="text-lg font-black text-amber-600 mb-4 flex items-center gap-2 shrink-0">
                 <i class="fa-solid fa-pen-to-square"></i> تعديل بيانات المعلم
             </h2>
 
+            {{-- بداية فورم التعديل --}}
             <form method="POST" action="" id="editTeacherForm"
                 class="space-y-4 overflow-y-auto pr-1 flex-1 custom-scroll">
                 @csrf
@@ -274,7 +259,7 @@
 
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-1">اسم المعلم</label>
-                    <input type="text" id="edit_full_name" name="full_name"
+                    <input type="text" id="edit_full_name" name="full_name" required
                         class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 rounded-xl py-2 px-3 text-sm outline-none dark:text-zinc-100" />
                 </div>
 
@@ -282,75 +267,41 @@
                     <label class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-2 uppercase">المواد
                         الموكلة للمعلم:</label>
                     <div
-                        class="grid grid-cols-2 gap-2 border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl p-3 max-h-40 overflow-y-auto">
-
-                        <label class="flex items-center gap-2 cursor-pointer py-1">
-                            <input type="checkbox" name="subjects[]" value="الرياضيات"
-                                class="subject-checkbox w-4 h-4 accent-teal-600 cursor-pointer" />
-                            <span class="text-xs text-slate-700 dark:text-zinc-300">الرياضيات</span>
-                        </label>
-
-                        <label class="flex items-center gap-2 cursor-pointer py-1">
-                            <input type="checkbox" name="subjects[]" value="اللغة العربية"
-                                class="subject-checkbox w-4 h-4 accent-teal-600 cursor-pointer" />
-                            <span class="text-xs text-slate-700 dark:text-zinc-300">اللغة العربية</span>
-                        </label>
-
-                        <label class="flex items-center gap-2 cursor-pointer py-1">
-                            <input type="checkbox" name="subjects[]" value="العلوم"
-                                class="subject-checkbox w-4 h-4 accent-teal-600 cursor-pointer" />
-                            <span class="text-xs text-slate-700 dark:text-zinc-300">العلوم</span>
-                        </label>
-
-                        <label class="flex items-center gap-2 cursor-pointer py-1">
-                            <input type="checkbox" name="subjects[]" value="اللغة الانجليزية"
-                                class="subject-checkbox w-4 h-4 accent-teal-600 cursor-pointer" />
-                            <span class="text-xs text-slate-700 dark:text-zinc-300">اللغة الانجليزية</span>
-                        </label>
-
-                        <label class="flex items-center gap-2 cursor-pointer py-1">
-                            <input type="checkbox" name="subjects[]" value="الكيمياء"
-                                class="subject-checkbox w-4 h-4 accent-teal-600 cursor-pointer" />
-                            <span class="text-xs text-slate-700 dark:text-zinc-300">الكيمياء</span>
-                        </label>
-
-                        <label class="flex items-center gap-2 cursor-pointer py-1">
-                            <input type="checkbox" name="subjects[]" value="الاحياء"
-                                class="subject-checkbox w-4 h-4 accent-teal-600 cursor-pointer" />
-                            <span class="text-xs text-slate-700 dark:text-zinc-300">الاحياء</span>
-                        </label>
-
-                        <label class="flex items-center gap-2 cursor-pointer py-1">
-                            <input type="checkbox" name="subjects[]" value="التربية الاسلامية"
-                                class="subject-checkbox w-4 h-4 accent-teal-600 cursor-pointer" />
-                            <span class="text-xs text-slate-700 dark:text-zinc-300">التربية الاسلامية</span>
-                        </label>
-
+                        class="grid grid-cols-2 gap-2 border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl p-3 max-h-40 overflow-y-auto custom-scroll">
+                        @foreach ($subjects as $subject)
+                            <label class="flex items-center gap-2 cursor-pointer py-1 group">
+                                <input type="checkbox" name="subjects[]" value="{{ $subject->id }}"
+                                    class="subject-checkbox w-4 h-4 accent-teal-600 cursor-pointer" />
+                                <span
+                                    class="text-xs text-slate-700 dark:text-zinc-300 group-hover:text-teal-600 transition-colors">
+                                    {{ $subject->name }}
+                                    <span class="text-[10px] text-gray-400">({{ $subject->grade->name ?? '' }})</span>
+                                </span>
+                            </label>
+                        @endforeach
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-1">رقم الهاتف</label>
-                    <input type="text" id="edit_phone" name="phone_number"
-                        class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 rounded-xl py-2 px-3 text-sm outline-none dark:text-zinc-100" />
+                    <input type="text" id="edit_phone" name="phone_number" required
+                        class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 rounded-xl py-2 px-3 text-sm outline-none dark:text-zinc-100 font-mono" />
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-black text-slate-500 mb-1.5 uppercase">الصفوف المسندة</label>
-                    <div class="border border-gray-100 dark:border-slate-800 rounded-xl p-3 space-y-1.5 text-xs bg-slate-50/50 dark:bg-slate-800/30"
-                        style="height:150px; overflow-y:scroll;">
-                        @foreach ($levels as $level)
-                            @foreach ($sectionsList as $section)
-                                <label class="flex items-center justify-between py-0.5 cursor-pointer group">
-                                    <span
-                                        class="text-slate-600 dark:text-zinc-400 group-hover:text-teal-600 transition-colors">
-                                        {{ $level }} — {{ $section }}
-                                    </span>
-                                    <input type="checkbox" name="sections[]"
-                                        value="{{ $level }}|{{ $section }}"
-                                        class="section-checkbox w-3.5 h-3.5 accent-teal-500 cursor-pointer" />
-                                </label>
-                            @endforeach
+                    <label class="block text-[11px] font-black text-slate-500 mb-1.5 uppercase">الصفوف الدراسية</label>
+                    <div class="border border-gray-100 dark:border-slate-800 rounded-xl p-3 space-y-1.5 text-xs bg-slate-50/50 dark:bg-slate-800/30 custom-scroll"
+                        style="height:120px; overflow-y:scroll;">
+                        @foreach ($grades as $grade)
+                            <div
+                                class="flex items-center justify-between py-1 border-b border-gray-100/50 dark:border-slate-800/50 last:border-0">
+                                <span class="text-slate-600 dark:text-zinc-400 font-medium">
+                                    <i class="fa-solid fa-graduation-cap ml-1 text-slate-400"></i> {{ $grade->name }}
+                                </span>
+                                <span
+                                    class="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md">يدار
+                                    عبر المواد</span>
+                            </div>
                         @endforeach
                     </div>
                 </div>
@@ -358,7 +309,7 @@
                 <div>
                     <label class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-1.5 uppercase">الدور
                         الوظيفي (الصلاحيات)</label>
-                    <select id="edit_role_id" name="role_id"
+                    <select id="edit_role_id" name="role_id" required
                         class="w-full border border-gray-100 dark:border-slate-800 rounded-xl p-3 text-xs bg-slate-50/50 dark:bg-slate-800/30 text-gray-600 dark:text-zinc-300 focus:outline-none cursor-pointer">
                         <option value="" disabled>اختر الدور...</option>
                         @foreach ($roles as $role)
@@ -367,13 +318,13 @@
                     </select>
                 </div>
 
-                <div class="flex justify-end gap-2 pt-2 border-t border-gray-100 dark:border-slate-800">
+                <div class="flex justify-end gap-2 pt-2 border-t border-gray-100 dark:border-slate-800 shrink-0">
                     <button type="button" onclick="switchModal('editModal', 'viewModal')"
                         class="px-4 py-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-slate-800 rounded-xl cursor-pointer">
                         رجوع
                     </button>
                     <button type="submit"
-                        class="px-4 py-2 text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-xl cursor-pointer">
+                        class="px-4 py-2 text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-xl cursor-pointer transition-colors">
                         حفظ التغييرات
                     </button>
                 </div>
@@ -381,8 +332,8 @@
         </div>
     </div>
 
-    {{-- مودال الحذف --}}
-    <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    {{-- ==================== 3. مودال الحذف ==================== deleteModal--}}
+    <div id="" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal('deleteModal')"></div>
         <div class="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-xs shadow-2xl relative z-10 p-6 text-center">
             <div
@@ -413,51 +364,49 @@
 @endsection
 
 @section('scripts')
+    {{-- معلق --}}
     <script>
         function openViewModal(teacher) {
-            // 1. تعبئة بيانات العرض
+            // 1. تعبئة بيانات العرض (View Modal)
             document.getElementById('vAvatar').innerText = teacher.full_name.charAt(0);
             document.getElementById('vName').innerText = teacher.full_name;
 
-            // عرض المواد بشكل نصي منفصل بفاصلة في شاشة العرض (مثال: الرياضيات, العلوم)
-            if (teacher.academic_levels && teacher.academic_levels.length > 0) {
-                // جلب أسماء المواد الفريدة المرتبطة بالمعلم
-                const uniqueSubjects = [...new Set(teacher.academic_levels.map(lvl => lvl.subject_name))];
-                document.getElementById('vSubject').innerText = uniqueSubjects.join('، ');
+            // جلب أسماء المواد الفريدة المربوطة بالمعلم من علاقة subjects الديناميكية
+            if (teacher.subjects && teacher.subjects.length > 0) {
+                const subjectNames = teacher.subjects.map(sub => sub.name);
+                document.getElementById('vSubject').innerText = subjectNames.join('، ');
+
+                // حساب عدد الصفوف الفريدة التي يدرسها المعلم بناءً على المواد
+                const uniqueGrades = [...new Set(teacher.subjects.map(sub => sub.grade_id))];
+                document.getElementById('vClasses').innerText = uniqueGrades.length + ' صفوف دراسية';
             } else {
-                document.getElementById('vSubject').innerText = teacher.subject ?? '-';
+                document.getElementById('vSubject').innerText = '-';
+                document.getElementById('vClasses').innerText = '0 صفوف دراسية';
             }
 
             document.getElementById('vPhone').innerText = teacher.phone_number;
-            document.getElementById('vClasses').innerText = (teacher.academic_levels?.length ?? 0) + ' صفوف وشعب';
             document.getElementById('vPerms').innerText = teacher.role?.role_name ?? '-';
 
-            // 2. تعبئة فورم التعديل (النصوص الأساسية)
+            // 2. تعبئة فورم التعديل (Edit Form)
             document.getElementById('edit_full_name').value = teacher.full_name;
             document.getElementById('edit_phone').value = teacher.phone_number;
             document.getElementById('editTeacherForm').action = `/admin/teachers/${teacher.id}`;
 
-            // تحديد الدور
+            // تحديد الدور الوظيفي
             document.getElementById('edit_role_id').value = teacher.role_id;
 
-            // 🔥 3. إضافة منطق تحديد المواد الموكلة للمعلم (جديد)
+            // 3. تحديد الـ Checkboxes الخاصة بالمواد تلقائياً بناءً على الـ id الخاص بكل مادة
             document.querySelectorAll('.subject-checkbox').forEach(cb => {
-                cb.checked = teacher.academic_levels?.some(
-                    lvl => cb.value === lvl.subject_name
+                // نقوم بالتحقق مما إذا كان المعرف الخاص بالـ checkbox (الذي يمثل ID المادة) موجوداً ضمن مواد المعلم
+                cb.checked = teacher.subjects?.some(
+                    sub => parseInt(cb.value) === parseInt(sub.id)
                 ) ?? false;
             });
 
-            // 4. تحديد الصفوف المسندة تلقائياً
-            document.querySelectorAll('.section-checkbox').forEach(cb => {
-                cb.checked = teacher.academic_levels?.some(
-                    lvl => cb.value === lvl.academic_level + '|' + lvl.section_name
-                ) ?? false;
-            });
+            // 4. ربط فورم الحذف بالـ ID الصحيح مع المسار الخاص بك
+            document.getElementById('deleteTeacherForm').action = `/admin/teachers/${teacher.id}`;
 
-            // 5. ربط فورم الحذف بالـ ID
-            document.getElementById('deleteTeacherForm').action = `/teachers/${teacher.id}`;
-
-            // فتح المودال مع تأثير الحركة (Animation)
+            // 5. فتح المودال مع تأثير الحركة (Animation)
             const modal = document.getElementById('viewModal');
             const content = document.getElementById('viewContent');
             modal.classList.remove('hidden');

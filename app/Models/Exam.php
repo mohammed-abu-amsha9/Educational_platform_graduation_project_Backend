@@ -16,4 +16,24 @@ class Exam extends Model
     {
         return $this->belongsToMany(QuestionBank::class, 'exam_questions', 'exam_id', 'question_bank_id');
     }
+
+    /** المعلم منشئ الامتحان */
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class, 'teacher_id');
+    }
+
+    /** الطلاب الذين دخلوا هذا الامتحان وسجلات دخولهم */
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'student_exams', 'exam_id', 'student_id')
+            ->withPivot('enter_time', 'submit_time') // لجلب أوقات الدخول والتسليم من الجدول الوسيط
+            ->withTimestamps();
+    }
+
+    /** نتائج الطلاب في هذا الامتحان */
+    public function results()
+    {
+        return $this->hasMany(StudentExamResult::class, 'exam_id');
+    }
 }

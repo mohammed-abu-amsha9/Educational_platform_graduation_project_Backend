@@ -11,17 +11,21 @@ class ChatRoom extends Model
     /** @use HasFactory<\Database\Factories\ChatRoomFactory> */
     use HasFactory, SoftDeletes;
 
-    // واحد لمتعدد. الغرفة الواحدة تحتوي على رسائل كثيرة.
-    public function messages()
+    /** المعلم المشترك في هذه المحادثة */
+    public function teacher()
     {
-        return $this->hasMany(Message::class, 'chat_room_id');
+        return $this->belongsTo(Teacher::class, 'teacher_id');
     }
+
+    /** الطالب المشترك في هذه المحادثة */
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id');
     }
-    public function teacher()
+
+    /** كافة الرسائل المتبادلة داخل هذه الغرفة */
+    public function messages()
     {
-        return $this->belongsTo(Teacher::class, 'teacher_id');
+        return $this->hasMany(Message::class, 'chat_room_id');
     }
 }

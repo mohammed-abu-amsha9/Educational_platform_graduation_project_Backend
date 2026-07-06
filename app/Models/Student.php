@@ -7,28 +7,65 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Schema;
 
-class Student extends Model
+class student extends Model
 {
     /** @use HasFactory<\Database\Factories\StudentFactory> */
     use HasFactory, SoftDeletes;
-    protected $appends = [
-        'total_required_fees',
-        'total_paid_amount',
-        'remaining_fees',
-        'financial_status'
-    ];
 
-    // علاقة الطالب مع جدول الحضور
-    public function attendances()
+    // داخل موديل Student.php
+    protected $appends = [
+        'total_paid_amount',
+        'total_required_fees',
+        'remaining_fees'
+    ];
+    /**
+     * جلب الصف الدراسي الذي ينتمي إليه هذا الطالب
+     */
+    public function grade()
     {
-        return $this->hasMany(AttendanceLog::class, 'student_id');
+        return $this->belongsTo(Grade::class, 'grade_id');
+    }
+
+
+    /**
+     * جلب سجلات حضور وغياب الطالب بالكامل
+     */
+    public function attendanceLogs()
+    {
+        return $this->hasMany(attendance_log::class, 'student_id');
+    }
+
+    /** الامتحانات التي سجل الطالب دخوله إليها */
+    public function exams()
+    {
+        return $this->belongsToMany(Exam::class, 'student_exams', 'student_id', 'exam_id')
+            ->withPivot('enter_time', 'submit_time')
+            ->withTimestamps();
+    }
+
+    /** نتائج الامتحانات الخاصة بالطالب */
+    public function examResults()
+    {
+        return $this->hasMany(StudentExamResult::class, 'student_id');
+    }
+
+    /** تسليمات الواجبات الخاصة بالطالب */
+    public function assignmentSubmissions()
+    {
+        return $this->hasMany(AssignmentSubmission::class, 'student_id');
+    }
+
+    /** غرف المحادثة المفتوحة مع هذا الطالب */
+    public function chatRooms()
+    {
+        return $this->hasMany(ChatRoom::class, 'student_id');
     }
 
     // دالة حساب نسبة الحضور
     public function getAttendancePercentageAttribute()
     {
         // 1. جلب إجمالي الأيام المسجلة لهذا الطالب
-        $totalDays = $this->attendances()->count();
+        $totalDays = $this->attendanceLogs()->count();
 
         // إذا لم يتم تسجيل حضور له بعد، تكون النسبة 100% تلقائياً كبداية
         if ($totalDays == 0) {
@@ -36,7 +73,7 @@ class Student extends Model
         }
 
         // 2. جلب جميع الايام اللي اتى فيها الطالب اما حاضر او متاخر لعمل الحسبة
-        $presentDays = $this->attendances()->whereIn('status', ['present', 'late'])->count();
+        $presentDays = $this->attendanceLogs()->whereIn('status', ['present', 'late'])->count();
 
         /**
          *  presentDays  قسم هذه الـ
@@ -49,15 +86,15 @@ class Student extends Model
     }
 
     // العلاقة: واحد لمتعدد لجدول الرسوم
-    public function monthlyFees()
+    public function fees()
     {
-        return $this->hasMany(StudentMonthlyFee::class, 'student_id');
+        return $this->hasMany(fee::class, 'student_id');
     }
 
     // 1. إجمالي المدفوع الحقيقي للطالب في هذا الشهر
     public function getTotalPaidAmountAttribute()
     {
-        return (float) $this->monthlyFees()->where('billing_month', date('m-Y'))->sum('paid_amount');
+        return (float) $this->fees()->where('billing_month', date('m-Y'))->sum('paid_amount');
     }
 
     // 2. إجمالي المطلوب: يقرأ من جدول الرسوم، وإذا لم يجد (طالب جديد) يقرأ الرسوم الحقيقية المخزنة في جدول الطلاب
@@ -68,14 +105,14 @@ class Student extends Model
         $studentAmount = (float) ($this->attributes['total_paid_amount'] ?? 0);
 
         // 2. نتحقق من وجود السجل المالي للشهر الحالي في جدول المدفوعات
-        $currentMonthFee = $this->monthlyFees()->where('billing_month', date('m-Y'))->first();
+        $currentMonthFee = $this->fees()->where('billing_month', date('m-Y'))->first();
 
         if ($currentMonthFee) {
             // 🔥 حركة ذكية: إذا تم تعديل رسوم الطالب الأساسية لتصبح مختلفة عن فاتورة الشهر، نقوم بتحديث الفاتورة فوراً خلف الكواليس
             if ((float)$currentMonthFee->monthly_amount !== $studentAmount) {
                 $currentMonthFee->monthly_amount = $studentAmount;
                 // إعادة حساب المتبقي داخل الجدول إذا كان الحقل موجوداً
-                if (Schema::hasColumn('student_monthly_fees', 'remaining_amount')) {
+                if (Schema::hasColumn('fees', 'remaining_amount')) {
                     $currentMonthFee->remaining_amount = $studentAmount - $currentMonthFee->paid_amount;
                 }
                 $currentMonthFee->save();
@@ -126,9 +163,9 @@ class Student extends Model
         });
 
         // 2. فلترة الصف الدراسي
-        $query->when($filters['academic_level'] ?? null, function ($q, $level) {
+        $query->when($filters['grade_id'] ?? null, function ($q, $level) {
             if ($level !== 'all') {
-                $q->where('academic_level', $level);
+                $q->where('grade_id', $level);
             }
         });
 
@@ -142,14 +179,14 @@ class Student extends Model
 
             $q->where(function ($subQuery) use ($status) {
                 if ($status == 'paid') {
-                    $subQuery->whereHas('monthlyFees', function ($f) {})
-                        ->whereRaw('(SELECT SUM(paid_amount) FROM student_monthly_fees WHERE student_monthly_fees.student_id = students.id) >= (SELECT SUM(monthly_amount) FROM student_monthly_fees WHERE student_monthly_fees.student_id = students.id)');
+                    $subQuery->whereHas('fees', function ($f) {})
+                        ->whereRaw('(SELECT SUM(paid_amount) FROM fees WHERE fees.student_id = students.id) >= (SELECT SUM(monthly_amount) FROM fees WHERE fees.student_id = students.id)');
                 } elseif ($status == 'partial') {
-                    $subQuery->whereHas('monthlyFees', function ($f) {})
-                        ->whereRaw('(SELECT SUM(paid_amount) FROM student_monthly_fees WHERE student_monthly_fees.student_id = students.id) > 0')
-                        ->whereRaw('(SELECT SUM(paid_amount) FROM student_monthly_fees WHERE student_monthly_fees.student_id = students.id) < (SELECT SUM(monthly_amount) FROM student_monthly_fees WHERE student_monthly_fees.student_id = students.id)');
+                    $subQuery->whereHas('fees', function ($f) {})
+                        ->whereRaw('(SELECT SUM(paid_amount) FROM fees WHERE fees.student_id = students.id) > 0')
+                        ->whereRaw('(SELECT SUM(paid_amount) FROM fees WHERE fees.student_id = students.id) < (SELECT SUM(monthly_amount) FROM fees WHERE fees.student_id = students.id)');
                 } elseif ($status == 'unpaid') {
-                    $subQuery->whereRaw('(SELECT COALESCE(SUM(paid_amount), 0) FROM student_monthly_fees WHERE student_monthly_fees.student_id = students.id) = 0');
+                    $subQuery->whereRaw('(SELECT COALESCE(SUM(paid_amount), 0) FROM fees WHERE fees.student_id = students.id) = 0');
                 }
             });
         });

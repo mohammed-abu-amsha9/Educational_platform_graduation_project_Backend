@@ -10,4 +10,10 @@ class Message extends Model
 {
     /** @use HasFactory<\Database\Factories\MessageFactory> */
     use HasFactory, SoftDeletes;
+
+    /** الغرفة التي تنتمي إليها هذه الرسالة */
+    public function chatRoom()
+    {
+        return $this->belongsTo(ChatRoom::class, 'chat_room_id');
+    }
 }

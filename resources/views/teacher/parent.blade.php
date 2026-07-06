@@ -32,7 +32,7 @@
             </div>
 
             <nav class="hidden md:flex items-center gap-1 bg-slate-100 dark:bg-slate-700 p-1.5 rounded-xl">
-                <a href="{{ route('admin_control_panel') }}"
+                <a href="{{ route('dashboard.index') }}"
                     class="px-5 py-2 rounded-lg text-sm font-semibold text-gray-600  hover:text-teal-700 dark:text-zinc-100">لوحة
                     الإدارة</a>
                 <a href="{{ route('teacher_control_panel') }}"
@@ -185,7 +185,7 @@
 
         <div id="mobile-menu"
             class="hidden md:hidden border-t border-gray-100 bg-slate-100 dark:bg-slate-800 px-4 pt-2 pb-4 space-y-2 shadow-inner">
-            <a href="{{ route('admin_control_panel') }}"
+            <a href="{{ route('dashboard.index') }}"
                 class="block px-4 py-2.5 rounded-xl text-sm font-bold text-gray-600  hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">لوحة
                 الإدارة</a>
             <a href="{{ route('teacher_control_panel') }}"

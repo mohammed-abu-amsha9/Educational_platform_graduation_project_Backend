@@ -33,7 +33,7 @@
             </div>
 
             <nav class="hidden md:flex items-center gap-1 bg-slate-100 dark:bg-slate-700 p-1.5 rounded-xl">
-                <a href="{{ route('admin_control_panel') }}"
+                <a href="{{ route('dashboard.index') }}"
                     class="px-5 py-2 rounded-lg text-sm font-semibold bg-teal-700 text-white shadow-sm dark:text-zinc-100">لوحة
                     الإدارة</a>
                 <a href="{{ route('teacher_control_panel') }}"
@@ -186,7 +186,7 @@
 
         <div id="mobile-menu"
             class="hidden md:hidden border-t border-gray-100 bg-slate-100 dark:bg-slate-800 px-4 pt-2 pb-4 space-y-2 shadow-inner">
-            <a href="{{ route('admin_control_panel') }}"
+            <a href="{{ route('dashboard.index') }}"
                 class="block px-4 py-2.5 rounded-xl text-sm font-bold bg-teal-700 text-white shadow-sm dark:text-zinc-100">لوحة
                 الإدارة</a>
             <a href="{{ route('teacher_control_panel') }}"
@@ -256,9 +256,9 @@
             class="bg-white border border-gray-200/60 rounded-2xl p-2.5 shadow-sm dark:bg-slate-800 dark:border-slate-800">
             <div class="flex flex-row items-center gap-2 overflow-x-auto custom-scrollbar">
 
-                <a href="{{ route('admin_control_panel') }}"
+                <a href="{{ route('dashboard.index') }}"
                     class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('admin_control_panel') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+            {{ request()->routeIs('dashboard.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
                     <i class="fa-solid fa-chart-pie text-base"></i>
                     <span>نظرة عامة</span>
                 </a>
@@ -284,29 +284,35 @@
                     <span>الرسوم</span>
                 </a>
 
-                <a href="{{ route('admin_roles') }}"
+                <a href="{{ route('roles.index') }}"
                     class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('admin_roles') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+            {{ request()->routeIs('roles.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
                     <i class="fa-solid fa-user-tag text-base"></i>
                     <span>الأدوار</span>
                 </a>
-                <a href="{{ route('admin_permistions') }}"
+                <a href="{{ route('permistions.index') }}"
                     class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('admin_permistions') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+            {{ request()->routeIs('permistions.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
                     <i class="fa-solid fa-shield-halved text-base"></i>
                     <span> الصلاحيات</span>
                 </a>
-                <a href="{{ route('admin_classes') }}"
+                <a href="{{ route('grades.index') }}"
                     class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('admin_classes') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+            {{ request()->routeIs('grades.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
                     <i class="fa-solid fa-chalkboard text-base"></i>
                     <span>الصفوف</span>
                 </a>
-                <a href="{{ route('admin_sections') }}"
+                <a href="{{ route('sections.index') }}"
                     class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('admin_sections') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+            {{ request()->routeIs('sections.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
                     <i class="fa-solid fa-cubes text-base"></i>
                     <span>الشعب</span>
+                </a>
+                <a href="{{ route('subjects.index') }}"
+                    class="flex items-center justify-center sm:justify-start gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
+            {{ request()->routeIs('subjects.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-100' }}">
+                    <i class="fa-solid fa-book text-base"></i>
+                    <span>المواد</span>
                 </a>
             </div>
         </div>
@@ -482,6 +488,24 @@
             @endif
 
         });
+    </script>
+
+    <script>
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove("hidden");
+                document.body.style.overflow = "hidden"; // منع سكرول الخلفية
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add("hidden");
+                document.body.style.overflow = "auto"; // إعادة السكرول الطبيعي
+            }
+        }
     </script>
     @yield('scripts')
 </body>
