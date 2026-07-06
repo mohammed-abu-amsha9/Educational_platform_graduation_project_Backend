@@ -168,7 +168,7 @@
                 </p>
             </div>
 
-            <form class="space-y-5" action="{{route('admin_control_panel')}}">
+            <form class="space-y-5" action="{{route('dashboard.index')}}">
                 <div>
                     <label class="block text-md font-bold text-gray-700 dark:text-zinc-300 mb-2">اسم المستخدم</label>
                     <div class="relative">
