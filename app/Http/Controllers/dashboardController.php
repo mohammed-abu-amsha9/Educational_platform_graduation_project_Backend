@@ -17,7 +17,7 @@ class dashboardController extends Controller
      */
     public function index()
     {
-        $totalStudents = student::withTrashed()->count(); // إجمالي الطلاب
+        $totalStudents = \App\Models\Student::withTrashed()->count(); // إجمالي الطلاب
         $totalStudentsActive = student::where('account_status', 'active')->count(); // إجمالي الطلاب النشيطين
         $activeTeachers = teacher::count(); // إجمالي المعلمين (يمكنك تصفيتها حسب النشطين)
         // نجيب إجمالي المبالغ المطلوبة بدون تكرار حسب الطالب والشهر
