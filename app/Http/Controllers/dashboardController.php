@@ -22,7 +22,7 @@ class dashboardController extends Controller
         $activeTeachers = \App\Models\Teacher::withTrashed()->count(); // إجمالي المعلمين (يمكنك تصفيتها حسب النشطين)
         // نجيب إجمالي المبالغ المطلوبة بدون تكرار حسب الطالب والشهر
         $totalRequired = student::sum('total_paid_amount'); // مجموع الرصيد من الطلاب
-        $totalPaid = \App\Models\Fee::sum('paid_amount'); // مجموع المدفوع من الطلاب
+        $totalPaid = Fee::sum('paid_amount'); // مجموع المدفوع من الطلاب
         $totalGrade = \App\Models\Grade::withTrashed()->count();
         // المتبقي العام
         $totalRemaining = $totalRequired - $totalPaid;
