@@ -17,13 +17,13 @@ class dashboardController extends Controller
      */
     public function index()
     {
-        $totalStudents = \App\Models\Student::withTrashed()->count(); // إجمالي الطلاب
+        $totalStudents = student::withTrashed()->count(); // إجمالي الطلاب
         $totalStudentsActive = student::where('account_status', 'active')->count(); // إجمالي الطلاب النشيطين
-        $activeTeachers = \App\Models\Teacher::withTrashed()->count(); // إجمالي المعلمين (يمكنك تصفيتها حسب النشطين)
+        $activeTeachers = teacher::count(); // إجمالي المعلمين (يمكنك تصفيتها حسب النشطين)
         // نجيب إجمالي المبالغ المطلوبة بدون تكرار حسب الطالب والشهر
         $totalRequired = student::sum('total_paid_amount'); // مجموع الرصيد من الطلاب
         $totalPaid = Fee::sum('paid_amount'); // مجموع المدفوع من الطلاب
-        $totalGrade = \App\Models\Grade::withTrashed()->count();
+        $totalGrade = grade::count();
         // المتبقي العام
         $totalRemaining = $totalRequired - $totalPaid;
         // عدد الطلاب الذين سددوا بالكامل
