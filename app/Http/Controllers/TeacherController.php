@@ -7,7 +7,7 @@ use App\Models\grade_teacher;
 use App\Models\role;
 use App\Models\subject;
 use App\Models\subject_teacher;
-use App\Models\teacher;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -19,7 +19,7 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        $teachers = teacher::with(['subjects', 'role'])->get();
+        $teachers = Teacher::with(['subjects', 'role'])->get();
         $roles = role::all();
         $grades = grade::with('sections')->get();
 

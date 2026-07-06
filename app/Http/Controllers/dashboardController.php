@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\fee;
 use App\Models\grade;
-use App\Models\student;
+use App\Models\Student;
 use App\Models\subject;
-use App\Models\teacher;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -17,11 +17,11 @@ class dashboardController extends Controller
      */
     public function index()
     {
-        $totalStudents = student::withTrashed()->count(); // إجمالي الطلاب
-        $totalStudentsActive = student::where('account_status', 'active')->count(); // إجمالي الطلاب النشيطين
-        $activeTeachers = teacher::count(); // إجمالي المعلمين (يمكنك تصفيتها حسب النشطين)
+        $totalStudents = Student::withTrashed()->count(); // إجمالي الطلاب
+        $totalStudentsActive = Student::where('account_status', 'active')->count(); // إجمالي الطلاب النشيطين
+        $activeTeachers = Teacher::count(); // إجمالي المعلمين (يمكنك تصفيتها حسب النشطين)
         // نجيب إجمالي المبالغ المطلوبة بدون تكرار حسب الطالب والشهر
-        $totalRequired = student::sum('total_paid_amount'); // مجموع الرصيد من الطلاب
+        $totalRequired = Student::sum('total_paid_amount'); // مجموع الرصيد من الطلاب
         $totalPaid = fee::sum('paid_amount'); // مجموع المدفوع من الطلاب
         $totalGrade = grade::count();
         // المتبقي العام
