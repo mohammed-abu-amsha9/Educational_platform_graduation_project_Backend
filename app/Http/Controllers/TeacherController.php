@@ -19,9 +19,9 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        $teachers = Teacher::with(['subjects', 'role'])->get();
-        $roles = Role::all();
-        $grades = Grade::with('sections')->get();
+        $teachers = teacher::with(['subjects', 'role'])->get();
+        $roles = role::all();
+        $grades = grade::with('sections')->get();
 
         // 🟢 جلب المواد من قاعدة البيانات لتصبح ديناميكية
         $subjects = subject::all();
