@@ -41,14 +41,19 @@
                         onchange="this.form.method='GET'; this.form.action='{{ route('attendance.index') }}'; this.form.submit();"
                         class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 text-xs outline-none focus:border-emerald-600 cursor-pointer">
                         <option value="">-- اختر الصف والشعبة --</option>
-                        @foreach ($teacherClasses as $class)
-                            @php
-                                $currentValue = $class->academic_level . '|' . $class->section_name;
-                            @endphp
-                            <option value="{{ $currentValue }}"
-                                {{ request('class_section') == $currentValue ? 'selected' : '' }}>
-                                {{ $class->academic_level }} - شعبة ({{ $class->section_name }})
-                            </option>
+
+                        {{-- 🟢 الدوران الصحيح الشجري: لكل صف، نعرض شعبه المتاحة --}}
+                        @foreach ($teacherClasses as $classes)
+                            @foreach ($classes->sections as $section)
+                                @php
+                                    // تركيب القيمة الفريدة المكونة من معرف الصف ومعرف الشعبة
+                                    $valueString = $classes->id . '|' . $section->id;
+                                @endphp
+                                <option value="{{ $valueString }}"
+                                    {{ request('class_section') == $valueString ? 'selected' : '' }}>
+                                    {{ $classes->name }} - شعبة ({{ $section->name }})
+                                </option>
+                            @endforeach
                         @endforeach
                     </select>
                 </div>

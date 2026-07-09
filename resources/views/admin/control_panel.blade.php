@@ -439,7 +439,7 @@
                             class="text-sm font-black text-slate-800 dark:text-zinc-100 bg-gray-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">{{$totalSubjects}}</span>
                     </div>
 
-                    <div
+                    <divphp 
                         class="flex items-center justify-between p-3.5 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100/70 dark:border-slate-800 rounded-xl">
                         <span class="text-sm font-bold text-slate-700 dark:text-zinc-300">الاختبارات المتاحة</span>
                         <span

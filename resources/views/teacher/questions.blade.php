@@ -17,20 +17,26 @@
                     </select>
                 </div>
                 <div class="w-full sm:w-64">
-                    <label class="block text-[10px] font-bold text-gray-700 dark:text-slate-400 mb-1">الصف الدراسي
-                        والمادة</label>
+                    <label class="block text-[10px] font-bold text-gray-700 dark:text-slate-400 mb-1">
+                        الصف الدراسي والمادة
+                    </label>
                     <select onchange="filterQuestions('class_section', this.value)"
                         class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 text-xs outline-none focus:border-emerald-600 cursor-pointer">
+
                         <option value="">-- كل الصفوف والمواد --</option>
+
+                        {{-- 🟢 الدوران الشجري المصلح: لكل صف، نعرض المواد المتاحة بداخلها --}}
                         @foreach ($teacherClasses as $class)
-                            @php
-                                // بناء القيمة المطابقة تماماً لما يتم تخزينه في البنك عند الإضافة
-                                $currentValue = $class->academic_level . '|' . $class->subject_name;
-                            @endphp
-                            <option value="{{ $currentValue }}"
-                                {{ request('class_section') == $currentValue ? 'selected' : '' }}>
-                                {{ $class->subject_name }} - {{ $class->academic_level }}
-                            </option>
+                            @foreach ($class->subjects as $subject)
+                                @php
+                                    // تركيب القيمة الفريدة المكونة من معرف الصف ومعرف المادة
+                                    $valueString = $class->id . '|' . $subject->id;
+                                @endphp
+                                <option value="{{ $valueString }}"
+                                    {{ request('class_section') == $valueString ? 'selected' : '' }}>
+                                    {{ $class->name }} - مادة ({{ $subject->name }})
+                                </option>
+                            @endforeach
                         @endforeach
                     </select>
                 </div>
@@ -140,20 +146,24 @@
 
                 <form action="{{ route('questions.store') }}" method="POST" class="p-6 space-y-4 text-xs">
                     @csrf
-                    <div class="w-full ">
+                    <div class="w-full">
                         <label class="block text-[10px] font-bold text-gray-700 dark:text-slate-400 mb-1">المادة
                             والصف</label>
-                        <select name="academic_level_subject"
+                        {{-- 🟢 تم تعديل الـ name هنا ليتوافق مع استقبال الباك إند --}}
+                        <select name="class_section" required
                             class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 text-xs outline-none focus:border-teal-500 cursor-pointer">
                             <option value="">-- اختر المادة والصف --</option>
+
                             @foreach ($teacherClasses as $class)
-                                @php
-                                    $currentValue = $class->academic_level . '|' . $class->subject_name;
-                                @endphp
-                                <option value="{{ $currentValue }}"
-                                    {{ request('class_section') == $currentValue ? 'selected' : '' }}>
-                                    {{ $class->subject_name }} - {{ $class->academic_level }}
-                                </option>
+                                @foreach ($class->subjects as $subject)
+                                    @php
+                                        $valueString = $class->id . '|' . $subject->id;
+                                    @endphp
+                                    <option value="{{ $valueString }}"
+                                        {{ request('class_section') == $valueString ? 'selected' : '' }}>
+                                        {{ $class->name }} - مادة ({{ $subject->name }})
+                                    </option>
+                                @endforeach
                             @endforeach
                         </select>
                     </div>
@@ -344,5 +354,21 @@
             // 3. إعادة توجيه المتصفح للرابط المحدث الجديد
             window.location.href = url.pathname + '?' + params.toString();
         }
+        document.getElementById('questionTypeSelect').addEventListener('change', function() {
+            const mcqSection = document.getElementById('mcqSection');
+            const tfSection = document.getElementById('tfSection');
+
+            if (this.value === 'mcq') {
+                mcqSection.classList.remove('hidden');
+                tfSection.classList.add('hidden');
+            } else if (this.value === 'tf') {
+                tfSection.classList.remove('hidden');
+                mcqSection.classList.add('hidden');
+            } else {
+                mcqSection.classList.add('hidden');
+                tfSection.classList.add('hidden');
+            }
+        });
     </script>
+
 @endsection

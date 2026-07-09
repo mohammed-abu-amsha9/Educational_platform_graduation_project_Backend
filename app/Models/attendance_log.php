@@ -9,7 +9,13 @@ class attendance_log extends Model
 {
     /** @use HasFactory<\Database\Factories\AttendanceLogFactory> */
     use HasFactory;
-
+    // الحقول المسموح بحفظها وتحديثها جماعياً
+    protected $fillable = [
+        'student_id',
+        'date',
+        'teacher_id',
+        'status'
+    ];  
     /**
      * جلب الطالب المرصود له هذا السجل الحركي
      */

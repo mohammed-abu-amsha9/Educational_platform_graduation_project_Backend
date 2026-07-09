@@ -17,4 +17,10 @@ class lesson extends Model
     {
         return $this->belongsTo(Teacher::class, 'teacher_id');
     }
+
+    // الدرس ينتمي إلى مادة
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class, 'subject_id');
+    }
 }

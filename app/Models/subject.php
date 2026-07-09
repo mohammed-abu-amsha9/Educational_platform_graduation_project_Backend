@@ -21,4 +21,10 @@ class subject extends Model
     {
         return $this->belongsToMany(Teacher::class, 'subject_teachers', 'subject_id', 'teacher_id');
     }
+
+    // المادة الواحدة تحتوي على عدة دروس
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class, 'subject_id');
+    }
 }

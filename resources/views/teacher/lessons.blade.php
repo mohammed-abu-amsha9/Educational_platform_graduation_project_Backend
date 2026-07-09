@@ -18,40 +18,53 @@
                 <form method="POST" action="{{ route('lessons.store') }}" enctype="multipart/form-data" class="space-y-3.5">
                     @csrf
 
+                    {{-- اختيار المادة المستهدفة --}}
+                    {{-- 1. قائمة اختيار المادة (ال كود الخاص بك) --}}
                     <div class="space-y-1">
                         <label class="font-bold text-slate-700 dark:text-zinc-300 block">المادة المستهدفة:</label>
-                        <select name="subject_name" required id="subject_select" onchange="filterTeacherSections()"
+                        <select name="subject_id" required id="subject_select" onchange="filterTeacherSections()"
                             class="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 text-slate-800 dark:text-zinc-200 rounded-xl p-2.5 outline-none font-medium cursor-pointer">
                             <option value="">اختر المادة...</option>
-                            @foreach ($teacherClasses->unique('subject_name') as $class)
-                                <option value="{{ $class->subject_name }}">{{ $class->subject_name }}</option>
+                            @foreach ($teacherSubjects as $subject)
+                                <option value="{{ $subject->id }}" data-grade="{{ $subject->grade_id }}">
+                                    {{ $subject->name }} ({{ $subject->grade->name ?? '' }})
+                                </option>
                             @endforeach
                         </select>
                     </div>
 
+                    {{-- حاوية عرض الشُعب التابعة لصفوف المعلم --}}
                     <div class="space-y-1 mt-3">
-                        <label class="font-bold text-slate-700 dark:text-zinc-300 block">الصفوف والشعب المستهدفة (يمكنك
-                            اختيار أكثر من صف):</label>
+                        <label class="font-bold text-slate-700 dark:text-zinc-300 block">الشُعب المستهدفة (المتاحة في
+                            صفوفك):</label>
                         <div id="sections_container"
                             class="grid grid-cols-2 gap-2 border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-950 rounded-xl p-3 max-h-40 overflow-y-auto">
-                            @foreach ($teacherClasses as $class)
-                                <label data-subject="{{ $class->subject_name }}"
-                                    class="section-checkbox-item hidden border border-gray-200 dark:border-slate-800 rounded-xl p-2 flex items-center gap-2 cursor-pointer bg-gray-50/30 dark:bg-slate-950/20 hover:border-teal-500">
-                                    <input type="checkbox" name="sections[]"
-                                        value="{{ $class->academic_level }}|{{ $class->section_name }}"
-                                        class="accent-teal-600 rounded w-4 h-4" />
-                                    <span class="font-bold text-xs text-slate-700 dark:text-zinc-300">
-                                        <i class="zmdi zmdi-account-box-mail"></i>
+
+                            {{-- الدوران حول الشعب المستخرجة عبر صفوف المعلم --}}
+                            @foreach ($teacherSubjects as $section)
+                                <label data-grade="{{ $section->grade_id }}"
+                                    class="section-checkbox-item hidden border border-gray-200 dark:border-slate-800 rounded-xl p-2 flex items-center justify-between gap-2 cursor-pointer bg-gray-50/30 dark:bg-slate-950/20 hover:border-teal-500 transition-all">
+                                    <div class="flex items-center gap-2">
+                                        <input type="checkbox" name="grades[]" value="{{ $section->id }}"
+                                            class="accent-teal-600 rounded w-4 h-4 section-input" />
+                                        <span class="font-bold text-xs text-slate-700 dark:text-zinc-300">
+                                            {{ $section->grade->name ?? '' }} - شعبة ({{ $section->name }})
+                                        </span>
+                                    </div>
+                                    <span class="text-teal-600 text-xs">
+                                        <i class="fa-solid fa-users text-[10px]"></i>
                                     </span>
                                 </label>
                             @endforeach
+
                             <div id="no_subject_hint"
                                 class="text-gray-400 dark:text-slate-500 text-xs p-2 col-span-2 text-center">
-                                يرجى اختيار المادة أولاً لإظهار الصفوف المتاحة لك.
+                                يرجى اختيار المادة أولاً لإظهار الشُعب الدراسية المتاحة لها.
                             </div>
                         </div>
                     </div>
 
+                    {{-- بقية الحقول (عنوان المحاضرة، النوع، الملف، الزر) تبقى كما هي تماماً دون تعديل لسلامة التصميم الخاص بك --}}
                     <div class="space-y-1">
                         <label class="font-bold mt-3 text-slate-700 dark:text-zinc-300 block">عنوان المحاضرة:</label>
                         <input type="text" name="title" required placeholder="مثال: شرح درس المفاعيل الخمسة"
@@ -115,7 +128,7 @@
                 </div>
 
                 <div class="space-y-3 flex-1 overflow-y-auto max-h-[440px] pl-1">
-                    @forelse ($lessons as $lessonAndSections)
+                    @forelse ($lessons as $lesson)
                         <div
                             class="p-3.5 border border-gray-100 dark:border-slate-800/60 bg-gray-50/10 dark:bg-slate-950/20 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                             <div class="flex items-center gap-3">
@@ -125,24 +138,22 @@
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-slate-800 dark:text-zinc-200">
-                                        {{ $lessonAndSections->title }}
+                                        {{ $lesson->title }}
                                     </h4>
                                     <p class="text-[10px] text-gray-400">
                                         المادة:
-                                        <span class="text-teal-600 font-bold">{{ $lessonAndSections->subject_name }}</span>
+                                        <span class="text-teal-600 font-bold">{{ $lesson->subject->name }}</span>
                                         • الشُعب:
                                         <span class="font-medium text-slate-600 dark:text-zinc-300">
-                                            @foreach ($lessonAndSections->sections as $section)
-                                                {{ $section->academic_level }}
-                                                ({{ $section->section_name }})
+                                            @foreach ($lesson->subject->grade->sections as $section)
+                                                ({{ $section->name }})
                                                 {{ !$loop->last ? '، ' : '' }}
                                             @endforeach
                                         </span>
                                     </p>
                                 </div>
                             </div>
-                            <form method="POST" action="{{ route('lessons.destroy', $lessonAndSections->id) }}"
-                                class="inline-block">
+                            <form method="POST" action="{{ route('lessons.destroy', $lesson->id) }}" class="inline-block">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
@@ -167,57 +178,57 @@
 @endsection
 @section('scripts')
     <script>
-        // كود تغيير نص المربع عند اختيار ملف لإشعار المعلم بالاختيار
-        function displaySelectedName() {
-            const input = document.getElementById('uploadFileMain');
-            const display = document.getElementById('fileNameDisplay');
-            if (input.files.length > 0) {
-                display.innerText = "📁 تم اختيار: " + input.files[0].name;
-            }
-        }
-
         function filterTeacherSections() {
-            // 1. التقاط قيمة المادة المحددة من القائمة المنسدلة
-            const selectedSubject = document.getElementById('subject_select').value.trim();
+            const subjectSelect = document.getElementById('subject_select');
+            const selectedOption = subjectSelect.options[subjectSelect.selectedIndex];
 
-            // 2. جلب جميع كروت الصفوف والشعب وتلميح المادة
-            const sectionItems = document.querySelectorAll('.section-checkbox-item');
+            // جلب معرف الصف التابع للمادة المختارة
+            const targetGradeId = selectedOption.getAttribute('data-grade');
             const hint = document.getElementById('no_subject_hint');
 
-            // إذا لم يقم المعلم باختيار أي مادة حتى الآن
-            if (!selectedSubject) {
-                // إخفاء كل الصفوف وإظهار التلميح المساعد
+            // جلب جميع عناصر الصفوف داخل الحاوية
+            const sectionItems = document.querySelectorAll('.section-checkbox-item');
+
+            // إعادة إلغاء تحديد الـ checkboxes عند تغيير المادة لمنع إرسال بيانات خاطئة
+            document.querySelectorAll('.grade-input').forEach(input => input.checked = false);
+
+            if (!targetGradeId) {
+                // إذا لم يتم اختيار مادة، نخفي كل الصفوف ونظهر رسالة التنبيه
                 sectionItems.forEach(item => item.classList.add('hidden'));
-                if (hint) hint.classList.remove('hidden');
+                hint.classList.remove('hidden');
                 return;
             }
 
-            // متغير لمتابعة ما إذا كان هناك صفوف متطابقة مع المادة المحددة
-            let hasMatches = false;
+            // إخفاء رسالة التنبيه
+            hint.classList.add('hidden');
 
-            // 3. المرور على كروت الصفوف وفحص السمة data-subject
+            // فلترة وإظهار الصف الذي يطابق المادة المختارة فقط
             sectionItems.forEach(item => {
-                const itemSubject = item.getAttribute('data-subject').trim();
+                const itemGradeId = item.getAttribute('data-grade');
 
-                if (itemSubject === selectedSubject) {
-                    item.classList.remove('hidden'); // إظهار الصف والشعبة المتطابقة
-                    hasMatches = true;
+                if (itemGradeId === targetGradeId) {
+                    item.classList.remove('hidden');
                 } else {
-                    item.classList.add('hidden'); // إخفاء الصفوف التابعة لمواد أخرى
-                    // إلغاء تحديد الـ Checkbox الداخلي إذا كان معلماً لمنع إرسال بيانات خاطئة
-                    const checkbox = item.querySelector('input[type="checkbox"]');
-                    if (checkbox) checkbox.checked = false;
+                    item.classList.add('hidden');
                 }
             });
+        }
 
-            // 4. التحكم في ظهور نص التلميح المساعد الموجه للمستخدم
-            if (hint) {
-                if (hasMatches) {
-                    hint.classList.add('hidden'); // إخفاء التلميح لوجود صفوف متاحة
-                } else {
-                    hint.textContent = "لا يوجد صفوف أو شعب مسندة إليك لتدريس هذه المادة.";
-                    hint.classList.remove('hidden');
-                }
+        function displaySelectedName() {
+            const fileInput = document.getElementById('uploadFileMain');
+            const nameDisplay = document.getElementById('fileNameDisplay');
+
+            // التحقق من أن المستخدم قام باختيار ملف بالفعل ولم يغلق النافذة
+            if (fileInput.files && fileInput.files.length > 0) {
+                // جلب اسم الملف الأول المحدد
+                const fileName = fileInput.files[0].name;
+
+                // تحديث النص وتغيير لونه وشكله ليعطي إيحاءً بالنجاح
+                nameDisplay.innerHTML =
+                    `<i class="fa-solid fa-file-circle-check text-emerald-500 ml-1"></i> <span class="text-emerald-600 font-bold">${fileName}</span>`;
+            } else {
+                // إعادة النص الأصلي في حال إلغاء الاختيار
+                nameDisplay.innerText = "اسحب الملف هنا أو اضغط للتصفح";
             }
         }
     </script>
