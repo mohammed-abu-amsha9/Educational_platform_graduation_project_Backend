@@ -20,21 +20,24 @@
                     <label class="block text-[10px] font-bold text-gray-700 dark:text-slate-400 mb-1">
                         الصف الدراسي والمادة
                     </label>
-                    <select onchange="filterQuestions('class_section', this.value)"
-                        class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 text-xs outline-none focus:border-emerald-600 cursor-pointer">
-
+                    <select name="class_section" class="w-full border border-gray-200 rounded-xl p-2 text-sm">
                         <option value="">-- كل الصفوف والمواد --</option>
 
-                        {{-- 🟢 الدوران الشجري المصلح: لكل صف، نعرض المواد المتاحة بداخلها --}}
-                        @foreach ($teacherClasses as $class)
-                            @foreach ($class->subjects as $subject)
+                        {{-- الدوران على صفوف المعلم المحددة له فقط --}}
+                        @foreach ($teacherGrades as $grade)
+                            {{-- فلترة المواد: نعرض فقط مواد المعلم التي تنتمي لهذا الصف الحالي (بناءً على grade_id داخل المادة) --}}
+                            @php
+                                $currentGradeSubjects = $teacherSubjects->where('grade_id', $grade->id);
+                            @endphp
+
+                            @foreach ($currentGradeSubjects as $subject)
                                 @php
                                     // تركيب القيمة الفريدة المكونة من معرف الصف ومعرف المادة
-                                    $valueString = $class->id . '|' . $subject->id;
+                                    $valueString = $grade->id . '|' . $subject->id;
                                 @endphp
                                 <option value="{{ $valueString }}"
                                     {{ request('class_section') == $valueString ? 'selected' : '' }}>
-                                    {{ $class->name }} - مادة ({{ $subject->name }})
+                                    {{ $grade->name }} - مادة ({{ $subject->name }})
                                 </option>
                             @endforeach
                         @endforeach
@@ -62,6 +65,7 @@
                         <tr
                             class="border-b border-gray-100 dark:border-slate-800 text-gray-700 dark:text-gray-500 font-bold">
                             <th class="pb-3 pl-4">نص السؤال</th>
+                            <th class="pb-3 pl-4">صف</th>
                             <th class="pb-3 px-4 w-40">النوع</th>
                             <th class="pb-3 px-4 w-28">الصعوبة</th>
                             <th class="pb-3 pr-4 w-24 text-left">الإجراءات</th>
@@ -73,7 +77,9 @@
                                 <td class="py-4 pl-4 font-medium text-slate-800 dark:text-zinc-200">
                                     {{ $question->question_text }}
                                 </td>
-
+                                <td>
+                                    {{ $question->grade->name }} - {{ $question->subject->name }}
+                                </td>
                                 <td class="py-4 px-4">
                                     @if ($question->question_type == 'mcq')
                                         <span
@@ -150,18 +156,24 @@
                         <label class="block text-[10px] font-bold text-gray-700 dark:text-slate-400 mb-1">المادة
                             والصف</label>
                         {{-- 🟢 تم تعديل الـ name هنا ليتوافق مع استقبال الباك إند --}}
-                        <select name="class_section" required
-                            class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 text-xs outline-none focus:border-teal-500 cursor-pointer">
-                            <option value="">-- اختر المادة والصف --</option>
+                        <select name="class_section" class="w-full border border-gray-200 rounded-xl p-2 text-sm">
+                            <option value="">-- كل الصفوف والمواد --</option>
 
-                            @foreach ($teacherClasses as $class)
-                                @foreach ($class->subjects as $subject)
+                            {{-- الدوران على صفوف المعلم المحددة له فقط --}}
+                            @foreach ($teacherGrades as $grade)
+                                {{-- فلترة المواد: نعرض فقط مواد المعلم التي تنتمي لهذا الصف الحالي (بناءً على grade_id داخل المادة) --}}
+                                @php
+                                    $currentGradeSubjects = $teacherSubjects->where('grade_id', $grade->id);
+                                @endphp
+
+                                @foreach ($currentGradeSubjects as $subject)
                                     @php
-                                        $valueString = $class->id . '|' . $subject->id;
+                                        // تركيب القيمة الفريدة المكونة من معرف الصف ومعرف المادة
+                                        $valueString = $grade->id . '|' . $subject->id;
                                     @endphp
                                     <option value="{{ $valueString }}"
                                         {{ request('class_section') == $valueString ? 'selected' : '' }}>
-                                        {{ $class->name }} - مادة ({{ $subject->name }})
+                                        {{ $grade->name }} - مادة ({{ $subject->name }})
                                     </option>
                                 @endforeach
                             @endforeach
@@ -339,36 +351,52 @@
         });
     </script>
     <script>
+        // 1. الدالة الأساسية لتحديث الرابط وإعادة تحميل الصفحة بناءً على الفلتر
         function filterQuestions(key, value) {
-            // 1. جلب رابط الصفحة الحالي والأقسام الممررة فيه (Query Strings)
             let url = new URL(window.location.href);
             let params = new URLSearchParams(url.search);
 
-            // 2. تحديث القيمة أو حذفها إذا كانت فارغة أو تعني "الكل"
             if (value === '' || value === 'all') {
                 params.delete(key);
             } else {
                 params.set(key, value);
             }
 
-            // 3. إعادة توجيه المتصفح للرابط المحدث الجديد
+            // إعادة توجيه المتصفح للرابط الجديد مع الحفاظ على الفلاتر الأخرى
             window.location.href = url.pathname + '?' + params.toString();
         }
-        document.getElementById('questionTypeSelect').addEventListener('change', function() {
-            const mcqSection = document.getElementById('mcqSection');
-            const tfSection = document.getElementById('tfSection');
 
-            if (this.value === 'mcq') {
-                mcqSection.classList.remove('hidden');
-                tfSection.classList.add('hidden');
-            } else if (this.value === 'tf') {
-                tfSection.classList.remove('hidden');
-                mcqSection.classList.add('hidden');
-            } else {
-                mcqSection.classList.add('hidden');
-                tfSection.classList.add('hidden');
-            }
-        });
+        // 2. ربط فلتر "الصف والمادة" ليعيد تحميل الصفحة فوراً عند تغيير الاختيار
+        // تأكد أن عنصر الـ select يحتوي على المعرف id="class_section_select" أو أضفه له
+        const classSectionSelect = document.getElementById('class_section_select') || document.querySelector(
+            'select[name="class_section"]');
+
+        if (classSectionSelect) {
+            classSectionSelect.addEventListener('change', function() {
+                // استدعاء دالة الفلترة وتمرير الاسم والقيمة المركبة (مثل 1|3)
+                filterQuestions('class_section', this.value);
+            });
+        }
+
+        // 3. الجزء الخاص بتبديل واجهة إضافة الأسئلة (MCQ / True-False) كما هي لديك
+        const questionTypeSelect = document.getElementById('questionTypeSelect');
+        if (questionTypeSelect) {
+            questionTypeSelect.addEventListener('change', function() {
+                const mcqSection = document.getElementById('mcqSection');
+                const tfSection = document.getElementById('tfSection');
+
+                if (this.value === 'mcq') {
+                    mcqSection?.classList.remove('hidden');
+                    tfSection?.classList.add('hidden');
+                } else if (this.value === 'tf') {
+                    tfSection?.classList.remove('hidden');
+                    mcqSection?.classList.add('hidden');
+                } else {
+                    mcqSection?.classList.add('hidden');
+                    tfSection?.classList.add('hidden');
+                }
+            });
+        }
     </script>
 
 @endsection

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AttendanceLogController;
 use App\Http\Controllers\dashboardController;
+use App\Http\Controllers\ExamController;
 use App\Http\Controllers\FeeController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\LessonController;
@@ -11,10 +12,12 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentExamController;
 use App\Http\Controllers\StudentMonthlyFeeController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
 use App\Models\permistion;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'login')->name('login');
@@ -53,4 +56,14 @@ Route::prefix('teacher')->group(function () {
     Route::resource('lessons', LessonController::class);
     Route::resource('attendance', AttendanceLogController::class);
     Route::resource('questions', QuestionBankController::class);
+    // 1. مسار مخصص لجلب الأسئلة عبر AJAX (يجب أن يكون قبل الـ resource)
+    Route::post('exams/fetch-questions', [ExamController::class, 'fetchQuestions'])->name('exams.fetch-questions');
+    Route::resource('exams', ExamController::class);
 });
+
+Route::prefix('student')->group(function () {
+    Route::resource('studentExams', StudentExamController::class);
+
+});
+
+Route::get('/api/get-exam-questions/{id}', [StudentExamController::class, 'getExamQuestions']);

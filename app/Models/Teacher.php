@@ -75,4 +75,9 @@ class teacher extends Model
         return $this->hasMany(ChatRoom::class, 'teacher_id');
     }
 
+    // 🟢 جلب الشعب التي يدرسها المعلم بدقة (الحل السحري لمشكلتك)
+    public function sections()
+    {
+        return $this->belongsToMany(Section::class, 'grade_teachers', 'teacher_id', 'section_id')->distinct();
+    }
 }

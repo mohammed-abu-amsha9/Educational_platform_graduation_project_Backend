@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('End_Time'); // الى الساعة كم متاح الاختبار
             $table->enum('status', ['Unpublished', 'Published'])->default('Unpublished'); // حالة الاختبار منشور او غير منشور
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -42,7 +42,6 @@
                                     الموكلة للمعلم:</label>
                                 <div
                                     class="grid grid-cols-2 gap-2 border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl p-3 max-h-40 overflow-y-auto custom-scroll">
-
                                     @foreach ($subjects as $subject)
                                         <label class="flex items-center gap-2 cursor-pointer py-1 group">
                                             <input type="checkbox" name="subjects[]" value="{{ $subject->id }}"
@@ -55,7 +54,6 @@
                                             </span>
                                         </label>
                                     @endforeach
-
                                 </div>
                             </div>
 
@@ -64,9 +62,7 @@
                                     المسندة</label>
                                 <div class="border border-gray-200 dark:border-slate-800 rounded-xl p-3 space-y-1.5 text-xs bg-slate-50/50 dark:bg-slate-800/30 custom-scroll"
                                     style="height:150px; overflow-y:scroll;">
-
                                     @foreach ($grades as $grade)
-                                        {{-- 1. الحالة الأولى: إذا كان الصف يحتوي على شعب فعلاً --}}
                                         @if ($grade->sections->count() > 0)
                                             @foreach ($grade->sections as $section)
                                                 <label
@@ -79,20 +75,17 @@
                                                         class="w-3.5 h-3.5 accent-teal-500 cursor-pointer" />
                                                 </label>
                                             @endforeach
-
-                                            {{-- 2. الحالة الثانية: إذا كان الصف وحيداً بدون أي شعبة مسجلة له --}}
                                         @else
                                             <label class="flex items-center justify-between py-0.5 cursor-pointer group">
                                                 <span
                                                     class="text-slate-600 dark:text-zinc-400 group-hover:text-teal-600 transition-colors font-bold">
                                                     {{ $grade->name }} — (عام / بدون شعبة)
                                                 </span>
-                                                <input type="checkbox" name="sections[]" value="grade_{{ $grade->id }}"
+                                                <input type="checkbox" name="grades[]" value="{{ $grade->id }}"
                                                     class="w-3.5 h-3.5 accent-teal-500 cursor-pointer" />
                                             </label>
-                                        @endif {{-- 🟢 التعديل هنا: قمنا بإغلاق الشرط أولاً --}}
-                                    @endforeach {{-- 🟢 التعديل هنا: ثم أغلقنا حلقة الصفوف --}}
-
+                                        @endif
+                                    @endforeach
                                 </div>
                             </div>
 
@@ -133,16 +126,13 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @forelse($teachers as $teacher)
-                            {{-- 🟢 تحسين: تمرير كائن المعلم كاملاً بعد معالجته بأمان دون كسر كود الـ HTML بسبب علامات الاقتباس --}}
-                            <div onclick="openViewModal({{ json_encode($teacher) }})"
+                            <div onclick="openViewModal({{ json_encode($teacher->load(['subjects', 'sections', 'grades', 'role'])) }})"
                                 class="group relative bg-white dark:bg-slate-900 border border-gray-200/60 hover:border-gray-300 dark:border-slate-800/80 p-5 rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition-all">
 
-                                {{-- حالة الحساب --}}
                                 <span
                                     class="absolute top-4 left-4 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded-full">نشط</span>
 
                                 <div class="flex items-center gap-4">
-                                    {{-- الحرف الأول من الاسم --}}
                                     <div
                                         class="w-14 h-14 rounded-full bg-teal-50 dark:bg-teal-950/40 flex items-center justify-center text-teal-600 dark:text-teal-400 font-black text-xl shadow-inner">
                                         {{ mb_substr($teacher->full_name, 0, 1) }}
@@ -156,15 +146,10 @@
 
                                         <div
                                             class="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-[11px] text-gray-500 dark:text-zinc-400">
-                                            {{-- 🟢 1. جلب أسماء المواد الموكلة مدمجة معاً بفواصل بسلاسة --}}
                                             <span>
                                                 <i class="fa-solid fa-book-open ml-1 text-teal-500"></i>
                                                 {{ $teacher->subjects->pluck('name')->implode('، ') ?: 'لم تحدد مواد' }}
                                             </span>
-
-
-
-                                            {{-- الصلاحية --}}
                                             <span>
                                                 <i class="fa-solid fa-key ml-1 text-amber-500"></i>
                                                 {{ $teacher->role->role_name ?? '-' }}
@@ -184,16 +169,17 @@
             </div>
         </div>
     </div>
-    {{-- ==================== 1. مودال العرض ==================== viewModal --}}
-    <div id="" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+
+    {{-- ==================== 1. مودال العرض ==================== --}}
+    <div id="viewModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal('viewModal')"></div>
         <div id="viewContent"
             class="bg-white border border-emerald-400 dark:bg-slate-900 rounded-3xl w-full max-w-md shadow-2xl relative z-10 p-6 transform scale-95 opacity-0 transition-all duration-300">
             <div class="flex justify-between items-start mb-6">
                 <h2 class="text-lg font-black text-teal-700">ملف المعلم</h2>
-                <button onclick="closeModal('viewModal')", class="text-gray-400 hover:text-rose-500 transition-colors">
+                <button onclick="closeModal('viewModal')" class="text-gray-400 hover:text-rose-500 transition-colors">
                     <i class="fa-solid fa-circle-xmark text-xl"></i>
-                </button>
+                    </< /button>
             </div>
 
             <div class="flex flex-col items-center text-center mb-6">
@@ -241,8 +227,8 @@
         </div>
     </div>
 
-    {{-- ==================== 2. مودال التعديل (مدمج داخله الفورم المطور) ==================== editModal--}}
-    <div id="" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    {{-- ==================== 2. مودال التعديل ==================== --}}
+    <div id="editModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal('editModal')"></div>
         <div
             class="bg-white border border-emerald-400 dark:bg-slate-900 rounded-3xl w-full max-w-md shadow-2xl relative z-10 p-6 max-h-[90vh] flex flex-col">
@@ -251,7 +237,6 @@
                 <i class="fa-solid fa-pen-to-square"></i> تعديل بيانات المعلم
             </h2>
 
-            {{-- بداية فورم التعديل --}}
             <form method="POST" action="" id="editTeacherForm"
                 class="space-y-4 overflow-y-auto pr-1 flex-1 custom-scroll">
                 @csrf
@@ -271,7 +256,8 @@
                         @foreach ($subjects as $subject)
                             <label class="flex items-center gap-2 cursor-pointer py-1 group">
                                 <input type="checkbox" name="subjects[]" value="{{ $subject->id }}"
-                                    class="subject-checkbox w-4 h-4 accent-teal-600 cursor-pointer" />
+                                    data-subject-id="{{ $subject->id }}"
+                                    class="edit-subject-checkbox w-4 h-4 accent-teal-600 cursor-pointer" />
                                 <span
                                     class="text-xs text-slate-700 dark:text-zinc-300 group-hover:text-teal-600 transition-colors">
                                     {{ $subject->name }}
@@ -289,19 +275,47 @@
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-black text-slate-500 mb-1.5 uppercase">الصفوف الدراسية</label>
-                    <div class="border border-gray-100 dark:border-slate-800 rounded-xl p-3 space-y-1.5 text-xs bg-slate-50/50 dark:bg-slate-800/30 custom-scroll"
-                        style="height:120px; overflow-y:scroll;">
+                    <label class="block text-[11px] font-black text-slate-500 mb-1.5 uppercase">الصفوف والشعب
+                        الدراسية</label>
+                    <div class="border border-gray-100 dark:border-slate-800 rounded-xl p-3 space-y-3 text-xs bg-slate-50/50 dark:bg-slate-800/30 custom-scroll"
+                        style="height:160px; overflow-y:scroll;">
                         @foreach ($grades as $grade)
-                            <div
-                                class="flex items-center justify-between py-1 border-b border-gray-100/50 dark:border-slate-800/50 last:border-0">
-                                <span class="text-slate-600 dark:text-zinc-400 font-medium">
-                                    <i class="fa-solid fa-graduation-cap ml-1 text-slate-400"></i> {{ $grade->name }}
-                                </span>
-                                <span
-                                    class="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md">يدار
-                                    عبر المواد</span>
-                            </div>
+                            @php $hasSections = $grade->sections && $grade->sections->count() > 0; @endphp
+
+                            @if ($hasSections)
+                                <div
+                                    class="space-y-1 bg-slate-100/30 dark:bg-slate-800/20 p-2 rounded-lg border border-gray-100/80 dark:border-slate-800/50">
+                                    <div
+                                        class="text-[10px] font-bold text-teal-600 dark:text-teal-400 bg-teal-50/50 dark:bg-teal-950/30 px-2 py-1 rounded-md flex items-center justify-between">
+                                        <span class="flex items-center">
+                                            <i class="fa-solid fa-graduation-cap ml-1"></i> {{ $grade->name }}
+                                        </span>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2 pr-2 pt-1">
+                                        @foreach ($grade->sections as $section)
+                                            <label
+                                                class="flex items-center py-1 px-2 border border-gray-100/50 dark:border-slate-800/40 rounded-md bg-white dark:bg-slate-900/40 cursor-pointer hover:bg-slate-50 transition-colors">
+                                                <input type="checkbox" name="sections[]" value="{{ $section->id }}"
+                                                    data-section-id="{{ $section->id }}"
+                                                    class="edit-section-checkbox ml-2 rounded border-gray-300 text-teal-600 focus:ring-teal-500 dark:border-slate-700 dark:bg-slate-900">
+                                                <span class="text-slate-600 dark:text-zinc-300">شعبة
+                                                    ({{ $section->name }})
+                                                </span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @else
+                                <label
+                                    class="flex items-center justify-between py-2 px-3 border border-gray-200/60 dark:border-slate-800 rounded-xl cursor-pointer hover:bg-slate-100/40 dark:hover:bg-slate-800/40 transition-colors">
+                                    <span class="flex items-center text-slate-700 dark:text-zinc-300 font-medium">
+                                        <input type="checkbox" name="grades[]" value="{{ $grade->id }}"
+                                            data-grade-id="{{ $grade->id }}"
+                                            class="edit-grade-checkbox ml-2 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-900">
+                                        <i class="fa-solid fa-graduation-cap ml-1 text-slate-400"></i> {{ $grade->name }}
+                                    </span>
+                                </label>
+                            @endif
                         @endforeach
                     </div>
                 </div>
@@ -320,20 +334,17 @@
 
                 <div class="flex justify-end gap-2 pt-2 border-t border-gray-100 dark:border-slate-800 shrink-0">
                     <button type="button" onclick="switchModal('editModal', 'viewModal')"
-                        class="px-4 py-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-slate-800 rounded-xl cursor-pointer">
-                        رجوع
-                    </button>
+                        class="px-4 py-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-slate-800 rounded-xl cursor-pointer">رجوع</button>
                     <button type="submit"
-                        class="px-4 py-2 text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-xl cursor-pointer transition-colors">
-                        حفظ التغييرات
-                    </button>
+                        class="px-4 py-2 text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-xl cursor-pointer transition-colors">حفظ
+                        التغييرات</button>
                 </div>
             </form>
         </div>
     </div>
 
-    {{-- ==================== 3. مودال الحذف ==================== deleteModal--}}
-    <div id="" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    {{-- ==================== 3. مودال الحذف ==================== --}}
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal('deleteModal')"></div>
         <div class="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-xs shadow-2xl relative z-10 p-6 text-center">
             <div
@@ -341,92 +352,94 @@
                 <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
             <h3 class="text-lg font-black text-slate-800 dark:text-zinc-100 mb-2">حذف المعلم؟</h3>
-            <p class="text-xs text-gray-400 mb-6 leading-relaxed">
-                أنت على وشك حذف بيانات هذا المعلم نهائياً من النظام، هل تريد الاستمرار؟
-            </p>
+            <p class="text-xs text-gray-400 mb-6 leading-relaxed">أنت على وشك حذف بيانات هذا المعلم نهائياً من النظام، هل
+                تريد الاستمرار؟</p>
             <div class="flex gap-2">
                 <button onclick="closeModal('deleteModal')"
-                    class="flex-1 py-3 text-sm font-bold text-gray-500 bg-slate-100 dark:bg-slate-800 rounded-xl">
-                    تراجع
-                </button>
+                    class="flex-1 py-3 text-sm font-bold text-gray-500 bg-slate-100 dark:bg-slate-800 rounded-xl">تراجع</button>
                 <form id="deleteTeacherForm" method="POST" action="" class="flex-1">
                     @csrf
                     @method('DELETE')
                     <button type="submit"
-                        class="w-full py-3 text-sm font-bold text-white bg-rose-500 hover:bg-rose-600 rounded-xl">
-                        نعم، احذف
-                    </button>
+                        class="w-full py-3 text-sm font-bold text-white bg-rose-500 hover:bg-rose-600 rounded-xl">نعم،
+                        احذف</button>
                 </form>
             </div>
         </div>
     </div>
 
-@endsection
-
-@section('scripts')
-    {{-- معلق --}}
+    {{-- ==================== كود الجافاسكربت المطور في أسفل الصفحة ==================== --}}
     <script>
+        let currentTeacherData = null;
+
         function openViewModal(teacher) {
-            // 1. تعبئة بيانات العرض (View Modal)
-            document.getElementById('vAvatar').innerText = teacher.full_name.charAt(0);
+            currentTeacherData = teacher;
+
+            // 1. تعبئة مودال العرض (View Modal)
             document.getElementById('vName').innerText = teacher.full_name;
-
-            // جلب أسماء المواد الفريدة المربوطة بالمعلم من علاقة subjects الديناميكية
-            if (teacher.subjects && teacher.subjects.length > 0) {
-                const subjectNames = teacher.subjects.map(sub => sub.name);
-                document.getElementById('vSubject').innerText = subjectNames.join('، ');
-
-                // حساب عدد الصفوف الفريدة التي يدرسها المعلم بناءً على المواد
-                const uniqueGrades = [...new Set(teacher.subjects.map(sub => sub.grade_id))];
-                document.getElementById('vClasses').innerText = uniqueGrades.length + ' صفوف دراسية';
-            } else {
-                document.getElementById('vSubject').innerText = '-';
-                document.getElementById('vClasses').innerText = '0 صفوف دراسية';
-            }
-
+            document.getElementById('vId').innerText = teacher.teacher_code;
             document.getElementById('vPhone').innerText = teacher.phone_number;
-            document.getElementById('vPerms').innerText = teacher.role?.role_name ?? '-';
+            document.getElementById('vAvatar').innerText = teacher.full_name.substring(0, 1);
+            document.getElementById('vPerms').innerText = teacher.role ? teacher.role.role_name : '-';
+            document.getElementById('vSubject').innerText = teacher.subjects.map(s => s.name).join('، ') || 'لم تحدد';
+            document.getElementById('vClasses').innerText = teacher.grades.map(s => s.name).join('، ') || 'لم تحدد';
 
-            // 2. تعبئة فورم التعديل (Edit Form)
+            // 2. تعبئة حقول مودال التعديل (Edit Modal) تجهيزاً لفتحه لاحقاً
             document.getElementById('edit_full_name').value = teacher.full_name;
             document.getElementById('edit_phone').value = teacher.phone_number;
-            document.getElementById('editTeacherForm').action = `/admin/teachers/${teacher.id}`;
-
-            // تحديد الدور الوظيفي
             document.getElementById('edit_role_id').value = teacher.role_id;
-
-            // 3. تحديد الـ Checkboxes الخاصة بالمواد تلقائياً بناءً على الـ id الخاص بكل مادة
-            document.querySelectorAll('.subject-checkbox').forEach(cb => {
-                // نقوم بالتحقق مما إذا كان المعرف الخاص بالـ checkbox (الذي يمثل ID المادة) موجوداً ضمن مواد المعلم
-                cb.checked = teacher.subjects?.some(
-                    sub => parseInt(cb.value) === parseInt(sub.id)
-                ) ?? false;
-            });
-
-            // 4. ربط فورم الحذف بالـ ID الصحيح مع المسار الخاص بك
+            document.getElementById('editTeacherForm').action = `/admin/teachers/${teacher.id}`;
             document.getElementById('deleteTeacherForm').action = `/admin/teachers/${teacher.id}`;
 
-            // 5. فتح المودال مع تأثير الحركة (Animation)
+            // استخراج المعرفات (IDs) وتحويلها دائماً إلى أرقام لضمان مطابقتها
+            const teacherSubjectIds = teacher.subjects ? teacher.subjects.map(s => Number(s.id)) : [];
+            const teacherSectionIds = teacher.sections ? teacher.sections.map(s => Number(s.id)) : [];
+
+            // ملاحظة: إذا كانت علاقة الصفوف بدون شعب مسجلة باسم grades أو مدمجة في العلاقة، نضمن جلبها هنا
+            const teacherGradeIds = teacher.grades ? teacher.grades.map(g => Number(g.id)) : [];
+            // ضبط الـ Checkboxes الخاصة بالمواد
+            document.querySelectorAll('.edit-subject-checkbox').forEach(cb => {
+                const id = Number(cb.getAttribute('data-subject-id'));
+                cb.checked = teacherSubjectIds.includes(id);
+            });
+
+            // ضبط الـ Checkboxes الخاصة بالشعب
+            document.querySelectorAll('.edit-section-checkbox').forEach(cb => {
+                const id = Number(cb.getAttribute('data-section-id'));
+                cb.checked = teacherSectionIds.includes(id);
+            });
+
+            // ضبط الـ Checkboxes الخاصة بالصفوف (بدون شعب)
+            document.querySelectorAll('.edit-grade-checkbox').forEach(cb => {
+                const id = Number(cb.getAttribute('data-grade-id'));
+                cb.checked = teacherGradeIds.includes(id);
+            });
+
+            // إظهار المودال الأول
             const modal = document.getElementById('viewModal');
-            const content = document.getElementById('viewContent');
             modal.classList.remove('hidden');
-            setTimeout(() => content.classList.remove('scale-95', 'opacity-0'), 10);
+            setTimeout(() => {
+                document.getElementById('viewContent').classList.remove('scale-95', 'opacity-0');
+            }, 50);
         }
 
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modalId === 'viewModal') {
-                const content = document.getElementById('viewContent');
-                content.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => modal.classList.add('hidden'), 300);
-            } else {
-                modal.classList.add('hidden');
+                document.getElementById('viewContent').classList.add('scale-95', 'opacity-0');
             }
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
         }
 
-        function switchModal(currentId, nextId) {
-            document.getElementById(currentId).classList.add('hidden');
-            document.getElementById(nextId).classList.remove('hidden');
+        function switchModal(fromId, toId) {
+            closeModal(fromId);
+            setTimeout(() => {
+                const toModal = document.getElementById(toId);
+                toModal.classList.remove('hidden');
+            }, 250);
         }
     </script>
+
 @endsection

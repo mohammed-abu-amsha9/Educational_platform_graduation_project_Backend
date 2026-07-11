@@ -6,12 +6,15 @@ use Illuminate\Foundation\Configuration\Middleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        commands: __DIR__.'/../routes/console.php',
+        web: __DIR__ . '/../routes/web.php',
+        commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
         //
+        $middleware->validateCsrfTokens(except: [
+            'api/save-student-exam' // استثناء هذا المسار تحديداً من الحماية لأننا نرسل عبر fetch
+        ]);
         $middleware->trustProxies(at: '*'); // يخبر Laravel بالوثوق في بروكسي Railway لتمرير الـ HTTPS
     })
     ->withExceptions(function (Exceptions $exceptions): void {

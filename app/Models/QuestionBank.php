@@ -14,6 +14,14 @@ class QuestionBank extends Model
     {
         return $this->belongsTo(Teacher::class, 'teacher_id');
     }
+    public function grade()
+    {
+        return $this->belongsTo(grade::class, 'grade_id');
+    }
+    public function subject()
+    {
+        return $this->belongsTo(subject::class, 'subject_id');
+    }
 
     /** خيارات الإجابة التابعة لهذا السؤال */
     public function options()

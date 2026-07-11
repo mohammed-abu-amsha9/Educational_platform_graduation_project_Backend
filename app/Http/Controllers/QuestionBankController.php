@@ -16,23 +16,42 @@ class QuestionBankController extends Controller
     public function index(Request $request)
     {
         $teacherId = 1;
+
         // 1. بناء الاستعلام الأساسي مع حصر الأسئلة التابعة لهذا المعلم فقط
         $query = QuestionBank::where('teacher_id', $teacherId);
+
         // 2. الفرز الذكي: إذا اختار المعلم نوعاً معيناً ولم يكن "all"
         if ($request->has('question_type') && $request->input('question_type') !== 'all') {
             $query->where('question_type', $request->input('question_type'));
         }
 
-        // 3. الفرز الذكي حسب الصف والمادة
-        if ($request->has('class_section') && !empty($request->input('class_section'))) {
-            $query->where('academic_level_subject', $request->input('class_section'));
+        // 3. الفرز الذكي المصلح حسب الصف والمادة (تفكيك القيمة المركبة)
+        if ($request->filled('class_section')) {
+            // تفكيك القيمة القادمة مثل "1|1" إلى مصفوفة تحتوي على [grade_id, subject_id]
+            $parts = explode('|', $request->input('class_section'));
+
+            if (count($parts) === 2) {
+                $gradeId   = $parts[0];
+                $subjectId = $parts[1];
+
+                // الفلترة بالاعتماد على الأعمدة الحقيقية الموجودة في الـ Migration
+                $query->where('grade_id', $gradeId)
+                    ->where('subject_id', $subjectId);
+            }
         }
 
-        // 3. جلب الأسئلة المفلترة
-        $questionBank = $query->get();
-        $teacherClasses = grade::with('subjects')->get();
+        // 4. جلب الأسئلة المفلترة (يفضل استخدام الـ العلاقات مثل مع الصف والمادة إذا كانت متوفرة)
+        $questionBank = $query->with(['grade', 'subject'])->latest()->get();
+
+        // جلب المعلم مع المواد المربوطة به، والصفوف المربوطة به مباشرة عبر جدول الربط
+        $currentTeacher = teacher::with(['subjects', 'grades'])->find($teacherId);
+
+        // نرسل الصفوف والمواد الخاصة بهذا المعلم فقط إلى الـ Blade
+        $teacherSubjects = $currentTeacher ? $currentTeacher->subjects : collect();
+        $teacherGrades = $currentTeacher ? $currentTeacher->grades->unique('id') : collect();
         return view('teacher.questions', [
-            'teacherClasses' => $teacherClasses,
+            'teacherSubjects' => $teacherSubjects,
+            'teacherGrades' => $teacherGrades,
             'questionBank' => $questionBank
         ]);
     }

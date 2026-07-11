@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>منصة صمود - لوحة بوابة الطالب - @yield('title')</title>
     <link rel="icon" type="image/png" href="{{ asset('assets/img/Logo.png') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/output.css') }}" />
@@ -34,7 +35,7 @@
             </div>
 
             <nav class="hidden md:flex items-center gap-1 bg-gray-100 dark:bg-slate-800 p-1.5 rounded-xl">
-                <a href="{{ route('admin_control_panel') }}"
+                <a href="{{ route('dashboard.index') }}"
                     class="px-5 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">لوحة
                     الإدارة</a>
                 <a href="{{ route('teacher_control_panel') }}"
@@ -197,7 +198,7 @@
 
         <div id="mobile-menu"
             class="hidden md:hidden border-t border-gray-100 bg-gray-50 dark:bg-slate-900 dark:border-slate-800 px-4 pt-2 pb-4 space-y-2 shadow-inner">
-            <a href="{{ route('admin_control_panel') }}"
+            <a href="{{ route('dashboard.index') }}"
                 class="block px-4 py-2.5 rounded-xl text-sm font-bold text-gray-600 hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">لوحة
                 الإدارة</a>
             <a href="{{ route('teacher_control_panel') }}"
@@ -291,9 +292,9 @@
                     <span>المواد</span>
                 </a>
 
-                <a href="{{ route('student_tests') }}"
+                <a href="{{ route('studentExams.index') }}"
                     class="flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('student_tests') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400' }}">
+            {{ request()->routeIs('studentExams.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400' }}">
                     <i class="fa-solid fa-clipboard-question text-base"></i>
                     <span>الإختبارات</span>
                 </a>

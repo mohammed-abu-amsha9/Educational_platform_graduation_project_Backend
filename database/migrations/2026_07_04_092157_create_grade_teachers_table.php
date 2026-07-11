@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // جدول صفوف المعلمين 
+        // جدول صفوف المعلمين
         Schema::create('grade_teachers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('teacher_id')->constrained()->onDelete('cascade'); // يرتبط بالمعلم المعني بالصف الدراسي
-            $table->foreignId('grade_id')->constrained()->onDelete('cascade'); // يرتبط بالمعلم المعني بالصف الدراسي
+            $table->foreignId('grade_id')->constrained()->onDelete('cascade');
+            $table->foreignId('section_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

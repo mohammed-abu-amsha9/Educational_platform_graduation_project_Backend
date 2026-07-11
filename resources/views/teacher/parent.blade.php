@@ -287,11 +287,17 @@
                     <span>بنك الأسئلة</span>
                 </a>
 
-                <a href="{{ route('teacher_test_generator') }}"
+                <a href="{{ route('exams.index') }}"
                     class="flex items-center justify-center sm:justify-start gap-1.5 px-4 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('teacher_test_generator') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'dark:text-zinc-100 text-gray-600 font-semibold hover:text-teal-700' }}">
+            {{ request()->routeIs('exams.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'dark:text-zinc-100 text-gray-600 font-semibold hover:text-teal-700' }}">
                     <i class="fa-solid fa-file-pen text-base"></i>
                     <span>مولد الإختبارات</span>
+                </a>
+                <a href="{{ route('exams.create') }}"
+                    class="flex items-center justify-center sm:justify-start gap-1.5 px-4 py-3 rounded-xl text-sm whitespace-nowrap
+            {{ request()->routeIs('exams.create') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'dark:text-zinc-100 text-gray-600 font-semibold hover:text-teal-700' }}">
+                    <i class="fa-solid fa-file-pen text-base"></i>
+                    <span>الإختبارات</span>
                 </a>
 
                 <a href="{{ route('teacher_exams_manage') }}"
