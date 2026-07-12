@@ -11,10 +11,6 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
-        $middleware->validateCsrfTokens(except: [
-            'api/save-student-exam' // استثناء هذا المسار تحديداً من الحماية لأننا نرسل عبر fetch
-        ]);
         $middleware->trustProxies(at: '*'); // يخبر Laravel بالوثوق في بروكسي Railway لتمرير الـ HTTPS
     })
     ->withExceptions(function (Exceptions $exceptions): void {

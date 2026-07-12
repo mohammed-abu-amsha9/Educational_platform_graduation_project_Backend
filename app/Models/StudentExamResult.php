@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class StudentExamResult extends Model
 {
     /** @use HasFactory<\Database\Factories\StudentExamResultFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     public function student()
     {

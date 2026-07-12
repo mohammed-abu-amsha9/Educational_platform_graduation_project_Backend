@@ -523,6 +523,54 @@
             }, 1200);
         }
     </script>
+    <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // 1. حالة النجاح (Success Toast)
+            @if (session('success'))
+                Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    customClass: {
+                        popup: 'dark:bg-slate-800 dark:text-white'
+                    }
+                }).fire({
+                    icon: 'success',
+                    title: "{{ session('success') }}"
+                });
+            @endif
+
+            // 2. حالة وجود أخطاء في المدخلات (Validation Errors Toast)
+            @if ($errors->any())
+                // تجميع كافة الأخطاء في نص واحد مفصول بأسطر
+                let errorMessages = "";
+                @foreach ($errors->all() as $error)
+                    errorMessages += "• {{ $error }}\n";
+                @endforeach
+
+                Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 10000, // زيادة الوقت قليلاً ليتمكن المستخدم من قراءة الأخطاء
+                    timerProgressBar: true,
+                    customClass: {
+                        popup: 'dark:bg-slate-800 dark:text-white text-right'
+                    }
+                }).fire({
+                    icon: 'error',
+                    title: 'يرجى تصحيح الأخطاء التالية:',
+                    html: '<pre style="font-family: inherit; text-align: right; direction: rtl; white-space: pre-line;" class="text-xs text-red-500 font-bold">' +
+                        errorMessages + '</pre>'
+                });
+            @endif
+
+        });
+    </script>
     <script>
         // ==========================================
         // إدارة قائمة الإشعارات المنسدلة

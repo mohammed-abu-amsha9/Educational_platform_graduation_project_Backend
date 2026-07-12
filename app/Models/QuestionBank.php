@@ -34,4 +34,10 @@ class QuestionBank extends Model
     {
         return $this->belongsToMany(Exam::class, 'exam_questions', 'question_bank_id', 'exam_id');
     }
+
+    public function questionBank()
+    {
+        // السهم يشير إلى جدول بنك الأسئلة الأساسي عبر المفتاح الأجنبي
+        return $this->belongsTo(QuestionBank::class, 'question_bank_id');
+    }
 }

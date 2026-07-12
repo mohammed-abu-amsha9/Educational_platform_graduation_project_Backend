@@ -170,6 +170,6 @@ class ExamController extends Controller
         $exam->delete();
 
         // 4. العودة إلى الصفحة السابقة مع رسالة تأكيد النجاح
-        return redirect()->route('exams.index')->with('success', 'تم حذف الاختبار وجميع الأسئلة المرتبطة به بنجاح.');
+        return redirect()->back()->with('success', 'تم حذف الاختبار وجميع الأسئلة المرتبطة به بنجاح.');
     }
 }

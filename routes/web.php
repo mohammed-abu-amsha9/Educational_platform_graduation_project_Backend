@@ -13,6 +13,7 @@ use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentExamController;
+use App\Http\Controllers\StudentExamResultController;
 use App\Http\Controllers\StudentMonthlyFeeController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
@@ -63,7 +64,7 @@ Route::prefix('teacher')->group(function () {
 
 Route::prefix('student')->group(function () {
     Route::resource('studentExams', StudentExamController::class);
+    Route::resource('studentExamResults', StudentExamResultController::class);
 
 });
 
-Route::get('/api/get-exam-questions/{id}', [StudentExamController::class, 'getExamQuestions']);
