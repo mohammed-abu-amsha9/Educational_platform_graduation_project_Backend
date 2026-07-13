@@ -256,7 +256,7 @@
                 </div>
                 <div id="status-details"
                     class="text-gray-500 text-sm font-medium flex items-center gap-1 dark:text-zinc-400">
-                    <span class="text-gray-700 dark:text-zinc-200">✓ متزامن</span>
+                    <span id="sync-text" class="text-gray-700 dark:text-zinc-200">✓ متزامن</span>
                 </div>
             </div>
             <div class="flex items-center gap-3">
@@ -285,9 +285,9 @@
                     <span>الرئيسية</span>
                 </a>
 
-                <a href="{{ route('student_materials') }}"
+                <a href="{{ route('materialContents.index') }}"
                     class="flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('student_materials') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400' }}">
+            {{ request()->routeIs('materialContents.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400' }}">
                     <i class="fa-solid fa-book-open text-base"></i>
                     <span>المواد</span>
                 </a>
@@ -313,9 +313,9 @@
                     <span>الدردشة</span>
                 </a>
 
-                <a href="{{ route('student_sync') }}"
+                <a href="{{ route('syncs.index') }}"
                     class="flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('student_sync') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400' }}">
+            {{ request()->routeIs('syncs.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400' }}">
                     <i class="fa-solid fa-cloud-arrow-up text-base"></i>
                     <span>المزامنة</span>
                 </a>
@@ -440,46 +440,81 @@
         let isOnline = true;
         let pendingCount = 1; // نفترض وجود عملية واحدة معلقة بالصفحة
 
-        function toggleConnection() {
-            isOnline = !isOnline;
+        // دالة تحديث شكل شريط الحالة بالكامل بناءً على حالة الاتصال
+        function updateStatusUI(online) {
             const statusBar = document.getElementById("status-bar");
             const statusBadge = document.getElementById("status-badge");
             const badgeText = document.getElementById("badge-text");
             const toggleIcon = document.getElementById("toggle-icon");
             const toggleText = document.getElementById("toggle-text");
-            const syncDetails = document.getElementById("status-details");
+            const syncText = document.getElementById("sync-text");
 
-            if (!statusBar) return;
+            if (!statusBar || !statusBadge || !badgeText) return;
 
-            if (isOnline) {
+            if (online) {
+                // تحويل المظهر إلى اللون الأخضر (متصل)
                 statusBar.className =
-                    "w-full bg-white border border-emerald-400 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-sm   dark:bg-slate-900 dark:border-emerald-500/40";
+                    "w-full bg-white border border-emerald-400 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-sm dark:bg-slate-900 dark:border-emerald-500/40";
                 statusBadge.className =
-                    "bg-emerald-50 text-emerald-700 border border-emerald-200 px-4 py-1.5 rounded-full text-sm font-semibold flex items-center gap-2  dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800/50";
+                    "bg-emerald-50 text-emerald-700 border border-emerald-200 px-4 py-1.5 rounded-full text-sm font-semibold flex items-center gap-2 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800/50";
                 badgeText.innerText = "متصل";
-                toggleIcon.className =
-                    "fa-solid fa-toggle-off text-orange-500 text-base";
-                toggleText.innerText = "محاكاة عدم الاتصال";
-                if (syncDetails)
-                    syncDetails.innerHTML = `<span class="text-gray-700 dark:text-zinc-200">✓ متزامن</span>`;
-                showToast("تم إعادة الاتصال بالخادم بنجاح.", "success");
+                if (toggleIcon) toggleIcon.className = "fa-solid fa-toggle-off text-orange-500 text-base";
+                if (toggleText) toggleText.innerText = "محاكاة عدم الاتصال";
+                if (syncText) {
+                    syncText.className = "text-gray-700 dark:text-zinc-200";
+                    syncText.innerHTML = "✓ متزامن";
+                }
             } else {
+                // تحويل المظهر إلى اللون الأحمر (منفصل)
                 statusBar.className =
-                    "w-full bg-white border border-rose-400 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-sm   dark:bg-slate-900 dark:border-rose-500/40";
+                    "w-full bg-white border border-rose-400 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-sm dark:bg-slate-900 dark:border-rose-500/40";
                 statusBadge.className =
-                    "bg-rose-50 text-rose-700 border border-rose-200 px-4 py-1.5 rounded-full text-sm font-semibold flex items-center gap-2  dark:bg-rose-950/30 dark:text-rose-400 dark:border-rose-800/50";
+                    "bg-rose-50 text-rose-700 border border-rose-200 px-4 py-1.5 rounded-full text-sm font-semibold flex items-center gap-2 dark:bg-rose-950/30 dark:text-rose-400 dark:border-rose-800/50";
                 badgeText.innerText = "غير متصل";
-                toggleIcon.className =
-                    "fa-solid fa-toggle-on text-emerald-500 text-base";
-                toggleText.innerText = "محاكاة الاتصال";
-                if (syncDetails)
-                    syncDetails.innerHTML = `<span class="text-amber-600 dark:text-amber-400 font-bold">⚠ معلق</span>`;
-                showToast(
-                    "تم قطع الاتصال محاكاةً. البيانات ستحفظ محلياً.",
-                    "error",
-                );
+                if (toggleIcon) toggleIcon.className = "fa-solid fa-toggle-on text-emerald-500 text-base";
+                if (toggleText) toggleText.innerText = "محاكاة الاتصال";
+                if (syncText) {
+                    syncText.className = "text-amber-600 dark:text-amber-400 font-bold";
+                    syncText.innerHTML = "⚠ معلق";
+                }
             }
         }
+
+        // دالة زر المحاكاة (الـ Toggle)
+        function toggleConnection() {
+            // عكس حالة المحاكاة الحالية في الـ sessionStorage
+            let isSimulatedOffline = sessionStorage.getItem('simulation_offline') === 'true';
+            sessionStorage.setItem('simulation_offline', !isSimulatedOffline ? 'true' : 'false');
+
+            // تحديث الواجهة بناءً على النتيجة الجديدة لدالة الفحص
+            updateStatusUI(window.isOnline());
+            if (window.isOnline()) {
+                if (typeof showToast === 'function') showToast("تم إعادة الاتصال بالخادم بنجاح.", "success");
+                if (typeof renderSyncPage === 'function') renderSyncPage();
+            } else {
+                if (typeof showToast === 'function') showToast("تم قطع الاتصال محاكاةً. البيانات ستحفظ محلياً.", "error");
+            }
+        }
+
+        // --- هنا السحر الخاص بالإنترنت الحقيقي ---
+        // الاستماع لقطع الإنترنت الحقيقي من الجهاز فجأة
+        window.addEventListener('offline', function() {
+            console.log("تم رصد انقطاع حقيقي في شبكة الجهاز!");
+            updateStatusUI(isOnline());
+        });
+
+        // الاستماع لعودة الإنترنت الحقيقي للجهاز فجأة
+        window.addEventListener('online', function() {
+            console.log("عادت شبكة الجهاز الحقيقية للعمل!");
+            updateStatusUI(isOnline());
+            if (typeof renderSyncPage === 'function') renderSyncPage();
+        });
+
+        // تشغيل الفحص المبدئي فور تحميل الصفحة للتأكد من الحالة الحالية لإنترنت الطالب
+        document.addEventListener("DOMContentLoaded", function() {
+            // التعديل هنا: أضفنا window. قبل اسم الدالة
+            updateStatusUI(window.isOnline());
+        });
 
         function triggerSync() {
             if (!isOnline) {
@@ -603,6 +638,22 @@
             });
         }
     </script>
+    <script>
+        // التأكد من أن المتصفح يدعم ميزة الـ Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('تم تسجيل Service Worker بنجاح في النطاق: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('فشل تسجيل Service Worker: ', error);
+                    });
+            });
+        }
+    </script>
+    <script src="{{ asset('assets/js/offline-handler.js') }}"></script>
+
     @yield('scripts')
 </body>
 

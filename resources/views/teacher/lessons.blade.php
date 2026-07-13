@@ -76,7 +76,7 @@
                         <div class="grid grid-cols-3 gap-2">
                             <label
                                 class="border border-gray-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center justify-center gap-1 cursor-pointer hover:border-teal-500">
-                                <input type="radio" name="file_type" value="video" checked class="accent-teal-600" />
+                                <input type="radio" name="file_type" value="video"  class="accent-teal-600" />
                                 <i class="fa-solid fa-video text-amber-500 text-xs"></i>
                                 <span class="font-bold text-[10px]">فيديو شرح</span>
                             </label>
@@ -142,13 +142,18 @@
                                     </h4>
                                     <p class="text-[10px] text-gray-400">
                                         المادة:
-                                        <span class="text-teal-600 font-bold">{{ $lesson->subject->name }}</span>
+                                        <span
+                                            class="text-teal-600 font-bold">{{ $lesson->subject->name ?? 'مادة محذوفة أو غير معرفة' }}</span>
                                         • الشُعب:
                                         <span class="font-medium text-slate-600 dark:text-zinc-300">
-                                            @foreach ($lesson->subject->grade->sections as $section)
-                                                ({{ $section->name }})
-                                                {{ !$loop->last ? '، ' : '' }}
-                                            @endforeach
+                                            @if ($lesson->subject && $lesson->subject->grade)
+                                                @foreach ($lesson->subject->grade->sections as $section)
+                                                    ({{ $section->name }})
+                                                    {{ !$loop->last ? '، ' : '' }}
+                                                @endforeach
+                                            @else
+                                                <span class="text-xs text-gray-400">غير محدد</span>
+                                            @endif
                                         </span>
                                     </p>
                                 </div>

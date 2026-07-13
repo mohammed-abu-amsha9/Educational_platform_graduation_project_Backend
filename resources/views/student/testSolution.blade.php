@@ -30,7 +30,8 @@
                 class="lg:col-span-3 bg-white dark:bg-slate-900 border border-gray-200 p-6 rounded-3xl shadow-sm flex flex-col min-h-[400px] justify-between">
 
                 <!-- فورم لإرسال إجابة السؤال الحالي وتخزينها -->
-                <form action="{{ route('studentExams.store') }}" method="POST">
+                <form action="{{ route('studentExams.store') }}" method="POST"
+                    window.location.href = "{{ route('syncs.index') }}";>
                     @csrf
                     <input type="hidden" name="exam_id" value="{{ $exam->id }}">
 
@@ -72,13 +73,14 @@
 
                         <!-- إذا كان هناك سؤال تالي -->
                         @if ($questions->hasMorePages())
-                            <button type="submit" name="action" value="next"
+                            <button type="submit" name="action" value="next" id="nextQuestionBtn"
+                                data-next-page="{{ $questions->currentPage() + 1 }}"
                                 class="bg-slate-800 dark:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl">
                                 التالي وحفظ <i class="fa-solid fa-arrow-left mr-1"></i>
                             </button>
                         @else
                             <!-- إذا كان هذا هو السؤال الأخير -->
-                            <button type="submit" name="action" value="finish"
+                            <button type="submit" id="finalSubmitBtn" name="action" value="finish"
                                 class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-5 py-2 rounded-xl">
                                 إنهاء وإرسال الإجابات <i class="fa-solid fa-check-double mr-1"></i>
                             </button>
@@ -92,5 +94,62 @@
     </div>
 @endsection
 @section('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const actionButtons = document.querySelectorAll('button, input[type="submit"], .btn');
 
+            actionButtons.forEach(button => {
+                button.addEventListener("click", function(event) {
+                    // إذا كان أونلاين، اتركه يعمل بشكل طبيعي جداً مع لارافيل والـ Pagination الافتراضي
+                    if (window.isOnline()) {
+                        return;
+                    }
+
+                    // إذا كان أوفلاين (أو محاكاة): نوقف الإرسال التلقائي للسيرفر لحماية البيانات
+                    event.preventDefault();
+                    event.stopPropagation();
+                    event.stopImmediatePropagation();
+
+                    // 1. تجميع الإجابات الحالية من الفورم لحمايتها
+                    const quizForm = document.getElementById("quizForm");
+                    let answers = {};
+                    if (quizForm) {
+                        let formData = new FormData(quizForm);
+                        formData.forEach((value, key) => {
+                            answers[key] = value;
+                        });
+                    }
+
+                    let quizData = {
+                        title: "إجابات اختبار معلقة",
+                        form_data: answers,
+                        created_at: new Date().toISOString()
+                    };
+
+                    // 2. التمييز الذكي بين إنهاء الاختبار وبين التنقل للتالي
+                    if (button.id === "finalSubmitBtn") {
+                        // حفظ العملية النهائية كاملة في IndexedDB كعملية تسليم نهائية
+                        window.saveActionLocally('submit_quiz', quizData);
+
+                        // تحويل الطالب فوراً لصفحة المزامنة (بدون إزعاج)
+                        window.location.replace("{{ route('syncs.index') }}");
+                    } else if (button.id === "nextQuestionBtn") {
+                        // حفظ حالة السؤال الحالي محلياً كمسودة لحين توفر الإنترنت
+                        window.saveActionLocally('save_draft_question', quizData);
+                        console.log("تم حفظ إجابة السؤال الحالي محلياً كمسودة بنجاح.");
+
+                        // [الحل السحري للأوفلاين]: نقوم ببناء رابط الصفحة التالية يدوياً وننقل الطالب إليها
+                        // نأخذ رابط الصفحة الحالي (مثلا: exam/create?exam_id=1) ونضيف أو نعدل عليه الـ page
+                        let currentUrl = new URL(window.location.href);
+                        let nextPage = button.getAttribute('data-next-page');
+
+                        currentUrl.searchParams.set('page', nextPage);
+
+                        // انتقال صامت وسلس للصفحة التالية بدون تدخل السيرفر (ستعتمد على الكاش المحلي أو الـ Service Worker)
+                        window.location.href = currentUrl.toString();
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

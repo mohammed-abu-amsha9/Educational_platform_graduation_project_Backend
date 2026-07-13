@@ -136,36 +136,110 @@
                 </div>
             </div>
         </div>
-
-        <div
-            class="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 hover:border-teal-500 rounded-2xl p-4 space-y-4">
-            <h4 class="font-black text-gray-700 dark:text-white flex items-center gap-1.5">
-                <i class="fa-solid fa-database text-cyan-500 text-[11px]"></i> إدارة
-                البيانات المحلية
-            </h4>
-
-            <div
-                class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-3 bg-slate-900 border border-slate-800 rounded-xl">
-                <div class="space-y-0.5">
-                    <p class="font-bold text-zinc-300 text-xs">
-                        حجم البيانات المخزنة محلياً
-                    </p>
-                    <p class="text-[10px] text-gray-400">
-                        تشمل الكاش المؤقت للاختبارات، التوصيفات، والنصوص المكتوبة
-                        غيابياً
-                    </p>
-                </div>
-                <div
-                    class="font-black text-zinc-100 text-sm dir-ltr bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
-                    74.8 KB
-                </div>
-            </div>
-
-            <button
-                class="w-full bg-rose-100 dark:bg-rose-950/40 hover:bg-rose-700/70 hover:text-white text-rose-400 border border-rose-900/50 font-black py-3 rounded-xl shadow-xs cursor-pointer text-center flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-trash-can text-[11px]"></i> مسح جميع البيانات
-                المحلية وإعادة المزامنة الصفرية
-            </button>
-        </div>
     </div>
+@endsection
+@section('scripts')
+    <script>
+        // أزلنا تعريف dbName لمنع التكرار والخطأ
+        document.addEventListener("DOMContentLoaded", function() {
+            // نتحقق أولاً إذا كان الملف الخارجي قد فتح قاعدة البيانات بالفعل
+            if (typeof dbName !== 'undefined') {
+                const request = indexedDB.open(dbName, 1);
+
+                request.onsuccess = function(event) {
+                    localDB = event.target.result;
+                    // تشغيل الدالة لعرض البيانات وتصفير العدادات
+                    renderSyncPage();
+                };
+            } else {
+                // في حال لم يتم قراءته من الملف الخارجي
+                const request = indexedDB.open("StudentOfflineDB", 1);
+                request.onsuccess = function(event) {
+                    localDB = event.target.result;
+                    renderSyncPage();
+                };
+            }
+        });
+        // أضف هذا السطر داخل الـ DOMContentLoaded المستدعى بصفحتك
+        if (sessionStorage.getItem('simulation_offline') === 'true') {
+            // إذا كان مسجلاً كأوفلاين محاكاة، نعكس الحالة برمجياً لتحديث الألوان فوراً
+            sessionStorage.setItem('simulation_offline', 'false');
+            toggleConnection();
+        }
+
+        // دالة قراءة الـ IndexedDB وتحديث عناصر الواجهة الخاصة بك
+        function renderSyncPage() {
+            if (!localDB) return;
+
+            // فتح ترافيك لقراءة الجدولين
+            const txActions = localDB.transaction("pending_actions", "readonly");
+            const storeActions = txActions.objectStore("pending_actions");
+            const reqActions = storeActions.getAll();
+
+            reqActions.onsuccess = function() {
+                const pendingList = reqActions.result;
+
+                const txLogs = localDB.transaction("sync_logs", "readonly");
+                const storeLogs = txLogs.objectStore("sync_logs");
+                const reqLogs = storeLogs.getAll();
+
+                reqLogs.onsuccess = function() {
+                    const successList = reqLogs.result ? reqLogs.result.reverse() : [];
+
+                    // تحديث العدادات العلوية في واجهتك ديناميكياً (هنا سيتم التصفير)
+                    document.getElementById("totalSyncCount").innerText = pendingList.length + successList.length;
+                    document.getElementById("successSyncCount").innerText = successList.length;
+                    document.getElementById("successLabelCount").innerText = successList.length;
+                    document.getElementById("pendingSyncCount").innerText = pendingList.length;
+                    document.getElementById("pendingLabelCount").innerText = pendingList.length;
+
+                    // بناء وتحديث قائمة "في انتظار المزامنة"
+                    const pendingContainer = document.getElementById("pendingContainer");
+                    pendingContainer.innerHTML = ""; // تفريغ العناصر القديمة الثابتة
+
+                    if (pendingList.length === 0) {
+                        pendingContainer.innerHTML = `
+                    <div class="text-center p-6 text-gray-400 bg-white dark:bg-slate-900/40 border border-dashed border-slate-700 dark:border-slate-800 rounded-2xl w-full">
+                        <i class="fa-solid fa-square-check text-emerald-400 text-lg mb-1 block"></i>
+                        لا توجد عمليات معلقة حالياً، بياناتك متزامنة بالكامل!
+                    </div>`;
+                    } else {
+                        pendingList.forEach(action => {
+                            let icon = 'fa-file-signature';
+                            if (action.type === 'chat_message') icon = 'fa-envelope';
+
+                            pendingContainer.innerHTML += `
+                        <div class="bg-white dark:bg-slate-900/60 border border-amber-500/20 p-4 rounded-2xl flex items-center justify-between gap-4 w-full">
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-xl bg-amber-950/60 text-amber-500 border border-amber-500/20 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid ${icon} text-xs"></i>
+                                </div>
+                                <div class="space-y-1">
+                                    <h5 class="font-bold text-gray-700 dark:text-white">
+                                        ${action.payload.title || 'عملية غير معنونة'}
+                                    </h5>
+                                    <p class="text-[11px] text-gray-600 dark:text-gray-400">
+                                        تم الحفظ محلياً: ${new Date(action.created_at).toLocaleString('ar-EG')}
+                                    </p>
+                                </div>
+                            </div>
+                            <span class="bg-amber-950/80 text-amber-500 border border-amber-500/20 text-[9px] font-black px-2 py-1 rounded-lg shrink-0">
+                                بانتظار شبكة <i class="fa-solid fa-wifi-slash mr-0.5 text-[8px]"></i>
+                            </span>
+                        </div>`;
+                        });
+                    }
+                };
+            };
+        }
+
+        // دالة تشغيل المزامنة عند الضغط على زر "المزامنة الآن"
+        function triggerSync() {
+            if (typeof isOnline === 'function' && !isOnline()) {
+                alert("لا يوجد اتصال بالإنترنت حالياً! تعذر بدء المزامنة السحابية.");
+                return;
+            }
+            alert("جاري التحقق من العمليات المعلقة وبدء المزامنة...");
+        }
+    </script>
 @endsection

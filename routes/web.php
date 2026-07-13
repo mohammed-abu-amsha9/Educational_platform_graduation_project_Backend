@@ -6,6 +6,7 @@ use App\Http\Controllers\ExamController;
 use App\Http\Controllers\FeeController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\materialContentController;
 use App\Http\Controllers\PermistionController;
 use App\Http\Controllers\QuestionBankController;
 use App\Http\Controllers\RoleController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\StudentExamController;
 use App\Http\Controllers\StudentExamResultController;
 use App\Http\Controllers\StudentMonthlyFeeController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\syncController;
 use App\Http\Controllers\TeacherController;
 use App\Models\permistion;
 use Illuminate\Support\Facades\DB;
@@ -65,6 +67,7 @@ Route::prefix('teacher')->group(function () {
 Route::prefix('student')->group(function () {
     Route::resource('studentExams', StudentExamController::class);
     Route::resource('studentExamResults', StudentExamResultController::class);
-
+    Route::resource('materialContents', materialContentController::class);
+    Route::resource('syncs', syncController::class);
 });
 
