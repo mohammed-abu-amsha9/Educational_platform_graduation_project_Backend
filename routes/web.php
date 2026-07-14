@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceLogController;
 use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\ExamController;
@@ -59,6 +60,11 @@ Route::prefix('teacher')->group(function () {
     // 1. مسار مخصص لجلب الأسئلة عبر AJAX (يجب أن يكون قبل الـ resource)
     Route::post('exams/fetch-questions', [ExamController::class, 'fetchQuestions'])->name('exams.fetch-questions');
     Route::resource('exams', ExamController::class);
+
+
+
+    Route::resource('assignments', AssignmentController::class);
+    
 });
 
 Route::prefix('student')->group(function () {

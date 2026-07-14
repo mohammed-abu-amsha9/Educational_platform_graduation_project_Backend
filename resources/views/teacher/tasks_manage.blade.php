@@ -95,78 +95,104 @@
             </div>
         </div>
 
-        <div id="createSection" class="space-y-6 block">
-            <form action="#" method="POST" enctype="multipart/form-data" class="space-y-6 text-xs">
-                <div
-                    class="bg-white dark:bg-slate-900 border border-gray-100 hover:border-emerald-400 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm space-y-4">
-                    <h3
-                        class="text-xs font-black text-slate-800 dark:text-zinc-200 flex items-center gap-2 pb-2 border-b border-gray-50 dark:border-slate-800">
-                        <span class="w-1.5 h-3 bg-teal-600 rounded-full"></span> بيانات
-                        الواجب الأساسية
-                    </h3>
 
+        <div id="createSection" class="space-y-6 block">
+            <!-- نموذج واحد فقط يغلف كل الحقول والأزرار ويرسل البيانات إلى الرابط الصحيح -->
+            <form action="/teacher/assignments" method="POST" enctype="multipart/form-data" class="space-y-6 text-xs">
+                @csrf
+        
+                <div class="bg-white dark:bg-slate-900 border border-gray-100 hover:border-emerald-400 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm space-y-4">
+                    <h3 class="text-xs font-black text-slate-800 dark:text-zinc-200 flex items-center gap-2 pb-2 border-b border-gray-50 dark:border-slate-800">
+                        <span class="w-1.5 h-3 bg-teal-600 rounded-full"></span> بيانات الواجب الأساسية
+                    </h3>
+        
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="md:col-span-2">
-                            <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">عنوان الواجب
-                                الدراسي *</label>
-                            <input type="text" required placeholder="مثال: واجب درس الفاعل والمفعول به - ملف PDF"
+                            <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">عنوان الواجب الدراسي *</label>
+                            <input type="text" name="title" required placeholder="مثال: واجب درس الفاعل والمفعول به - ملف PDF"
                                 class="w-full border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 outline-none focus:border-teal-500" />
                         </div>
-                        <div>
-                            <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">المادة والصف
-                                المستهدف</label>
-                            <select
-                                class="w-full border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 outline-none focus:border-teal-500 cursor-pointer">
-                                <option>اللغة العربية - الصف الأول الإعدادي</option>
-                                <option>اللغة العربية - الصف الثاني الإعدادي</option>
-                            </select>
+        
+                        <!-- قسم الصف والمادة والدرس -->
+                        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <!-- 1. حقل اختيار الصف الدراسي -->
+                            <div>
+                                <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">الصف الدراسي *</label>
+                                <select name="grade_id" id="grade_id" required
+                                    class="w-full border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 rounded-lg p-2.5 focus:ring-emerald-500 focus:border-emerald-500">
+                                    <option value="" class="text-gray-400">-- اختر الصف الدراسي --</option>
+                                    @foreach($grades as $grade)
+                                        <option value="{{ $grade->id }}">{{ $grade->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+        
+                            <!-- 2. حقل اختيار المادة الدراسية -->
+                            <div>
+                                <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">المادة الدراسية *</label>
+                                <select name="subject_id" id="subject_id" required
+                                    class="w-full border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 rounded-lg p-2.5 focus:ring-emerald-500 focus:border-emerald-500">
+                                    <option value="" class="text-gray-400">-- اختر المادة الدراسية --</option>
+                                    @foreach($subjects as $subject)
+                                        <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+        
+                            <!-- 3. حقل اختيار الدرس -->
+                            <div>
+                                <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">الدرس أو المحاضرة *</label>
+                                <select name="lesson_id" id="lesson_id" required
+                                    class="w-full border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 rounded-lg p-2.5 focus:ring-emerald-500 focus:border-emerald-500">
+                                    <option value="" class="text-gray-400">-- اختر الدرس أو المحاضرة --</option>
+                                    @foreach($lessons as $lesson)
+                                        <option value="{{ $lesson->id }}">{{ $lesson->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">آخر موعد لتسليم
-                                الطلاب *</label>
-                            <input type="datetime-local" required
+        
+                        <div class="md:col-span-2">
+                            <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">آخر موعد لتسليم الطلاب *</label>
+                            <input name="deadline" type="datetime-local" required
                                 class="w-full border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 outline-none focus:border-teal-500 cursor-pointer" />
                         </div>
                     </div>
                 </div>
-
-                <div
-                    class="bg-white dark:bg-slate-900 border border-gray-100 hover:border-emerald-400 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm space-y-4">
-                    <h3
-                        class="text-xs font-black text-slate-800 dark:text-zinc-200 flex items-center gap-2 pb-2 border-b border-gray-50 dark:border-slate-800">
-                        <span class="w-1.5 h-3 bg-teal-600 rounded-full"></span> تفاصيل
-                        ومطلوبات الواجب
+        
+                <div class="bg-white dark:bg-slate-900 border border-gray-100 hover:border-emerald-400 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm space-y-4">
+                    <h3 class="text-xs font-black text-slate-800 dark:text-zinc-200 flex items-center gap-2 pb-2 border-b border-gray-50 dark:border-slate-800">
+                        <span class="w-1.5 h-3 bg-teal-600 rounded-full"></span> تفاصيل ومطلوبات الواجب
                     </h3>
                     <div class="space-y-4">
                         <div>
-                            <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">وصف الواجب أو
-                                النص المطلوب</label>
-                            <textarea rows="3" placeholder="اكتب تعليماتك للطلاب هنا..."
+                            <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">وصف الواجب أو النص المطلوب</label>
+                            <textarea name="description" rows="3" placeholder="اكتب تعليماتك للطلاب هنا..."
                                 class="w-full border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 outline-none focus:border-teal-500 resize-none"></textarea>
                         </div>
                         <div>
-                            <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">إرفاق ملف أسئلة
-                                من المعلم (اختياري)</label>
-                            <input type="file" accept=".pdf,image/*"
+                            <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">إرفاق ملف أسئلة من المعلم (اختياري)</label>
+                            <!-- إضافة الـ name="file" هنا ضرورية جداً لتتمكن من استقبال الملف في الـ Controller -->
+                            <input type="file" name="file" accept=".pdf,image/*"
                                 class="w-full border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2 px-4 focus:border-teal-500 cursor-pointer" />
                         </div>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-zinc-300 mb-1.5">درجة الواجب الإجمالية *</label>
-                        <input type="number" min="1" max="100" placeholder="أدخل الدرجة الإجمالية (مثال: 10)"
+                        <input name="total_mark" type="number" min="1" max="100" placeholder="أدخل الدرجة الإجمالية (مثال: 10)"
                             class="w-full border border-slate-800 focus:ring-2 focus:ring-teal-600 bg-slate-950 rounded-xl py-2.5 px-4 text-xs outline-none text-zinc-200" />
                     </div>
                 </div>
-
-
+        
                 <div class="flex justify-end">
-                    <button type="submit"
-                        class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-3 rounded-xl  shadow-lg shadow-teal-600/10 cursor-pointer">
+                    <!-- زر الإرسال المباشر للـ Form الرئيسي -->
+                    <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-3 rounded-xl shadow-lg shadow-teal-600/10 cursor-pointer">
                         نشر وتكليف الطلاب فوراً
                     </button>
                 </div>
             </form>
         </div>
+
 
         <div id="trackSection" class="space-y-6 hidden">
             <div id="assignmentsListView"
