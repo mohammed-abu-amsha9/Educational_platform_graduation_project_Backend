@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\grade;
 use App\Models\QuestionBank;
 use App\Models\QuestionOption;
+use App\Models\StudentExamAnswer;
 use App\Models\teacher;
 use Illuminate\Http\Request;
 
@@ -161,8 +162,13 @@ class QuestionBankController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(QuestionBank $QuestionBank)
+    public function destroy($id)
     {
-        //
+        $question = QuestionBank::findOrFail($id);
+        $question->options()->delete();
+        StudentExamAnswer::where('question_bank_id', $id)->delete();
+        $question->delete();
+        return redirect()->back()->with('success', 'تم حذف السؤال من البنك، وإزالته من كافة الاختبارات وإجابات الطلاب بنجاح!');
+
     }
 }

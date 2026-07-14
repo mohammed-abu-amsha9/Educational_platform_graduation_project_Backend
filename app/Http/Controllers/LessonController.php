@@ -18,7 +18,7 @@ class LessonController extends Controller
     {
         $teacherId =  1;
 
-        $lessons = lesson::with('subject')->get();
+        $lessons = lesson::with('subject')->where('teacher_id', $teacherId)->get();
         // جلب المواد الفريدة التي يدرسها هذا المعلم
         $teacher = teacher::with(['subjects.grade', 'grades.sections'])->find($teacherId);
 
