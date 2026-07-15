@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceLogController;
 use App\Http\Controllers\ChatRoomController;
 use App\Http\Controllers\dashboardController;
@@ -63,7 +64,15 @@ Route::prefix('teacher')->group(function () {
     // 1. مسار مخصص لجلب الأسئلة عبر AJAX (يجب أن يكون قبل الـ resource)
     Route::post('exams/fetch-questions', [ExamController::class, 'fetchQuestions'])->name('exams.fetch-questions');
     Route::resource('exams', ExamController::class);
+<<<<<<< HEAD
     Route::resource('chats', ChatRoomController::class);
+=======
+
+
+
+    Route::resource('assignments', AssignmentController::class);
+    
+>>>>>>> e59bab5dc862b127692cd164ba6709cf0c16a920
 });
 
 Route::prefix('student')->group(function () {
@@ -74,3 +83,4 @@ Route::prefix('student')->group(function () {
     Route::resource('syncs', syncController::class);
 });
 
+Route::get('/api/get-exam-questions/{id}', [StudentExamController::class, 'getExamQuestions']);
