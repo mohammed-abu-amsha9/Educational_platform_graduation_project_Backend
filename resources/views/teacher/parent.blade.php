@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{{ asset('assets/fontawesome-free-7.2.0-web/css/all.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/join_style.css') }}" />
     @yield('styles')
+    @livewireStyles
 </head>
 
 <body class="bg-gray-50 text-gray-850 dark:bg-slate-950 dark:text-zinc-100">
@@ -314,9 +315,9 @@
                     <span>رفع الواجبات وتصحيحها</span>
                 </a>
 
-                <a href="{{ route('teacher_chats') }}"
+                <a href="{{ route('chats.create') }}"
                     class="flex items-center justify-center sm:justify-start gap-1.5 px-4 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('teacher_chats') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'dark:text-zinc-100 text-gray-600 font-semibold hover:text-teal-700' }}">
+            {{ request()->routeIs('chats.create') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'dark:text-zinc-100 text-gray-600 font-semibold hover:text-teal-700' }}">
                     <i class="fa-solid fa-envelope text-base"></i>
                     <span>صندوق المراسلة</span>
                 </a>
@@ -495,6 +496,7 @@
         }
     </script>
     @yield('scripts')
+    @livewireScripts
 </body>
 
 </html>

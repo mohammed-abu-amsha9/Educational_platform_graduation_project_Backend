@@ -30,6 +30,13 @@
 
                             <div>
                                 <label
+                                    class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-1.5 uppercase">رقم الهوية</label>
+                                <input type="number" name="id" placeholder="000000000" required
+                                    class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-teal-600 font-mono text-slate-800 dark:text-zinc-100" />
+                            </div>
+
+                            <div>
+                                <label
                                     class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-1.5 uppercase">رقم
                                     الهاتف</label>
                                 <input type="text" name="phone_number" placeholder="0599999999" required

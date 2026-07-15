@@ -67,6 +67,7 @@ class TeacherController extends Controller
         $teacherCode = 'TCH_' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
         // إنشاء المعلم
         $teacher = new Teacher();
+        $teacher->id    = $request->input('id');
         $teacher->full_name    = $request->input('full_name');
         $teacher->teacher_code = $teacherCode;
         $teacher->phone_number = $request->input('phone_number');
@@ -206,8 +207,10 @@ class TeacherController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(teacher $teacher)
+    public function destroy($id)
     {
-        //
+        $teacher = Teacher::findOrFail($id);
+        $teacher->delete();
+        return redirect()->back()->with('error', 'تم حذف الموظف');
     }
 }

@@ -12,7 +12,9 @@ class ChatRoomController extends Controller
      */
     public function index()
     {
-        //
+        $room = ChatRoom::first();
+
+        return view('student.chats', compact('room'));
     }
 
     /**
@@ -20,7 +22,7 @@ class ChatRoomController extends Controller
      */
     public function create()
     {
-        //
+        return response()->view('teacher.chats');
     }
 
     /**

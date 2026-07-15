@@ -9,8 +9,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Message extends Model
 {
     /** @use HasFactory<\Database\Factories\MessageFactory> */
-    use HasFactory, SoftDeletes;
-
+    use HasFactory;
+    // أضف هذه المصفوفة (أو عدلها إذا كانت موجودة)
+    protected $fillable = [
+        'chat_room_id',
+        'sender_type',
+        'message_text'
+    ];
     /** الغرفة التي تنتمي إليها هذه الرسالة */
     public function chatRoom()
     {

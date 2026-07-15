@@ -9,8 +9,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ChatRoom extends Model
 {
     /** @use HasFactory<\Database\Factories\ChatRoomFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
+    // أضف هذه المصفوفة (أو عدلها إذا كانت موجودة)
+    protected $fillable = [
+        'student_id',
+        'teacher_id'
+    ];
     /** المعلم المشترك في هذه المحادثة */
     public function teacher()
     {

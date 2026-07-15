@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -306,9 +305,9 @@
                     <span>المهام والواجبات</span>
                 </a>
 
-                <a href="{{ route('student_chats') }}"
+                <a href="{{ route('chats.index') }}"
                     class="flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('student_chats') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400' }}">
+            {{ request()->routeIs('chats.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400' }}">
                     <i class="fa-solid fa-comments text-base"></i>
                     <span>الدردشة</span>
                 </a>
@@ -653,7 +652,6 @@
         }
     </script>
     <script src="{{ asset('assets/js/offline-handler.js') }}"></script>
-
     @yield('scripts')
 </body>
 
