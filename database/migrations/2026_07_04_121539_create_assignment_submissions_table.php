@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained()->onDelete('cascade'); // يرتبط بالطالب الذي قام بحل ورفع ملف الواجب للمنصة
             $table->string('submitted_file_url', 255); // رابط ومسار ملف الحل المرفوع من الطالب (كراسة إجابة PDF أو صورة)
             $table->integer('mark')->nullable(); // الدرجة والعلامة المستحقة التي يضعها المعلم يدوياً بعد مراجعة ملف الحل
-            $table->string('status', 50); // حالة تصحيح التسليم الحالي لمتابعة الواجهات (لم يتم التصحيح، تم التصحيح)
+            $table->enum('status', ['correction', 'uncorrection'])->default('uncorrection'); // حالة تصحيح التسليم الحالي لمتابعة الواجهات (لم يتم التصحيح، تم التصحيح)
             $table->timestamp('submitted_at')->useCurrent(); // الوقت والتاريخ الدقيق والآلي لقيام الطالب بضغط زر إرسال للحل
             $table->timestamps();
         });

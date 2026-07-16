@@ -14,10 +14,12 @@ return new class extends Migration
         // الواجبات المنشورة
         Schema::create('assignments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('teacher_id')->constrained()->onDelete('cascade'); // المعلم صاحب المهمة والتكليف والمسؤول عن مراجعته وتصحيحه لاحقاً
-            $table->foreignId('lesson_id')->constrained()->onDelete('cascade'); // المعلم صاحب المهمة والتكليف والمسؤول عن مراجعته وتصحيحه لاحقاً
+            $table->foreignId('teacher_id')->constrained()->onDelete('cascade'); 
+            $table->foreignId('subject_id')->constrained()->onDelete('cascade'); 
+            $table->foreignId('grade_id')->constrained()->onDelete('cascade');   
+            $table->foreignId('section_id')->constrained()->onDelete('cascade'); 
             $table->string('title', 200); // عنوان الواجب الرئيسي (مثل: واجب إعراب الجملة الفعلية والأفعال الخمس)
-            $table->dateTime('deadline'); // آخر موعد وتاريخ محدد وصارم متاح أمام الطالب لإرسال حل الواجب
+            $table->dateTime('due_date'); // آخر موعد وتاريخ محدد وصارم متاح أمام الطالب لإرسال حل الواجب
             $table->text('description'); // التوصيف والتوجيه النصي التفصيلي لمضمون وحل الواجب المطلوبة
             $table->string('file', 255)->nullable(); // رابط أو مسار ملف الأسئلة الاختياري المرفق مع الواجب من المعلم
             $table->integer('total_mark'); // درجة الواجب الإجمالية (مثلاً: الواجب من 10 درجات أو 20 درجة)

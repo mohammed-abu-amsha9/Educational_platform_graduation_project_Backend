@@ -80,4 +80,10 @@ class teacher extends Model
     {
         return $this->belongsToMany(Section::class, 'grade_teachers', 'teacher_id', 'section_id')->distinct();
     }
+
+    public function gradeAssignments()
+    {
+        // هذا الجدول يربط المعلم بالصف والشعبة
+        return $this->hasMany(grade_teacher::class, 'teacher_id');
+    }
 }

@@ -298,9 +298,9 @@
                     <span>الإختبارات</span>
                 </a>
 
-                <a href="{{ route('student_tasks_and_duties') }}"
+                <a href="{{ route('assignmentSubmissions.index') }}"
                     class="flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('student_tasks_and_duties') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400' }}">
+            {{ request()->routeIs('assignmentSubmissions.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400' }}">
                     <i class="fa-solid fa-chalkboard-user text-base"></i>
                     <span>المهام والواجبات</span>
                 </a>

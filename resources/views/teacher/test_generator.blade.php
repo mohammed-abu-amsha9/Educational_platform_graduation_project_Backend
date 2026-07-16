@@ -77,7 +77,6 @@
     </style>
 @endsection
 @section('content')
-
     <form method="POST" action="{{route('exams.store')}}" class="my-6 mx-auto space-y-6" dir="rtl" id="quizGeneratorForm">
         @csrf
         <div id="setupSection"

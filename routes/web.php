@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\AssignmentSubmissionController;
 use App\Http\Controllers\AttendanceLogController;
 use App\Http\Controllers\ChatRoomController;
 use App\Http\Controllers\dashboardController;
@@ -21,6 +22,8 @@ use App\Http\Controllers\StudentMonthlyFeeController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\syncController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\viewTasks;
+use App\Http\Controllers\viewTasksController;
 use App\Models\permistion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -64,15 +67,11 @@ Route::prefix('teacher')->group(function () {
     // 1. مسار مخصص لجلب الأسئلة عبر AJAX (يجب أن يكون قبل الـ resource)
     Route::post('exams/fetch-questions', [ExamController::class, 'fetchQuestions'])->name('exams.fetch-questions');
     Route::resource('exams', ExamController::class);
-<<<<<<< HEAD
     Route::resource('chats', ChatRoomController::class);
-=======
-
-
-
     Route::resource('assignments', AssignmentController::class);
-    
->>>>>>> e59bab5dc862b127692cd164ba6709cf0c16a920
+    Route::get('gradingassignments', [viewTasksController::class, 'Grading_and_monitoring_assignments'])->name('gradingassignments');
+    Route::get('studentsListView', [viewTasksController::class, 'studentsListView'])->name('studentsListView');
+    Route::get('reviewAndCorrection/{id}', [viewTasksController::class, 'reviewAndCorrection'])->name('reviewAndCorrection');
 });
 
 Route::prefix('student')->group(function () {
@@ -81,6 +80,5 @@ Route::prefix('student')->group(function () {
     Route::resource('materialContents', materialContentController::class);
     Route::resource('chats', ChatRoomController::class);
     Route::resource('syncs', syncController::class);
+    Route::resource('assignmentSubmissions', AssignmentSubmissionController::class);
 });
-
-Route::get('/api/get-exam-questions/{id}', [StudentExamController::class, 'getExamQuestions']);

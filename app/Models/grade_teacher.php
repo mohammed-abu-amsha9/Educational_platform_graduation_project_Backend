@@ -9,4 +9,19 @@ class grade_teacher extends Model
 {
     /** @use HasFactory<\Database\Factories\GradeTeacherFactory> */
     use HasFactory;
+
+    // تعريف الجدول المرتبط
+    protected $table = 'grade_teachers';
+
+    // العلاقة مع الصف (Grade)
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class, 'grade_id');
+    }
+
+    // العلاقة مع الشعبة (Section)
+    public function section()
+    {
+        return $this->belongsTo(Section::class, 'section_id');
+    }
 }

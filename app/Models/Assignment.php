@@ -9,13 +9,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Assignment extends Model
 {
     /** @use HasFactory<\Database\Factories\AssignmentFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     /** المعلم الذي نشر هذا الواجب */
     public function teacher()
     {
         return $this->belongsTo(Teacher::class, 'teacher_id');
     }
+    public function subject()
+    {
+        return $this->belongsTo(subject::class, 'subject_id');
+    }
+    public function grade()
+    {
+        return $this->belongsTo(grade::class, 'grade_id');
+    }
+    public function section()
+    {
+        return $this->belongsTo(section::class, 'section_id');
+    }
+
 
     /** كافة الحلول والتسليمات المرفوعة من الطلاب على هذا الواجب */
     public function submissions()

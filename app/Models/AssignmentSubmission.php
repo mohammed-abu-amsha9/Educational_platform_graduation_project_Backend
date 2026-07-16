@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class AssignmentSubmission extends Model
 {
     /** @use HasFactory<\Database\Factories\AssignmentSubmissionFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     public function assignment()
     {

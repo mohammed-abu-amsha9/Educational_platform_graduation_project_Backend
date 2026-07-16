@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assignment;
+use App\Models\AssignmentSubmission;
 use App\Models\grade;
 use App\Models\lesson;
 use App\Models\subject;
@@ -17,36 +18,21 @@ class AssignmentController extends Controller
      */
     public function index()
     {
-        $teacherId = 1; // معرف المعلم المستهدف
-
-        // 1. جلب الصفوف التي يحتوي جدولها على مواد يدرسها المعلم رقم 1
-        $grades = grade::whereHas('subjects.teachers', function ($query) use ($teacherId) {
-            $query->where('teachers.id', $teacherId);
-        })->get();
-
-        // 2. جلب المواد التي يدرسها المعلم رقم 1 فقط
-        $subjects = subject::whereHas('teachers', function ($query) use ($teacherId) {
-            $query->where('teachers.id', $teacherId);
-        })->get();
-
-        // 3. ا جلب الدروس التابعة للمواد التي يدرسها المعلم رقم 1 فقط
-        // (عن طريق التأكد من أن المادة التابعة للدرس يدرسها المعلم رقم 1)
-        $lessons = lesson::whereHas('subject.teachers', function ($query) use ($teacherId) {
-            $query->where('teachers.id', $teacherId);
-        })->get();
-
-        // 4. تمرير القوائم الثلاث المصفاة بنجاح
-        return view('teacher.tasks_manage', [
-            'grades'   => $grades,
-            'subjects' => $subjects,
-            'lessons'  => $lessons
+        $teacherId = 1;
+        // 1. جلب المعلم مع المواد والصفوف والشعب (مع منع التكرار لاحقاً)
+        $currentTeacher = teacher::with(['subjects', 'grades.sections'])->find($teacherId);
+        return response()->view('teacher.tasks_manage', [
+            'currentTeacher' => $currentTeacher,
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {}
+    public function create()
+    {
+        //
+    }
 
 
 
@@ -55,39 +41,51 @@ class AssignmentController extends Controller
      */
     public function store(Request $request)
     {
+        // 1. التحقق من صحة البيانات القادمة من الفورم
+        $request->validate([
+            'title'    => 'required|string', // يحتوي على "grade_id|subject_id"
+            'due_date'      => 'required|date',
+            'description'  => 'required|string',
+            'file'    => 'nullable',
+            'total_mark'       => 'required|numeric',
+        ]);
 
-    $request->validate([
-        'title'        => 'required|string|max:255',
-        'lesson_id'    => 'required|exists:lessons,id',
-        'deadline'     => 'required|date',
-        'description'  => 'required|string',
-        'file'         => 'nullable|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:5120', // حد أقصى 5 ميجا
-        'total_mark'   => 'required|integer|min:1|max:100',
-    ]);
+        // 2. تفكيك القيمة المدمجة (مثل: sub_1_sec_2 أو sub_1_grd_3)
+        $assignmentValue = $request->input('section_id');
+        $parts = explode('_', $assignmentValue);
 
+        $subjectId = $parts[1]; // الرقم بعد sub
+        $type = $parts[2];     // سواء كان sec أو grd
+        $targetId = $parts[3]; // رقم الشعبة أو الصف
 
-    $filePath = null;
-    if ($request->hasFile('file')) {
-        // سيتم حفظ الملف في مجلد storage/app/public/assignments
-        $filePath = $request->file('file')->store('assignments', 'public');
-    }
+        // 3. حفظ البيانات في نموذج الواجب
+        $assignment = new Assignment();
+        $assignment->teacher_id =  1; // يفضل استخدام auth()->id()
+        $assignment->subject_id = $subjectId;
 
+        if ($type === 'sec') {
+            $assignment->section_id = $targetId;
+            // جلب الصف التابع لهذه الشعبة (تحتاج علاقة في موديل Section)
+            $assignment->grade_id = \App\Models\Section::find($targetId)->grade_id;
+        } else {
+            $assignment->grade_id = $targetId;
+            $assignment->section_id = null; // أو القيمة الافتراضية لديك
+        }
 
-    $assignment = new Assignment();
+        $assignment->title = $request->input('title');
+        $assignment->due_date = $request->input('due_date');
+        $assignment->description = $request->input('description');
 
-    $assignment->teacher_id = 1; 
-    $assignment->lesson_id = $request->lesson_id;
-    $assignment->title = $request->title;
-    $assignment->deadline = $request->deadline;
-    $assignment->description = $request->description;
-    $assignment->file = $filePath; // تخزين مسار الملف الجديد المحفوظ وليس كائن الـ Request
-    $assignment->total_mark = $request->total_mark;
+        // معالجة الملف
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('assignments', 'public');
+            $assignment->file = $path;
+        }
 
+        $assignment->total_mark = $request->input('total_mark');
+        $assignment->save();
 
-    $assignment->save();
-
-
-    return redirect()->back()->with('success', 'تم نشر وتكليف الطلاب بالواجب بنجاح!');
+        return redirect()->back()->with('success', 'تم نشر الواجب بنجاح');
     }
 
     /**
