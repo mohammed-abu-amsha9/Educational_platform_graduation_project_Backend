@@ -15,6 +15,6 @@ class StudentExamAnswer extends Model
         'student_id',
         'exam_id',
         'question_bank_id',
-        'selected_option_id'
+        'selected_option_id',
     ];
 }

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,121 +38,14 @@
                 <a href="{{ route('dashboard.index') }}"
                     class="px-5 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">لوحة
                     الإدارة</a>
-                <a href="{{ route('teacher_control_panel') }}"
+                <a href="{{ route('dashboardTeacher.index') }}"
                     class="px-5 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">بوابة
                     المعلم</a>
-                <a href="{{ route('student_control_panel') }}"
+                <a href="{{ route('dashboardStudent.index') }}"
                     class="px-5 py-2 rounded-lg text-sm font-semibold bg-teal-700 text-white shadow-sm">بوابة الطالب</a>
             </nav>
 
             <div class="hidden md:flex items-center gap-4">
-                <div class="relative inline-block text-right">
-                    <button id="notification-btn"
-                        class="relative p-2 text-slate-600 dark:text-zinc-300 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer">
-                        <i class="fa-regular fa-bell text-lg"></i>
-                        <span class="absolute top-1.5 left-1.5 flex h-2 w-2">
-                            <span
-                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
-                        </span>
-                    </button>
-
-                    <div id="notification-dropdown"
-                        class="hidden absolute left-0 mt-2 w-72 bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 rounded-2xl shadow-xl z-50 overflow-hidden animate-scale-up"
-                        dir="rtl">
-                        <div
-                            class="p-3 bg-gray-50/50 dark:bg-slate-950/40 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between">
-                            <span class="font-black text-slate-800 dark:text-zinc-100 text-xs">🔔 الإشعارات
-                                الحديثة</span>
-                            <span
-                                class="bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 text-[9px] px-2 py-0.5 rounded-md font-bold">5
-                                جديدة</span>
-                        </div>
-
-                        <div
-                            class="divide-y divide-gray-50 dark:divide-slate-800/60 max-h-[225px] overflow-y-auto scrollbar-thin">
-                            <a href="#"
-                                class="block p-3 hover:bg-gray-50 dark:hover:bg-slate-950/40 transition-colors">
-                                <div class="flex gap-2">
-                                    <div class="w-2 h-2 rounded-full bg-indigo-600 mt-1.5 shrink-0"></div>
-                                    <div class="space-y-0.5">
-                                        <p class="font-bold text-slate-800 dark:text-zinc-200 text-[11px]">
-                                            تم إضافة واجب جديد في اللغة
-                                            العربية
-                                        </p>
-                                        <p class="text-gray-400 text-[9px]">
-                                            منذ 10 دقائق • الأستاذة سارة
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-
-                            <a href="#"
-                                class="block p-3 hover:bg-gray-50 dark:hover:bg-slate-950/40 transition-colors">
-                                <div class="flex gap-2">
-                                    <div class="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 shrink-0"></div>
-                                    <div class="space-y-0.5">
-                                        <p class="font-bold text-slate-800 dark:text-zinc-200 text-[11px]">
-                                            رصد درجة اختبار الكيمياء: حصلتِ
-                                            على 4/4
-                                        </p>
-                                        <p class="text-gray-400 text-[9px]">
-                                            منذ ساعتين • الإدارة المدرسية
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-
-                            <a href="#"
-                                class="block p-3 hover:bg-gray-50 dark:hover:bg-slate-950/40 transition-colors">
-                                <div class="flex gap-2">
-                                    <div class="w-2 h-2 rounded-full bg-amber-500 mt-1.5 shrink-0"></div>
-                                    <div class="space-y-0.5">
-                                        <p class="font-bold text-slate-800 dark:text-zinc-200 text-[11px]">
-                                            تعديل موعد اختبار الرياضيات
-                                            القادم
-                                        </p>
-                                        <p class="text-gray-400 text-[9px]">
-                                            اليوم، 10:30 ص
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-
-                            <a href="#"
-                                class="block p-3 hover:bg-gray-50 dark:hover:bg-slate-950/40 transition-colors">
-                                <div class="flex gap-2">
-                                    <div class="w-2 h-2 rounded-full bg-slate-400 mt-1.5 shrink-0"></div>
-                                    <div class="space-y-0.5">
-                                        <p class="font-bold text-slate-800 dark:text-zinc-200 text-[11px]">
-                                            تم قبول عذر الغياب ليوم الخميس
-                                            الماضي
-                                        </p>
-                                        <p class="text-gray-400 text-[9px]">
-                                            أمس، 4:15 م
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-
-                            <a href="#"
-                                class="block p-3 hover:bg-gray-50 dark:hover:bg-slate-950/40 transition-colors">
-                                <div class="flex gap-2">
-                                    <div class="w-2 h-2 rounded-full bg-indigo-600 mt-1.5 shrink-0"></div>
-                                    <div class="space-y-0.5">
-                                        <p class="font-bold text-slate-800 dark:text-zinc-200 text-[11px]">
-                                            نشاط صفي جديد: مسابقة الخط
-                                            العربي السنوية
-                                        </p>
-                                        <p class="text-gray-400 text-[9px]">
-                                            قبل يومين
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
                 <button
                     class="theme-toggle w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-500 hover:text-teal-700 hover:bg-gray-100 dark:bg-slate-800 dark:text-zinc-300 dark:hover:bg-slate-700">
                     <i class="theme-icon fa-regular fa-moon text-lg"></i>
@@ -164,11 +58,11 @@
                         class="flex items-center gap-3 p-1.5 rounded-xl cursor-pointer focus:outline-none hover:bg-gray-50 dark:hover:bg-slate-800">
                         <div
                             class="w-10 h-10 bg-teal-700 rounded-full flex items-center justify-center text-zinc-100 font-bold text-lg shrink-0">
-                            م
+                            {{ \Illuminate\Support\Str::substr(Auth::user()->name, 0, 1) }}
                         </div>
                         <div class="text-right hidden sm:block">
                             <p class="font-bold text-sm text-gray-900 leading-tight dark:text-zinc-100">
-                                مريم أحمد يوسف
+                                {{ Auth::user()->name }}
                             </p>
                             <p class="text-xs text-gray-500 mt-0.5 dark:text-zinc-400">
                                 طالب
@@ -178,11 +72,14 @@
 
                     <div id="user-dropdown"
                         class="hidden absolute left-0 mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-xl z-50 py-1 dark:bg-slate-900 dark:border-slate-800 text-right">
-                        <a href="{{ route('login') }}"
-                            class="flex items-center gap-2.5 px-4 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/3">
-                            <i class="fa-solid fa-arrow-right-from-bracket text-base"></i>
-                            <span>تسجيل الخروج</span>
-                        </a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" style="color: #dc2626"
+                                class="flex items-center gap-2.5 px-4 py-2.5 text-sm font-bold">
+                                <i class="fa-solid fa-arrow-right-from-bracket text-base"></i>
+                                <span>تسجيل الخروج</span>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -200,10 +97,10 @@
             <a href="{{ route('dashboard.index') }}"
                 class="block px-4 py-2.5 rounded-xl text-sm font-bold text-gray-600 hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">لوحة
                 الإدارة</a>
-            <a href="{{ route('teacher_control_panel') }}"
+            <a href="{{ route('dashboardTeacher.index') }}"
                 class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-600 hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">بوابة
                 المعلم</a>
-            <a href="{{ route('student_control_panel') }}"
+            <a href="{{ route('dashboardStudent.index') }}"
                 class="block px-4 py-2.5 rounded-xl text-sm font-semibold bg-teal-700 text-white shadow-sm">بوابة
                 الطالب</a>
 
@@ -213,9 +110,10 @@
                     <div class="flex items-center gap-3">
                         <div
                             class="w-9 h-9 bg-teal-600/10 rounded-xl flex items-center justify-center text-teal-700 dark:text-teal-400 font-bold">
-                            د
+                            {{ \Illuminate\Support\Str::substr(Auth::user()->name, 0, 1) }}
                         </div>
-                        <span class="text-sm font-bold text-gray-800 dark:text-zinc-200">د. أحمد الصبور</span>
+                        <span
+                            class="text-sm font-bold text-gray-800 dark:text-zinc-200">{{ Auth::user()->name }}</span>
                     </div>
                     <i id="mobile-arrow"
                         class="fa-solid fa-chevron-down text-xs text-gray-400 -transform duration-200"></i>
@@ -223,18 +121,17 @@
 
                 <div id="mobile-user-dropdown"
                     class="hidden bg-white dark:bg-slate-950 rounded-xl mt-1 mx-2 border border-gray-100 dark:border-slate-800 overflow-hidden shadow-inner">
-                    <a href="{{ route('login') }}"
-                        class="flex items-center gap-2.5 px-6 py-2.5 text-sm text-red-600 font-medium hover:bg-red-50 dark:hover:bg-red-950/20">
-                        <i class="fa-solid fa-arrow-right-from-bracket text-base"></i>
-                        <span>تسجيل الخروج</span>
-                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" style="color: #dc2626"
+                            class="flex items-center gap-2.5 px-6 py-2.5 text-sm text-red-600 font-medium hover:bg-red-50 dark:hover:bg-red-950/20">
+                            <i class="fa-solid fa-arrow-right-from-bracket text-base"></i>
+                            <span>تسجيل الخروج</span>
+                        </button>
+                    </form>
                 </div>
 
                 <div class="flex justify-end gap-2 mt-3 px-4">
-                    <button
-                        class="w-9 h-9 rounded-xl bg-gray-100 dark:bg-slate-800 flex items-center justify-center text-gray-500 dark:text-zinc-400 hover:bg-gray-200">
-                        <i class="fa-regular fa-bell"></i>
-                    </button>
                     <button
                         class="theme-toggle w-9 h-9 rounded-xl bg-gray-100 dark:bg-slate-800 flex items-center justify-center text-gray-500 dark:text-zinc-400 hover:bg-gray-200">
                         <i class="theme-icon fa-regular fa-moon"></i>
@@ -277,9 +174,9 @@
             class="bg-white border border-gray-200/60 rounded-2xl p-2.5 shadow-sm dark:bg-slate-900 dark:border-slate-800">
             <div class="flex flex-row items-center gap-2 overflow-x-auto custom-scrollbar">
 
-                <a href="{{ route('student_control_panel') }}"
+                <a href="{{ route('dashboardStudent.index') }}"
                     class="flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm whitespace-nowrap
-            {{ request()->routeIs('student_control_panel') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400' }}">
+            {{ request()->routeIs('dashboardStudent.index') ? 'bg-teal-700 text-white font-bold shadow-md shadow-teal-700/10' : 'text-gray-600 font-semibold hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400' }}">
                     <i class="fa-solid fa-gauge-high text-base"></i>
                     <span>الرئيسية</span>
                 </a>
@@ -514,48 +411,6 @@
             // التعديل هنا: أضفنا window. قبل اسم الدالة
             updateStatusUI(window.isOnline());
         });
-
-        function triggerSync() {
-            if (!isOnline) {
-                showToast(
-                    "فشلت المزامنة! يرجى تفعيل الاتصال بالإنترنت أولاً.",
-                    "error",
-                );
-                return;
-            }
-
-            showToast(
-                "جاري إرسال البيانات المعلقة وتحديث السجلات...",
-                "amber",
-            );
-
-            // عمل تأثير تحميل بسيط لمدة ثانية
-            setTimeout(() => {
-                // 1. تحديث العدادات الرقمية بالصفحة (إذا كانت موجودة)
-                const pendingCounterEl =
-                    document.getElementById("pending-count"); // استهداف العداد المعلق
-                const successCounterEl =
-                    document.getElementById("success-count"); // استهداف عداد الناجح
-
-                if (pendingCounterEl) pendingCounterEl.innerText = "0";
-                if (successCounterEl) successCounterEl.innerText = "1";
-
-                // 2. تحديث حالة كروت المزامنة (تغيير الأيقونة من ساعة انتظار إلى صح أخضر)
-                const syncStatusBadge =
-                    document.getElementById("sync-status-badge");
-                if (syncStatusBadge) {
-                    syncStatusBadge.className =
-                        "bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full flex items-center gap-1.5 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800/60";
-                    syncStatusBadge.innerHTML =
-                        `<i class="fa-solid fa-circle-check text-xs"></i> <span>مكتملة</span>`;
-                }
-
-                showToast(
-                    "تمت المزامنة بنجاح وتحديث كافة البيانات المدرسية!",
-                    "success",
-                );
-            }, 1200);
-        }
     </script>
     <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
     <script>
@@ -650,6 +505,67 @@
                     });
             });
         }
+    </script>
+    <script>
+        window.triggerSync = async function() {
+            if (!window.isOnline()) return;
+
+            const transaction = window.localDB.transaction(["pending_actions"], "readwrite");
+            const store = transaction.objectStore("pending_actions");
+            const request = store.getAll();
+
+            request.onsuccess = async function() {
+                const actions = request.result;
+                if (!actions || actions.length === 0) return;
+
+                for (let action of actions) {
+                    let response;
+
+                    // 1. إذا كان الواجب (يحتاج FormData للملف)
+                    if (action.type === 'SUBMIT_ASSIGNMENT') {
+                        let formData = new FormData();
+                        formData.append('type', 'SUBMIT_ASSIGNMENT');
+                        formData.append('assignment_id', action.payload.assignment_id);
+                        formData.append('comment', action.payload.comment || '');
+
+                        if (action.payload.file_content) {
+                            const fileBlob = new Blob([new Uint8Array(action.payload.file_content)], {
+                                type: action.payload.file_type
+                            });
+                            formData.append('file', fileBlob, action.payload.file_name);
+                        }
+
+                        response = await fetch("{{ route('syncs.store') }}", {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                    .content
+                            },
+                            body: formData
+                        });
+                    }
+                    // 2. إذا كان اختبار (يرسل كـ JSON عادي)
+                    else if (action.type === 'submit_quiz') {
+                        response = await fetch("{{ route('syncs.store') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                    .content
+                            },
+                            body: JSON.stringify(action.payload) // يرسل الـ action كاملاً كـ JSON
+                        });
+                    }
+
+                    if (response && response.ok) {
+                        const deleteTx = window.localDB.transaction(["pending_actions"], "readwrite");
+                        deleteTx.objectStore("pending_actions").delete(action.id);
+                    }
+                }
+                showToast("تمت المزامنة بنجاح.");
+                setTimeout(() => window.location.reload(), 5000);
+            };
+        };
     </script>
     <script src="{{ asset('assets/js/offline-handler.js') }}"></script>
     @yield('scripts')

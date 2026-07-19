@@ -16,7 +16,7 @@ class ExamController extends Controller
      */
     public function index()
     {
-        $teacherId = 1;
+        $teacherId = auth()->id();
         // جلب المعلم مع المواد المربوطة به، والصفوف المربوطة به مباشرة عبر جدول الربط
         $currentTeacher = teacher::with(['subjects', 'grades'])->find($teacherId);
 
@@ -103,7 +103,7 @@ class ExamController extends Controller
         // إذا عثرنا على المادة نأخذ اسمها، وإلا نضع اسماً افتراضياً احتياطياً
         $subjectName = $subject ? $subject->name : 'مادة دراسية';
 
-        $teacherId = 1;
+        $teacherId = auth()->id();
         $exam = new Exam();
         $exam->teacher_id = $teacherId;
         $exam->title = "اختبار " . $subjectName;
@@ -146,7 +146,7 @@ class ExamController extends Controller
      */
     public function update(Request $request, Exam $exam)
     {
-        $teacherId = 1;
+        $teacherId = auth()->id();
         // التحقق من أن هذا المعلم هو المالك الفعلي للاختبار قبل تعديله لحماية النظام
         if ($exam->teacher_id !== $teacherId) {
             abort(403, 'غير مصرح لك بتعديل هذا الاختبار.');

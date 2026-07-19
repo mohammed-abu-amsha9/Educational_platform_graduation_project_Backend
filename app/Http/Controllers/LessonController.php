@@ -16,7 +16,7 @@ class LessonController extends Controller
      */
     public function index()
     {
-        $teacherId =  1;
+        $teacherId =  auth()->id();
 
         $lessons = lesson::with('subject')->where('teacher_id', $teacherId)->get();
         // جلب المواد الفريدة التي يدرسها هذا المعلم
@@ -59,7 +59,7 @@ class LessonController extends Controller
         ]);
 
         // تثبيت معرف المعلم الحالي (مثال ثابت كما أعددته في الـ index)
-        $teacherId = 1;
+        $teacherId = auth()->id();
 
         // 2. معالجة الملف (إذا رفع ملفًا أو إذا وضع رابطًا خارجيًا)
         $fileUrl = null;

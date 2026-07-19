@@ -3,15 +3,12 @@
 @section('content')
 
     <div class="w-full space-y-6 text-xs text-right" dir="rtl" id="examsMainContainer">
-
         <!-- حوايا الامتحان -->
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-
             <!-- القائمة الجانبية: خريطة الأسئلة من لارافيل -->
             <div class="lg:col-span-1 bg-white dark:bg-slate-900 border border-gray-200 p-4 rounded-3xl space-y-4 shadow-sm">
                 <div class="space-y-2">
                     <p class="font-bold text-slate-700 dark:text-zinc-300 text-[10px]">خريطة الأسئلة:</p>
-
                     <div id="questionsMapTracker" class="grid grid-cols-3 gap-2">
                         @for ($i = 1; $i <= $questions->total(); $i++)
                             <!-- تحويلها إلى div عادي بدون روابط لعرض الرقم الحالي فقط بدون إمكانية الضغط والرجوع -->
@@ -24,17 +21,13 @@
                     </div>
                 </div>
             </div>
-
             <!-- منطقة السؤال الحالي (لارافيل يعرض سؤالاً واحداً فقط هنا بناءً على الـ Pagination) -->
             <div
                 class="lg:col-span-3 bg-white dark:bg-slate-900 border border-gray-200 p-6 rounded-3xl shadow-sm flex flex-col min-h-[400px] justify-between">
-
                 <!-- فورم لإرسال إجابة السؤال الحالي وتخزينها -->
-                <form action="{{ route('studentExams.store') }}" method="POST"
-                    window.location.href = "{{ route('syncs.index') }}";>
+                <form action="{{ route('studentExams.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="exam_id" value="{{ $exam->id }}">
-
                     @foreach ($questions as $question)
                         <input type="hidden" name="question_id" value="{{ $question->id }}">
                         <input type="hidden" name="page" value="{{ $questions->currentPage() }}">
@@ -44,7 +37,6 @@
                             <h3 class="text-sm font-bold text-slate-800 dark:text-zinc-100 leading-relaxed">
                                 {{ $question->question_text }}</h3>
                         </div>
-
                         <!-- عرض خيارات السؤال -->
                         <div class="grid grid-cols-1 gap-3 mt-4">
                             @foreach ($question->options as $option)
@@ -60,17 +52,14 @@
                             @endforeach
                         </div>
                     @endforeach
-
                     <!-- أزرار التنقل والإنهاء بالاعتماد على الـ PHP -->
                     <!-- أزرار التحكم والتنقل داخل الـ Blade -->
                     <div class="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-slate-800 mt-8">
-
                         <!-- زر السؤال السابق: معطل دائماً ومغلق برمجياً وبصرياً -->
                         <button type="button" disabled
                             class="bg-gray-100 text-gray-400 font-bold px-4 py-2 rounded-xl opacity-40 cursor-not-allowed">
                             <i class="fa-solid fa-arrow-right ml-1"></i> السؤال السابق
                         </button>
-
                         <!-- إذا كان هناك سؤال تالي -->
                         @if ($questions->hasMorePages())
                             <button type="submit" name="action" value="next" id="nextQuestionBtn"
@@ -85,10 +74,8 @@
                                 إنهاء وإرسال الإجابات <i class="fa-solid fa-check-double mr-1"></i>
                             </button>
                         @endif
-
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -96,57 +83,49 @@
 @section('scripts')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const actionButtons = document.querySelectorAll('button, input[type="submit"], .btn');
+            function showToast(message, isSuccess = false) {
+                const container = document.getElementById('toast-container');
+                if (container) {
+                    const toast = document.createElement('div');
+                    toast.className =
+                        `${isSuccess ? "bg-emerald-600" : "bg-rose-600"} text-white px-6 py-3 rounded-2xl shadow-xl pointer-events-auto animate-fade-in`;
+                    toast.innerText = message;
+                    container.appendChild(toast);
+                    setTimeout(() => {
+                        toast.remove();
+                    }, 5000);
+                }
+            }
 
-            actionButtons.forEach(button => {
+            // ربط الأزرار
+            document.querySelectorAll('#finalSubmitBtn, #nextQuestionBtn').forEach(button => {
                 button.addEventListener("click", function(event) {
-                    // إذا كان أونلاين، اتركه يعمل بشكل طبيعي جداً مع لارافيل والـ Pagination الافتراضي
-                    if (window.isOnline()) {
-                        return;
-                    }
+                    if (window.isOnline()) return;
 
-                    // إذا كان أوفلاين (أو محاكاة): نوقف الإرسال التلقائي للسيرفر لحماية البيانات
                     event.preventDefault();
                     event.stopPropagation();
-                    event.stopImmediatePropagation();
 
-                    // 1. تجميع الإجابات الحالية من الفورم لحمايتها
-                    const quizForm = document.getElementById("quizForm");
-                    let answers = {};
-                    if (quizForm) {
-                        let formData = new FormData(quizForm);
-                        formData.forEach((value, key) => {
-                            answers[key] = value;
-                        });
-                    }
+                    let form = this.closest('form');
 
-                    let quizData = {
-                        title: "إجابات اختبار معلقة",
-                        form_data: answers,
-                        created_at: new Date().toISOString()
-                    };
+                    // استخدام FormData لجلب كل شيء من الفورم تلقائياً
+                    let formData = new FormData(form);
 
-                    // 2. التمييز الذكي بين إنهاء الاختبار وبين التنقل للتالي
-                    if (button.id === "finalSubmitBtn") {
-                        // حفظ العملية النهائية كاملة في IndexedDB كعملية تسليم نهائية
-                        window.saveActionLocally('submit_quiz', quizData);
+                    // إضافة الأكشن بناءً على الزر
+                    formData.append('action', this.id === "finalSubmitBtn" ? "finish" : "next");
+                    formData.append('type', 'submit_quiz');
+                    formData.append('student_id', 1);
 
-                        // تحويل الطالب فوراً لصفحة المزامنة (بدون إزعاج)
-                        window.location.replace("{{ route('syncs.index') }}");
-                    } else if (button.id === "nextQuestionBtn") {
-                        // حفظ حالة السؤال الحالي محلياً كمسودة لحين توفر الإنترنت
-                        window.saveActionLocally('save_draft_question', quizData);
-                        console.log("تم حفظ إجابة السؤال الحالي محلياً كمسودة بنجاح.");
+                    // تحويل FormData إلى Object لحفظه في IndexedDB
+                    let quizData = Object.fromEntries(formData.entries());
 
-                        // [الحل السحري للأوفلاين]: نقوم ببناء رابط الصفحة التالية يدوياً وننقل الطالب إليها
-                        // نأخذ رابط الصفحة الحالي (مثلا: exam/create?exam_id=1) ونضيف أو نعدل عليه الـ page
-                        let currentUrl = new URL(window.location.href);
-                        let nextPage = button.getAttribute('data-next-page');
+                    // حفظ البيانات
+                    window.saveActionLocally('submit_quiz', quizData);
+                    showToast("تم الحفظ محلياً.", false);
 
-                        currentUrl.searchParams.set('page', nextPage);
-
-                        // انتقال صامت وسلس للصفحة التالية بدون تدخل السيرفر (ستعتمد على الكاش المحلي أو الـ Service Worker)
-                        window.location.href = currentUrl.toString();
+                    if (this.id === "finalSubmitBtn") {
+                        setTimeout(() => {
+                            window.location.replace("{{ route('studentExams.index') }}");
+                        }, 2000);
                     }
                 });
             });

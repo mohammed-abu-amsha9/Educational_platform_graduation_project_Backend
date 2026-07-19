@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Exam;
 use App\Models\fee;
 use App\Models\grade;
 use App\Models\Student;
@@ -53,6 +54,9 @@ class dashboardController extends Controller
 
         $totalSubjects = subject::count();
 
+        // جلب آخر 5 مدفوعات تمت
+        $latestFees = Fee::with('student')->latest()->take(5)->get();
+        $examPublish = Exam::where('status', 'Published')->get();
         return response()->view('admin.control_panel', [
             'totalStudents' => $totalStudents,
             'totalStudentsActive' => $totalStudentsActive,
@@ -63,6 +67,8 @@ class dashboardController extends Controller
             'totalGrade' => $totalGrade,
             'grades' => $grades,
             'totalSubjects' => $totalSubjects,
+            'latestFees' => $latestFees,
+            'examPublish' => $examPublish,
         ]);
     }
 

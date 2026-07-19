@@ -61,7 +61,7 @@
 
             <div class="relative z-10 flex items-center mb-10">
                 <div class="w-12 h-12 flex items-center justify-center font-extrabold text-xl overflow-hidden p-0.5">
-                    <img src="{{asset('assets/img/Logo.png')}}" alt="لوجو منصة صمود"
+                    <img src="{{ asset('assets/img/Logo.png') }}" alt="لوجو منصة صمود"
                         class="w-full h-full object-cover rounded-xl" />
                 </div>
                 <div class="mx-5">
@@ -168,53 +168,27 @@
                 </p>
             </div>
 
-            <form class="space-y-5" action="{{route('dashboard.index')}}">
+            <form method="POST" action="{{ route('login') }}" class="space-y-5">
+                @csrf
                 <div>
                     <label class="block text-md font-bold text-gray-700 dark:text-zinc-300 mb-2">اسم المستخدم</label>
                     <div class="relative">
-                        <input type="text" placeholder="أدخل اسم المستخدم"
+                        <input type="text" placeholder="أدخل اسم المستخدم" name="id"
                             class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-600/40 text-gray-400 dark:text-zinc-400 rounded-xl py-3 pr-4 pl-10 text-right focus:outline-none focus:ring-2 focus:ring-emerald-600 dark:focus:ring-teal-500 focus:border-transparent text-sm transition-colors" />
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-zinc-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
-                        </span>
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-md font-bold text-gray-700 dark:text-zinc-300 mb-2">كلمة المرور</label>
                     <div class="relative">
-                        <input id="password" type="password" placeholder="........."
+                        <input id="password" type="password" placeholder="........." name="password"
                             class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-600/40 text-slate-800 dark:text-zinc-100 rounded-xl py-3 pr-4 pl-10 text-right focus:outline-none focus:ring-2 focus:ring-emerald-600 dark:focus:ring-teal-500 focus:border-transparent text-sm transition-colors" />
-
-                        <button id="toggle-password" type="button"
-                            onclick="
-                  const input = document.getElementById('password');
-                  const icon = document.getElementById('eye-icon');
-                  if (input.type === 'password') {
-                    input.type = 'text';
-                    icon.className = 'fa-solid fa-eye-slash text-base';
-                  } else {
-                    input.type = 'password';
-                    icon.className = 'fa-solid fa-eye text-base';
-                  }
-                "
-                            class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-zinc-300">
-                            <i id="eye-icon" class="fa-solid fa-eye text-base"></i>
-                        </button>
                     </div>
                 </div>
 
                 <button type="submit"
                     class="w-full bg-gradient-to-l from-emerald-700 to-teal-600 hover:from-emerald-800 hover:to-teal-700 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-lg shadow-emerald-700/20">
                     <span>تسجيل الدخول</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18m0 0l-6-6m6 6l-6 6" />
-                    </svg>
                 </button>
             </form>
         </div>
@@ -240,6 +214,54 @@
                 // إعادة الأيقونة إلى العين الطبيعية
                 eyeIcon.className = "fa-solid fa-eye text-base";
             }
+        });
+    </script>
+    <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // 1. حالة النجاح (Success Toast)
+            @if (session('success'))
+                Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    customClass: {
+                        popup: 'dark:bg-slate-800 dark:text-white'
+                    }
+                }).fire({
+                    icon: 'success',
+                    title: "{{ session('success') }}"
+                });
+            @endif
+
+            // 2. حالة وجود أخطاء في المدخلات (Validation Errors Toast)
+            @if ($errors->any())
+                // تجميع كافة الأخطاء في نص واحد مفصول بأسطر
+                let errorMessages = "";
+                @foreach ($errors->all() as $error)
+                    errorMessages += "• {{ $error }}\n";
+                @endforeach
+
+                Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 10000, // زيادة الوقت قليلاً ليتمكن المستخدم من قراءة الأخطاء
+                    timerProgressBar: true,
+                    customClass: {
+                        popup: 'dark:bg-slate-800 dark:text-white text-right'
+                    }
+                }).fire({
+                    icon: 'error',
+                    title: 'يرجى تصحيح الأخطاء التالية:',
+                    html: '<pre style="font-family: inherit; text-align: right; direction: rtl; white-space: pre-line;" class="text-xs text-red-500 font-bold">' +
+                        errorMessages + '</pre>'
+                });
+            @endif
+
         });
     </script>
 </body>

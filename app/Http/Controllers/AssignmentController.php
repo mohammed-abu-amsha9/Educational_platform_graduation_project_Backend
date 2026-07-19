@@ -18,7 +18,7 @@ class AssignmentController extends Controller
      */
     public function index()
     {
-        $teacherId = 1;
+        $teacherId = auth()->id();
         // 1. جلب المعلم مع المواد والصفوف والشعب (مع منع التكرار لاحقاً)
         $currentTeacher = teacher::with(['subjects', 'grades.sections'])->find($teacherId);
         return response()->view('teacher.tasks_manage', [
@@ -60,7 +60,7 @@ class AssignmentController extends Controller
 
         // 3. حفظ البيانات في نموذج الواجب
         $assignment = new Assignment();
-        $assignment->teacher_id =  1; // يفضل استخدام auth()->id()
+        $assignment->teacher_id =  auth()->id(); // يفضل استخدام auth()->id()
         $assignment->subject_id = $subjectId;
 
         if ($type === 'sec') {

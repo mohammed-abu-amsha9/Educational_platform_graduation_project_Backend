@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -12,6 +14,12 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        // php artisan db:seed --class=UserSeeder
+        DB::table('users')->insert([
+            'id' => 409273190,
+            'name' => 'محمد اياد يونس ابو عمشة',
+            'password' => Hash::make('409273190'), // تشفير كلمة المرور
+            'role_id' => 1,
+        ]);
     }
 }

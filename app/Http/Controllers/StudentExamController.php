@@ -31,7 +31,7 @@ class StudentExamController extends Controller
     {
         // 1. استقبال رقم الامتحان من الرابط
         $examId = $request->query('exam_id');
-        $studentId = 1;
+        $studentId = auth()->id();
 
 
         // 2. جلب الامتحان مع الأسئلة والخيارات الخاصة بكل سؤال دفعة واحدة وبسطر واحد!
@@ -74,7 +74,7 @@ class StudentExamController extends Controller
         $questionId = $request->input('question_id');
         $selectedOptionId = $request->input('selected_option'); // رقم الخيار المحدد
         $action = $request->input('action'); // نوع الزر (next أو finish)
-        $studentId = 1; // معرف الطالب الحالي
+        $studentId = auth()->id(); // معرف الطالب الحالي
 
         // ب) حفظ إجابة السؤال الحالي فوراً في قاعدة البيانات
         if ($questionId && $selectedOptionId) {

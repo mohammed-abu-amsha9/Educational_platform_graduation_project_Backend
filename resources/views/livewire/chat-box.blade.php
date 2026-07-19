@@ -1,5 +1,5 @@
 <div wire:poll.2s
-    class="w-full bg-white dark:bg-slate-900 border border-gray-100 hover:border-teal-400 dark:border-slate-800/80 rounded-3xl shadow-md overflow-hidden text-xs mx-auto relative"
+    class="w-full mt-6 bg-white dark:bg-slate-900 border border-gray-100 hover:border-teal-400 dark:border-slate-800/80 rounded-3xl shadow-md overflow-hidden text-xs mx-auto relative"
     dir="rtl">
     <div class="relative flex min-h-[650px] lg:min-h-[700px]">
 
@@ -21,8 +21,30 @@
                 <!-- في القائمة الجانبية -->
                 <!-- استبدل هذا السطر -->
                 @foreach ($usersList as $user)
-                    <div wire:click="selectTeacher({{ $user->id }})" class="p-4 cursor-pointer ...">
-                        {{ $user->full_name }}
+                    @php
+                        // نحتاج لتمييز المستخدم النشط
+                        // سنفترض أننا نمرر ID المستخدم المختار في variable إضافي أو نقارنه بالـ roomId
+                        $isActive = $recipient && $recipient->id == $user->id;
+                    @endphp
+
+                    <div wire:click="selectPerson({{ $user->id }})"
+                        class="p-4 flex items-start gap-3 cursor-pointer transition-all border-r-4
+                        {{ $isActive
+                            ? 'bg-teal-50/40 dark:bg-slate-900/40 border-teal-600'
+                            : 'bg-white dark:bg-slate-900 border-transparent hover:bg-gray-50 dark:hover:bg-slate-800/30' }}">
+
+                        <div
+                            class="w-8 h-8 rounded-xl bg-teal-600 text-white font-black flex items-center justify-center text-xs shrink-0">
+                            {{ mb_substr($user->full_name, 0, 1) }}
+                        </div>
+
+                        <div class="flex-1 mt-2 min-w-0 space-y-0.5">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-slate-800 dark:text-zinc-100">
+                                    {{ $user->full_name }}
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -30,7 +52,7 @@
 
         <!-- منطقة المحادثة -->
         <div class="flex-1 flex flex-col bg-white dark:bg-slate-900 w-full">
-            @if ($roomId)
+            @if ($roomId && $recipient)
                 <!-- Header المحادثة -->
                 <div
                     class="p-4 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between bg-gray-50/30 dark:bg-slate-950/10">
@@ -47,10 +69,6 @@
                                 <h4 class="font-bold text-slate-800 dark:text-zinc-100">
                                     {{ $recipient->full_name ?? '...' }}
                                 </h4>
-                                <p class="text-[10px] text-teal-600 font-bold flex items-center gap-1">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                    متصل الآن
-                                </p>
                             </div>
                         </div>
                     </div>

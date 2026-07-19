@@ -17,7 +17,7 @@ class StudentExamResultController extends Controller
 
     public function index(Request $request)
     {
-        $teacherId = 1;
+        $teacherId = auth()->id();
 
         // 1. جلب المعلم مع المواد والصفوف والشعب (مع منع التكرار لاحقاً)
         $currentTeacher = teacher::with(['subjects', 'grades.sections'])->find($teacherId);

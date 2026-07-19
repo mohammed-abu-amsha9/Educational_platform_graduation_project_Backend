@@ -10,7 +10,7 @@ class viewTasksController extends Controller
 {
     public function Grading_and_monitoring_assignments()
     {
-        $teacherId = 1;
+        $teacherId = auth()->id();
         // جلب واجبات المعلم مع عدّ التسليمات المرتبطة بها
         $assignments = Assignment::where('teacher_id', $teacherId)
             ->withCount('submissions')
@@ -20,7 +20,7 @@ class viewTasksController extends Controller
 
     public function studentsListView()
     {
-        $teacherId = 1;
+        $teacherId = auth()->id();
         // جلب كل التسليمات التابعة لواجبات المعلم المسجل دخوله حالياً
         $submissions = AssignmentSubmission::whereHas('assignment', function ($query) use ($teacherId) {
             $query->where('teacher_id', $teacherId);

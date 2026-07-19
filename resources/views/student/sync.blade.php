@@ -12,14 +12,6 @@
                     إدارة البيانات المحفوظة محلياً في انتظار الاتصال بالشبكة
                 </p>
             </div>
-
-            <div class="flex items-center gap-2.5">
-                <button onclick="triggerSync()"
-                    class="bg-cyan-600 hover:bg-cyan-700 text-white font-black px-4 py-2 rounded-xl shadow-md flex items-center gap-1.5 cursor-pointer">
-                    <i class="fa-solid fa-cloud-arrow-up text-[10px]"></i> المزامنة
-                    الآن
-                </button>
-            </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -231,15 +223,6 @@
                     }
                 };
             };
-        }
-
-        // دالة تشغيل المزامنة عند الضغط على زر "المزامنة الآن"
-        function triggerSync() {
-            if (typeof isOnline === 'function' && !isOnline()) {
-                alert("لا يوجد اتصال بالإنترنت حالياً! تعذر بدء المزامنة السحابية.");
-                return;
-            }
-            alert("جاري التحقق من العمليات المعلقة وبدء المزامنة...");
         }
     </script>
 @endsection

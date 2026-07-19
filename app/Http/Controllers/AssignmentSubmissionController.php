@@ -16,7 +16,7 @@ class AssignmentSubmissionController extends Controller
     {
         $assignments = Assignment::with(['subject', 'grade', 'section'])->get();
         // جلب تسليمات الطالب الحالي فقط
-        $studentId = 1;
+        $studentId = auth()->id();
         $mySubmissions = AssignmentSubmission::where('student_id', $studentId)->get();
         return response()->view('student.tasks_and_duties', ['assignments' => $assignments, 'mySubmissions' => $mySubmissions]);
     }
@@ -36,7 +36,7 @@ class AssignmentSubmissionController extends Controller
     {
         // 1. رفع الملف
         $path = $request->file('file')->store('submissions', 'public');
-        $studentId = 1;
+        $studentId = auth()->id();
         // 2. تخزين في قاعدة البيانات
         $assignment_submission = new AssignmentSubmission();
         $assignment_submission->assignment_id = $request->assignment_id;

@@ -17,7 +17,7 @@ class materialContentController extends Controller
     public function index()
     {
         // 1. جلب معرف المستخدم الحالي (الطالب المسجل دخوله)
-        $studentId = 1;
+        $studentId = auth()->id();
 
         // 2. جلب بيانات الطالب من جدول students بناءً على معرف المستخدم لجلب رقم الصف (grade_id)
         // ملاحظة: بما أن id الطالب في قاعدة بياناتك هو نفسه id في جدول users (مثل 959295995)

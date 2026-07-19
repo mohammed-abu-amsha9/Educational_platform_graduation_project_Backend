@@ -4,7 +4,7 @@
 
 @section('content')
     {{-- Main Content --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
         <div
             class="relative overflow-hidden bg-white dark:bg-slate-900 border border-gray-100 hover:border-emerald-400 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-md flex flex-col justify-between min-h-[140px]">
             <div
@@ -140,49 +140,7 @@
             </div>
         </div>
 
-        <div
-            class="relative overflow-hidden bg-white dark:bg-slate-900 border border-gray-100 hover:border-emerald-400 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-md flex flex-col justify-between min-h-[140px]">
-            <div
-                class="absolute -top-10 -left-10 w-28 h-28 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none hidden dark:block">
-            </div>
-            <div class="flex justify-between items-start">
-                <div class="flex flex-col gap-1 text-right">
-                    <span class="text-xs font-bold text-slate-700 dark:text-zinc-400">متوسط الحضور</span>
-                    <span class="text-sm text-indigo-600 dark:text-indigo-400 font-semibold">معدل عام</span>
-                </div>
-                <div
-                    class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-sm">
-                    <i class="fa-solid fa-chart-simple text-lg"></i>
-                </div>
-            </div>
-            <div class="text-right mt-4">
-                <h3 class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
-                    88%
-                </h3>
-            </div>
-        </div>
 
-        <div
-            class="relative overflow-hidden bg-white dark:bg-slate-900 border border-gray-100 hover:border-emerald-400 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-md flex flex-col justify-between min-h-[140px]">
-            <div
-                class="absolute -top-10 -left-10 w-28 h-28 bg-purple-500/10 rounded-full blur-2xl pointer-events-none hidden dark:block">
-            </div>
-            <div class="flex justify-between items-start">
-                <div class="flex flex-col gap-1 text-right">
-                    <span class="text-xs font-bold text-slate-700 dark:text-zinc-400">متوسط العلامات</span>
-                    <span class="text-sm text-purple-600 dark:text-purple-400 font-semibold">أداء أكاديمي</span>
-                </div>
-                <div
-                    class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-950/40 flex items-center justify-center text-purple-600 dark:text-purple-400 shadow-sm">
-                    <i class="fa-solid fa-bullseye text-lg"></i>
-                </div>
-            </div>
-            <div class="text-right mt-4">
-                <h3 class="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                    83%
-                </h3>
-            </div>
-        </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6 items-stretch">
@@ -305,113 +263,34 @@
             <div class="w-full">
                 <h3 class="text-base font-bold text-slate-800 dark:text-zinc-100 text-right mb-5 flex items-center gap-2">
                     <i class="fa-solid fa-bell text-teal-600 dark:text-teal-400 text-sm"></i>
-                    <span>آخر الإشعارات والمدفوعات</span>
+                    <span>آخر المدفوعات</span>
                 </h3>
 
                 <div class="flex flex-col gap-3">
-                    <div
-                        class="flex items-center justify-between p-3 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100/70 dark:border-slate-800 rounded-xl">
-                        <div class="text-right flex items-center gap-3">
-                            <div
-                                class="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-950/40 flex items-center justify-center text-teal-600 dark:text-teal-400 text-xs">
-                                <i class="fa-solid fa-user-plus"></i>
+                    @foreach ($latestFees as $fee)
+                        <div
+                            class="flex items-center justify-between p-3 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100/70 dark:border-slate-800 rounded-xl">
+                            <div class="text-right flex items-center gap-3">
+                                <div
+                                    class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 text-xs">
+                                    <i class="fa-solid fa-wallet"></i>
+                                </div>
+                                <div>
+                                    <!-- الوصول لاسم الطالب من خلال علاقة الـ student داخل الـ fee -->
+                                    <h4 class="text-sm font-bold text-slate-800 dark:text-zinc-200">
+                                        {{ $fee->student->full_name }}
+                                    </h4>
+                                    <p class="text-xs text-gray-400 dark:text-zinc-400 mt-0.5">
+                                        {{ $fee->payment_method }}
+                                    </p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="text-sm font-bold text-slate-800 dark:text-zinc-200">
-                                    تمت إضافة الطالب أحمد محمود الخالدي
-                                </h4>
-                                <p class="text-xs text-gray-400 dark:text-zinc-400 mt-0.5">
-                                    الصف السابع الابتدائي
-                                </p>
-                            </div>
+                            <span class="text-sm font-black text-slate-800 dark:text-zinc-100 flex items-center gap-1">
+                                <span class="text-xs font-bold text-gray-400 dark:text-zinc-500">₪</span>
+                                {{ $fee->paid_amount }}
+                            </span>
                         </div>
-                        <span class="text-xs font-medium text-gray-400 dark:text-zinc-500">الآن</span>
-                    </div>
-
-                    <div
-                        class="flex items-center justify-between p-3 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100/70 dark:border-slate-800 rounded-xl">
-                        <div class="text-right flex items-center gap-3">
-                            <div
-                                class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 text-xs">
-                                <i class="fa-solid fa-wallet"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-bold text-slate-800 dark:text-zinc-200">
-                                    محمد سامي العلي
-                                </h4>
-                                <p class="text-xs text-gray-400 dark:text-zinc-400 mt-0.5">
-                                    محفظة
-                                </p>
-                            </div>
-                        </div>
-                        <span class="text-sm font-black text-slate-800 dark:text-zinc-100 flex items-center gap-1">
-                            <span class="text-xs font-bold text-gray-400 dark:text-zinc-500">₪</span>
-                            300
-                        </span>
-                    </div>
-
-                    <div
-                        class="flex items-center justify-between p-3 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100/70 dark:border-slate-800 rounded-xl">
-                        <div class="text-right flex items-center gap-3">
-                            <div
-                                class="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-950/40 flex items-center justify-center text-teal-600 dark:text-teal-400 text-xs">
-                                <i class="fa-solid fa-user-plus"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-bold text-slate-800 dark:text-zinc-200">
-                                    تمت إضافة الطالبة ياسمين رائد النجار
-                                </h4>
-                                <p class="text-xs text-gray-400 dark:text-zinc-400 mt-0.5">
-                                    الصف الأول الابتدائي
-                                </p>
-                            </div>
-                        </div>
-                        <span class="text-xs font-medium text-gray-400 dark:text-zinc-500">قبل ٥ د</span>
-                    </div>
-
-                    <div
-                        class="flex items-center justify-between p-3 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100/70 dark:border-slate-800 rounded-xl">
-                        <div class="text-right flex items-center gap-3">
-                            <div
-                                class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 text-xs">
-                                <i class="fa-solid fa-wallet"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-bold text-slate-800 dark:text-zinc-200">
-                                    يوسف عمر البكري
-                                </h4>
-                                <p class="text-xs text-gray-400 dark:text-zinc-400 mt-0.5">
-                                    تحويل بنكي
-                                </p>
-                            </div>
-                        </div>
-                        <span class="text-sm font-black text-slate-800 dark:text-zinc-100 flex items-center gap-1">
-                            <span class="text-xs font-bold text-gray-400 dark:text-zinc-500">₪</span>
-                            500
-                        </span>
-                    </div>
-
-                    <div
-                        class="flex items-center justify-between p-3 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100/70 dark:border-slate-800 rounded-xl">
-                        <div class="text-right flex items-center gap-3">
-                            <div
-                                class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 text-xs">
-                                <i class="fa-solid fa-wallet"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-bold text-slate-800 dark:text-zinc-200">
-                                    مريم أحمد يوسف
-                                </h4>
-                                <p class="text-xs text-gray-400 dark:text-zinc-400 mt-0.5">
-                                    نقداً
-                                </p>
-                            </div>
-                        </div>
-                        <span class="text-sm font-black text-slate-800 dark:text-zinc-100 flex items-center gap-1">
-                            <span class="text-xs font-bold text-gray-400 dark:text-zinc-500">₪</span>
-                            800
-                        </span>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -429,32 +308,26 @@
                         class="flex items-center justify-between p-3.5 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100/70 dark:border-slate-800 rounded-xl">
                         <span class="text-sm font-bold text-slate-700 dark:text-zinc-300">المستخدمون النشطون</span>
                         <span
-                            class="text-sm font-black text-slate-800 dark:text-zinc-100 bg-gray-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">{{$totalStudentsActive}}</span>
+                            class="text-sm font-black text-slate-800 dark:text-zinc-100 bg-gray-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">{{ $totalStudentsActive }}</span>
                     </div>
 
                     <div
                         class="flex items-center justify-between p-3.5 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100/70 dark:border-slate-800 rounded-xl">
                         <span class="text-sm font-bold text-slate-700 dark:text-zinc-300">إجمالي المواد</span>
                         <span
-                            class="text-sm font-black text-slate-800 dark:text-zinc-100 bg-gray-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">{{$totalSubjects}}</span>
+                            class="text-sm font-black text-slate-800 dark:text-zinc-100 bg-gray-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">{{ $totalSubjects }}</span>
                     </div>
 
-                    <divphp 
+                    <divphp
                         class="flex items-center justify-between p-3.5 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100/70 dark:border-slate-800 rounded-xl">
                         <span class="text-sm font-bold text-slate-700 dark:text-zinc-300">الاختبارات المتاحة</span>
                         <span
-                            class="text-sm font-black text-slate-800 dark:text-zinc-100 bg-gray-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">5</span>
-                    </div>
-
-                    <div
-                        class="flex items-center justify-between p-3.5 bg-gray-50/50 dark:bg-slate-800/30 border border-gray-100/70 dark:border-slate-800 rounded-xl">
-                        <span class="text-sm font-bold text-slate-700 dark:text-zinc-300">قائمة انتظار
-                            المزامنة</span>
-                        <span
-                            class="text-sm font-black text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/30 px-2.5 py-1 rounded-md font-bold">0</span>
-                    </div>
+                            class="text-sm font-black text-slate-800 dark:text-zinc-100 bg-gray-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">{{$examPublish->count()}}</span>
                 </div>
+
+
             </div>
         </div>
+    </div>
     </div>
 @endsection

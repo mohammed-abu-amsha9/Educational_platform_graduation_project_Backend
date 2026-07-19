@@ -6,24 +6,21 @@
         <div class="flex items-center gap-4">
             <div
                 class="w-16 h-16 bg-white/20 border-2 border-white/30 rounded-full flex items-center justify-center text-2xl font-black shadow-inner">
-                م
+                {{ \Illuminate\Support\Str::substr(Auth::user()->name, 0, 1) }}
             </div>
             <div class="space-y-1 text-center md:text-right">
-                <h2 class="text-base font-black">مريم أحمد يوسف</h2>
+                <h2 class="text-base font-black">{{ Auth::user()->name }}</h2>
                 <p class="text-white/80 font-medium text-[11px]">
-                    STU-2024-001 • الصف الأول الثانوي
+                    {{ $student->student_code }} • {{ $student->grade->name }}
                 </p>
                 <div class="flex items-center justify-center md:justify-start gap-1.5 pt-1 flex-wrap">
                     <span class="bg-white/20 text-white text-[10px] font-bold px-2 py-0.5 rounded-md">✓ نشط</span>
-                    <span class="bg-white/20 text-white text-[10px] font-bold px-2 py-0.5 rounded-md">مدفوع</span>
-                    <span class="bg-white/20 text-white text-[10px] font-bold px-2 py-0.5 rounded-md">96%
-                        حضور</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    {{-- <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div
             class="bg-white dark:bg-slate-900 border border-gray-200 hover:border-teal-400 dark:border-slate-700 hover:shadow-lg p-4 rounded-2xl shadow-3xs text-center space-y-1">
             <div class="flex justify-center">
@@ -197,5 +194,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection

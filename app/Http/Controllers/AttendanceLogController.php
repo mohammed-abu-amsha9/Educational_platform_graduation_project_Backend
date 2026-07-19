@@ -14,7 +14,7 @@ class AttendanceLogController extends Controller
      */
     public function index(Request $request)
     {
-        $teacherId = 1;
+        $teacherId = auth()->id();
 
         // جلب المعلم مع الصفوف الموكلة إليه (عبر علاقة grades وموادها)
         $teacher = teacher::with(['grades.sections', 'subjects.grade'])->find($teacherId);
@@ -76,7 +76,7 @@ class AttendanceLogController extends Controller
         ]);
 
         // معرف المعلم الحالي (مثبت مؤقتاً برقم 1)
-        $teacherId = 1;
+        $teacherId = auth()->id();
 
         // التاريخ المرسل من الحقل المخفي في الواجهة
         $date = $request->input('date');

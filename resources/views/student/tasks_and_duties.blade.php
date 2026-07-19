@@ -72,17 +72,9 @@
                             <div>
                                 <h4 class="font-bold text-slate-800">واجب: {{ $submission->assignment->title }}</h4>
                             </div>
-
-                            <!-- شرط لعرض الحالة بناءً على قيمة العمود status -->
-                            @if ($submission->status === 'correction')
-                                <span class="text-emerald-600 font-bold bg-emerald-50 px-3 py-1 rounded-full text-xs">
-                                    تم التصحيح
-                                </span>
-                            @else
                                 <span class="text-amber-600 font-bold bg-amber-50 px-3 py-1 rounded-full text-xs">
-                                    بانتظار التصحيح
+                                    تم التسليم
                                 </span>
-                            @endif
                         </div>
                     @endforeach
                 </div>
@@ -107,11 +99,11 @@
                     <div>
                         <h4 class="font-black text-slate-800 dark:text-zinc-100 text-xs">إرسال ملفات الواجب الدراسي</h4>
                         <p id="targetAssignmentTitle"
-                            class="text-[10px] text-gray-400 font-medium truncate max-w-[280px] mt-0.5">اسم الواجب المختار
+                            class="text-[10px] text-gray-400 font-medium truncate max-w-[280px] mt-0.5">
                         </p>
                     </div>
                 </div>
-                <button onclick="closeSubmitModal()"
+                <button type="button" onclick="closeSubmitModal()"
                     class="bg-gray-200 dark:bg-slate-800 hover:bg-rose-500 hover:text-white dark:hover:bg-rose-600 text-slate-700 dark:text-zinc-300 w-6 h-6 rounded-lg flex items-center justify-center font-bold cursor-pointer">
                     <i class="fa-solid fa-xmark text-xs"></i>
                 </button>
@@ -140,7 +132,7 @@
                             <i class="fa-solid fa-file-circle-check"></i>
                         </div>
                         <p id="selectedFileName" class="font-black text-emerald-600 text-xs truncate max-w-xs mx-auto">
-                            file_name.pdf</p>
+                        </p>
                         <p class="text-[9px] text-gray-400">جاهز للتسليم، اضغط لتغييره</p>
                     </div>
                 </div>
@@ -165,7 +157,7 @@
 
             <div
                 class="p-4 bg-gray-50 dark:bg-slate-950/40 border-t border-gray-100 dark:border-slate-800 flex items-center justify-end gap-2">
-                <button onclick="closeSubmitModal()"
+                <button type="button" onclick="closeSubmitModal()"
                     class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-slate-700 dark:text-zinc-300 font-bold px-4 py-2 rounded-xl hover:bg-gray-50 cursor-pointer">إلغاء</button>
                 <!-- احذف onclick="executeFakeUpload()" من هنا -->
                 <button type="submit" id="confirmUploadBtn" disabled
@@ -175,7 +167,6 @@
             </div>
         </div>
     </form>
-    <div id="toast-container" class="fixed bottom-5 left-5 z-50 flex flex-col gap-2"></div>
 @endsection
 @section('scripts')
     <script>
@@ -195,23 +186,73 @@
 
         function handleFileSelection() {
             const fileInput = document.getElementById("assignmentFileInput");
-            const selectedFileName = document.getElementById("selectedFileName");
-            const confirmUploadBtn = document.getElementById("confirmUploadBtn");
-            const uploadPromptZone = document.getElementById("uploadPromptZone");
-            const fileSelectedZone = document.getElementById("fileSelectedZone");
+            const file = fileInput.files[0]; // الملف الذي اختاره الطالب
 
-            if (fileInput.files.length > 0) {
-                // تحديث اسم الملف في الواجهة
-                selectedFileName.innerText = fileInput.files[0].name;
+            if (file) {
+                // 1. تحديث الواجهة (كما كنت تفعل)
+                document.getElementById("selectedFileName").innerText = file.name;
+                document.getElementById("uploadPromptZone").classList.add("hidden");
+                document.getElementById("fileSelectedZone").classList.remove("hidden");
+                document.getElementById("confirmUploadBtn").disabled = false;
 
-                // إظهار منطقة الملف المختار
-                uploadPromptZone.classList.add("hidden");
-                fileSelectedZone.classList.remove("hidden");
-
-                // تفعيل زر التأكيد
-                confirmUploadBtn.disabled = false;
-                confirmUploadBtn.classList.remove("opacity-40");
+                // 2. تخزين الملف في ذاكرة مؤقتة (للاستخدام عند المزامنة)
+                // سنقوم بإنشاء متغير عالمي مؤقت، أو يمكنك تخزين الـ Blob مباشرة في الـ IndexedDB
+                window.tempSelectedFile = file;
             }
         }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const submissionForm = document.getElementById("submitAssignmentModal");
+
+            if (submissionForm) {
+                submissionForm.addEventListener("submit", function(event) {
+                    // إذا كان متصلاً، يرسل للسيرفر كالمعتاد
+                    if (window.isOnline()) {
+                        return;
+                    }
+
+                    // إذا كان أوفلاين: منع الإرسال
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    const fileInput = document.getElementById('assignmentFileInput');
+                    const file = fileInput.files[0];
+
+                    // تحويل الملف لقراءة محتواه
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        // حفظ البيانات + محتوى الملف الفعلي
+                        const submissionData = {
+                            assignment_id: document.getElementById('hiddenAssignmentId').value,
+                            comment: document.getElementById('studentSubmissionComment').value,
+                            file_name: file.name,
+                            file_type: file.type,
+                            file_content: e.target.result, // محتوى الملف (Blob/ArrayBuffer)
+                            created_at: new Date().toISOString()
+                        };
+
+                        // حفظ في IndexedDB
+                        window.saveActionLocally('SUBMIT_ASSIGNMENT', submissionData);
+
+                        // إظهار رسالة
+                        const toastContainer = document.getElementById('toast-container');
+                        if (toastContainer) {
+                            const toast = document.createElement('div');
+                            toast.className =
+                                "bg-rose-600 text-white px-6 py-3 rounded-2xl shadow-xl animate-fade-in";
+                            toast.innerText =
+                                "تم حفظ الواجب والملف محلياً، سيتم رفعهما عند عودة الاتصال.";
+                            toastContainer.appendChild(toast);
+                            setTimeout(() => toast.remove(), 3000);
+                        }
+                        closeSubmitModal();
+                    };
+
+                    // قراءة الملف كـ ArrayBuffer (مناسب جداً للتخزين)
+                    reader.readAsArrayBuffer(file);
+                });
+            }
+        });
     </script>
 @endsection

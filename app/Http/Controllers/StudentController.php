@@ -7,6 +7,7 @@ use App\Models\role;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
@@ -78,32 +79,30 @@ class StudentController extends Controller
         if (!$studentRole) {
             return redirect()->back()->withErrors(['error' => 'دور الطالب غير معرف في النظام، يرجى إنشاؤه أولاً.']);
         }
-        // 3. إنشاء طالب جديد وحفظ البيانات
-        $student = new Student();
-        $student->id = $request->input('id');
-        $student->full_name = $request->input('full_name');
-        $student->student_code = $studentCode;
-        $student->grade_id = $request->input('grade_id');
-        $student->section_id = $request->input('section_id');
-        $student->total_paid_amount = $request->input('total_paid_amount');
-        $student->parent_id = $request->input('parent_id');
-        $student->parent_phone = $request->input('parent_phone');
-        $student->parent_backup_phone = $request->input('parent_backup_phone') ?? '';
-        $student->save();
-
-        // انشاء حساب طالب
-        $user = new User();
-        $user->id = $student->id;
-        $user->name = $student->full_name;
-        $user->password = Hash::make($request->input('id'));
-        $user->role_id = $studentRole->id;
-        $user->save();
-
-        // حقل account_status سيأخذ القيمة الافتراضية 'active' تلقائياً من الـ migration
-
-
-        // 4. إعادة التوجيه مع رسالة نجاح
-        return redirect()->back()->with('success', 'تم إضافة بيانات الطالب وتثبيته بنجاح!');
+        DB::transaction(function () use ($request, $studentCode, $studentRole) {
+            // 3. إنشاء طالب جديد وحفظ البيانات
+            $student = new Student();
+            $student->id = $request->input('id');
+            $student->full_name = $request->input('full_name');
+            $student->student_code = $studentCode;
+            $student->grade_id = $request->input('grade_id');
+            $student->section_id = $request->input('section_id');
+            $student->total_paid_amount = $request->input('total_paid_amount');
+            $student->parent_id = $request->input('parent_id');
+            $student->parent_phone = $request->input('parent_phone');
+            $student->parent_backup_phone = $request->input('parent_backup_phone') ?? '';
+            $student->save();
+            // انشاء حساب طالب
+            $user = new User();
+            $user->id = $student->id;
+            $user->name = $student->full_name;
+            $user->password = Hash::make($request->input('id'));
+            $user->role_id = $studentRole->id;
+            $user->save();
+            // حقل account_status سيأخذ القيمة الافتراضية 'active' تلقائياً من الـ migration
+            // 4. إعادة التوجيه مع رسالة نجاح
+            return redirect()->back()->with('success', 'تم إضافة بيانات الطالب وتثبيته بنجاح!');
+        });
     }
 
     // تعديل الصف والشعبة

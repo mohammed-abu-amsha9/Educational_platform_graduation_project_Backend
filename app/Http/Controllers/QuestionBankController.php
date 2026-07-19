@@ -16,7 +16,7 @@ class QuestionBankController extends Controller
      */
     public function index(Request $request)
     {
-        $teacherId = 1;
+        $teacherId = auth()->id();
 
         // 1. بناء الاستعلام الأساسي مع حصر الأسئلة التابعة لهذا المعلم فقط
         $query = QuestionBank::where('teacher_id', $teacherId);
@@ -78,7 +78,7 @@ class QuestionBankController extends Controller
             'difficulty_level' => 'required|in:easy,medium,hard',
         ]);
 
-        $teacher_id = 1; // مُثبت مؤقتاً لمشروع التخرج
+        $teacher_id = auth()->id(); // مُثبت مؤقتاً لمشروع التخرج
 
         // تفكيك سلسلة "الصف|المادة" المرسلة من الـ Blade
         $parts = explode('|', $request->input('class_section'));

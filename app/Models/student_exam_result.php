@@ -9,6 +9,13 @@ class student_exam_result extends Model
 {
     /** @use HasFactory<\Database\Factories\StudentExamResultFactory> */
     use HasFactory;
+    protected $fillable = [
+        'student_id',
+        'exam_id',
+        'score_obtained',
+        'status',
+        'submission_method',
+    ];
 
     public function student()
     {
