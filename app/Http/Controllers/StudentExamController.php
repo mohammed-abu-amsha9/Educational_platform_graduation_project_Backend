@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exam;
-use App\Models\Student_exam;
-use App\Models\Student_exam_result;
-use App\Models\StudentExamAnswer;
+use App\Models\student_exam;
+use App\Models\student_exam_result;
+use App\Models\studentExamAnswer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -42,7 +42,7 @@ class StudentExamController extends Controller
 
         // 2. ✨ [المنطق الجديد]: تسجيل دخول الطالب في جدول student_exams إذا لم يكن مسجلاً مسبقاً
         // نستخدم firstOrCreate لحمايته من إنشاء سجل جديد في كل مرة ينتقل فيها بين صفحات الأسئلة
-        Student_exam::firstOrCreate(
+        student_exam::firstOrCreate(
             // 1. ابحث بدلالة هذه الحقول الثابتة فقط
             [
                 'exam_id'    => $examId,
@@ -79,7 +79,7 @@ class StudentExamController extends Controller
         if ($questionId && $selectedOptionId) {
             // نستخدم updateOrCreate للتأكد من عدم تكرار الإجابة لنفس السؤال؛
             // المصفوفة الأولى للبحث عن إجابة سابقة، والثانية لتحديث الخيار فقط.
-            StudentExamAnswer::updateOrCreate(
+            studentExamAnswer::updateOrCreate(
                 [
                     'student_id'       => $studentId,
                     'exam_id'          => $examId,
@@ -107,7 +107,7 @@ class StudentExamController extends Controller
         if ($action === 'finish') {
 
             // 1. تحديث وقت تسليم الامتحان الفعلي في جدول student_exams
-            Student_exam::where('exam_id', $examId)
+            student_exam::where('exam_id', $examId)
                 ->where('student_id', $studentId)
                 ->update([
                     'submit_time' => now()->toTimeString(), // تسجيل وقت التسليم الحالي
@@ -116,7 +116,7 @@ class StudentExamController extends Controller
             $exam = Exam::with('questions.options')->find($examId);
 
             // 3. جلب كل الإجابات الفردية التي حفظناها للطالب في خطوة (1) لهذا الامتحان
-            $studentAnswers = StudentExamAnswer::where('student_id', $studentId)
+            $studentAnswers = studentExamAnswer::where('student_id', $studentId)
                 ->where('exam_id', $examId)
                 ->get()
                 ->keyBy('question_bank_id'); // ترتيبها برقم السؤال ليسهل جلبها
@@ -143,7 +143,7 @@ class StudentExamController extends Controller
             $finalScore = $totalQuestions > 0 ? ($correctAnswersCount / $totalQuestions) * 100 : 0;
 
             // 6. الحفظ النهائي والرسمي في جدول نتيجة اختبار الطالب student_exam_results
-            $student_exam_result = new Student_exam_result();
+            $student_exam_result = new student_exam_result();
             $student_exam_result->student_id = $studentId;
             $student_exam_result->exam_id = $examId;
             $student_exam_result->score_obtained = $finalScore;

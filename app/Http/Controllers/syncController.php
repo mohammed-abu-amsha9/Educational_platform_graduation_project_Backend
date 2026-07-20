@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\AssignmentSubmission;
 use App\Models\Exam;
-use App\Models\Student_exam;
-use App\Models\Student_exam_result;
-use App\Models\StudentExamAnswer;
+use App\Models\student_exam;
+use App\Models\student_exam_result;
+use App\Models\studentExamAnswer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -62,7 +62,7 @@ class syncController extends Controller
 
             // 1. حفظ/تحديث إجابة السؤال (نفس منطق الأونلاين، بدون تكرار)
             if ($questionId && $selectedOptionId) {
-                StudentExamAnswer::updateOrCreate(
+                studentExamAnswer::updateOrCreate(
                     [
                         'student_id'       => $studentId,
                         'exam_id'          => $examId,
@@ -77,7 +77,7 @@ class syncController extends Controller
             // 2. لو كان "إنهاء الاختبار"، نفّذ نفس منطق التصحيح والحفظ النهائي
             if ($action == 'finish') {
 
-                Student_exam::where('exam_id', $examId)
+                student_exam::where('exam_id', $examId)
                     ->where('student_id', $studentId)
                     ->update([
                         'submit_time' => now()->toTimeString(),
@@ -85,7 +85,7 @@ class syncController extends Controller
 
                 $exam = Exam::with('questions.options')->find($examId);
 
-                $studentAnswers = StudentExamAnswer::where('student_id', $studentId)
+                $studentAnswers = studentExamAnswer::where('student_id', $studentId)
                     ->where('exam_id', $examId)
                     ->get()
                     ->keyBy('question_bank_id');
@@ -105,7 +105,7 @@ class syncController extends Controller
                 $finalScore = $totalQuestions > 0 ? ($correctAnswersCount / $totalQuestions) * 100 : 0;
 
                 // تأكد إنه ما في نتيجة سابقة قبل ما تنشئ وحدة جديدة (تجنب تكرار النتيجة كمان)
-                Student_exam_result::updateOrCreate(
+                student_exam_result::updateOrCreate(
                     [
                         'student_id' => $studentId,
                         'exam_id'    => $examId,

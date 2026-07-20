@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\grade;
-use App\Models\Grade_teacher;
-use App\Models\QuestionBank;
+use App\Models\grade_teacher;
 use App\Models\role;
 use App\Models\section;
 use App\Models\subject;
-use App\Models\Subject_teacher;
+use App\Models\subject_teacher;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -77,7 +76,7 @@ class TeacherController extends Controller
         // 4. إصلاح حفظ المواد في الجدول الوسيط (Many-to-Many)
         // نقوم بعمل حلقة تكرار لحفظ كل مادة تم اختيارها في الفورم بشكل مستقل
         foreach ($request->input('subjects') as $subjectId) {
-            $subjectTeacher = new Subject_teacher();
+            $subjectTeacher = new subject_teacher();
             $subjectTeacher->subject_id = $subjectId; // 🟢 المادة تأخذ ID المادة القادم من الفورم
             $subjectTeacher->teacher_id = $teacher->id; // 🟢 المعلم يأخذ ID المعلم الذي تم إنشاؤه للتو
             $subjectTeacher->save();
@@ -97,7 +96,7 @@ class TeacherController extends Controller
                 $section = section::find($sectionId); // تأكد من مسار الموديل لديك
 
                 if ($section) {
-                    $gradeTeacher = new Grade_teacher();
+                    $gradeTeacher = new grade_teacher();
                     $gradeTeacher->teacher_id = $teacher->id;
                     $gradeTeacher->grade_id   = $section->grade_id; // جلب رقم الصف تلقائياً من الشعبة
                     $gradeTeacher->section_id = (int) $sectionId;   // 🟢 حفظ رقم الشعبة هنا
@@ -109,7 +108,7 @@ class TeacherController extends Controller
         // 2️⃣ ثانياً: حفظ الصفوف العامة (التي تم اختيارها مباشرة لأنها بدون شعب)
         if ($request->has('grades')) {
             foreach ($request->input('grades') as $gradeId) {
-                $gradeTeacher = new Grade_teacher();
+                $gradeTeacher = new grade_teacher();
                 $gradeTeacher->teacher_id = $teacher->id;
                 $gradeTeacher->grade_id   = (int) $gradeId;
                 $gradeTeacher->section_id = null; // 🟢 لا توجد شعبة لأن الصف عام
@@ -156,9 +155,9 @@ class TeacherController extends Controller
         // ملاحظة: إذا كنت تستخدم علاقات Laravel الرسمية (BelongsToMany) فالأفضل استخدام sync هكذا:
         // $teacher->subjects()->sync($request->input('subjects'));
         // ولكن بناءً على طريقتك الحالية بالـ Model اليدوي:
-        Subject_teacher::where('teacher_id', $teacher->id)->delete();
+        subject_teacher::where('teacher_id', $teacher->id)->delete();
         foreach ($request->input('subjects') as $subjectId) {
-            $subjectTeacher = new Subject_teacher();
+            $subjectTeacher = new subject_teacher();
             $subjectTeacher->subject_id = $subjectId;
             $subjectTeacher->teacher_id = $teacher->id;
             $subjectTeacher->save();
@@ -174,7 +173,7 @@ class TeacherController extends Controller
         $user->role_id  = $request->input('role_id');
         $user->save();
         // 4. تحديث الصفوف والشعب (تنظيف السجلات القديمة أولاً)
-        Grade_teacher::where('teacher_id', $teacher->id)->delete();
+        grade_teacher::where('teacher_id', $teacher->id)->delete();
 
         // 🟢 أولاً: حفظ الصفوف والشعب (الشعب التي تحتوي على section_id)
         if ($request->has('sections')) {
@@ -182,7 +181,7 @@ class TeacherController extends Controller
                 $section = section::find($sectionId);
 
                 if ($section) {
-                    $gradeTeacher = new Grade_teacher();
+                    $gradeTeacher = new grade_teacher();
                     $gradeTeacher->teacher_id = $teacher->id;
                     $gradeTeacher->grade_id   = $section->grade_id;
                     $gradeTeacher->section_id = (int) $sectionId;

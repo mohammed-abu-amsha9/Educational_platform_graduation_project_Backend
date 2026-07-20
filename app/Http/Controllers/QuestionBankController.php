@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Grade;
 use App\Models\QuestionBank;
 use App\Models\QuestionOption;
-use App\Models\StudentExamAnswer;
+use App\Models\studentExamAnswer;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 
@@ -166,7 +166,7 @@ class QuestionBankController extends Controller
     {
         $question = QuestionBank::findOrFail($id);
         $question->options()->delete();
-        StudentExamAnswer::where('question_bank_id', $id)->delete();
+        studentExamAnswer::where('question_bank_id', $id)->delete();
         $question->delete();
         return redirect()->back()->with('success', 'تم حذف السؤال من البنك، وإزالته من كافة الاختبارات وإجابات الطلاب بنجاح!');
 

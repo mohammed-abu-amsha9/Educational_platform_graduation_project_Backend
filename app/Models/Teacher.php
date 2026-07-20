@@ -16,7 +16,7 @@ class Teacher extends Model
      */
     public function role()
     {
-        return $this->belongsTo(Role::class, 'role_id');
+        return $this->belongsTo(role::class, 'role_id');
     }
 
     /**
