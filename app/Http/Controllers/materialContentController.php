@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\lesson;
+use App\Models\Lesson;
 use App\Models\Student;
 use App\Models\subject;
 use App\Models\Teacher;
@@ -38,7 +38,7 @@ class materialContentController extends Controller
             foreach ($subject->teachers as $teacher) {
 
                 // حساب عدد الدروس النشطة فقط (والتأكد أنها غير محذوفة)
-                $lessonCount = lesson::where('subject_id', $subject->id)
+                $lessonCount = Lesson::where('subject_id', $subject->id)
                     ->where('teacher_id', $teacher->id)
                     ->count();
 
