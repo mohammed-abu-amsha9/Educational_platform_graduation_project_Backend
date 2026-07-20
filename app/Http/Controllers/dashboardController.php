@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exam;
-use App\Models\Fee;
+use App\Models\fee;
 use App\Models\Grade;
 use App\Models\Student;
 use App\Models\Subject;
@@ -22,7 +22,7 @@ class dashboardController extends Controller
         $activeTeachers = Teacher::count(); // إجمالي المعلمين (يمكنك تصفيتها حسب النشطين)
         // نجيب إجمالي المبالغ المطلوبة بدون تكرار حسب الطالب والشهر
         $totalRequired = Student::sum('total_paid_amount'); // مجموع الرصيد من الطلاب
-        $totalPaid = Fee::sum('paid_amount'); // مجموع المدفوع من الطلاب
+        $totalPaid = fee::sum('paid_amount'); // مجموع المدفوع من الطلاب
         $totalGrade = Grade::count();
         // المتبقي العام
         $totalRemaining = $totalRequired - $totalPaid;
@@ -54,7 +54,7 @@ class dashboardController extends Controller
         $totalSubjects = Subject::count();
 
         // جلب آخر 5 مدفوعات تمت
-        $latestFees = Fee::with('student')->latest()->take(5)->get();
+        $latestFees = fee::with('student')->latest()->take(5)->get();
         $examPublish = Exam::where('status', 'Published')->get();
         return response()->view('admin.control_panel', [
             'totalStudents' => $totalStudents,
