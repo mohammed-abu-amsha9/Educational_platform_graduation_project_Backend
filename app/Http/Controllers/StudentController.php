@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\grade;
-use App\Models\Role;
+use App\Models\role;
 use App\Models\section;
 use App\Models\Student;
 use App\Models\User;
@@ -72,7 +72,7 @@ class StudentController extends Controller
         $studentCode = 'STU_' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
 
         // 1. 🟢 جلب دور الطالب تلقائياً من قاعدة البيانات بناءً على اسمه
-        $studentRole = Role::where('role_name', 'طالب')
+        $studentRole = role::where('role_name', 'طالب')
             ->orWhere('role_name', 'student')
             ->first();
 

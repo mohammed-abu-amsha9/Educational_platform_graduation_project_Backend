@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\grade;
 use App\Models\Grade_teacher;
 use App\Models\QuestionBank;
-use App\Models\Role;
+use App\Models\role;
 use App\Models\section;
 use App\Models\subject;
 use App\Models\Subject_teacher;
@@ -23,7 +23,7 @@ class TeacherController extends Controller
     {
         // 🟢 قمنا بإضافة 'grades' هنا لجلب صفوف المعلم من الجدول الوسيط تلقائياً
         $teachers = Teacher::with(['subjects', 'sections', 'role'])->get();
-        $roles = Role::all();
+        $roles = role::all();
         $grades = grade::with('sections')->get(); // كل الصفوف المتاحة في النظام
         // 🟢 جلب المواد من قاعدة البيانات لتصبح ديناميكية
         $subjects = subject::all();
