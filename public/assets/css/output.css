@@ -2625,6 +2625,9 @@
     .hover\:bg-slate-200:hover {
       background-color: var(--color-slate-200);
     }
+    .hover\:bg-teal-50:hover {
+      background-color: var(--color-teal-50);
+    }
     .hover\:bg-teal-600:hover {
       background-color: var(--color-teal-600);
     }
@@ -2653,6 +2656,9 @@
     }
     .hover\:text-slate-600:hover {
       color: var(--color-slate-600);
+    }
+    .hover\:text-teal-600:hover {
+      color: var(--color-teal-600);
     }
     .hover\:text-teal-700:hover {
       color: var(--color-teal-700);
