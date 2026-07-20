@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Fee;
+use App\Models\fee;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -13,7 +13,7 @@ class FeeController extends Controller
      */
     public function index()
     {
-        $studentFee = Fee::with('student')->get();
+        $studentFee = fee::with('student')->get();
         $students = Student::with('grade')->get();
 
         // حساب إجمالي المدفوع
@@ -67,7 +67,7 @@ class FeeController extends Controller
         $monthly_amount = (float) $validated['monthly_amount'];
         $paid_amount    = (float) $validated['paid_amount'];
 
-        $StudentMonthlyFee = new Fee();
+        $StudentMonthlyFee = new fee();
 
         // إسناد رقم الهوية كمعرف أساسي للـ id
         $StudentMonthlyFee->student_id = $request->input('student_id');

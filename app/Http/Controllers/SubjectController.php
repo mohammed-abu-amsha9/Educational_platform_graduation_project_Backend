@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Grade;
-use App\Models\Subject;
+use App\Models\grade;
+use App\Models\subject;
 use Illuminate\Http\Request;
 
 class SubjectController extends Controller
@@ -13,8 +13,8 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $subjects = Subject::with('grade')->get();
-        $grades = Grade::all();
+        $subjects = subject::with('grade')->get();
+        $grades = grade::all();
         return response()->view('admin.subjects', ['subjects' => $subjects, 'grades' => $grades]);
     }
 
@@ -36,7 +36,7 @@ class SubjectController extends Controller
             'grade_id' => 'required|exists:grades,id'
         ]);
 
-        $subject = new Subject();
+        $subject = new subject();
         $subject->name = $request->input('subject_name');
         $subject->grade_id = $request->input('grade_id');
         $subject->save();
@@ -80,7 +80,7 @@ class SubjectController extends Controller
      */
     public function destroy($id)
     {
-        $subject = Subject::findOrFail($id);
+        $subject = subject::findOrFail($id);
         $subject->delete();
         return redirect()->back()->with('success', 'تم حذف المادة بنجاح');
     }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Lesson;
+use App\Models\lesson;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +16,7 @@ class LessonController extends Controller
     {
         $teacherId =  auth()->id();
 
-        $lessons = Lesson::with('subject')->where('teacher_id', $teacherId)->get();
+        $lessons = lesson::with('subject')->where('teacher_id', $teacherId)->get();
         // جلب المواد الفريدة التي يدرسها هذا المعلم
         $teacher = Teacher::with(['subjects.grade', 'grades.sections'])->find($teacherId);
 
@@ -71,7 +71,7 @@ class LessonController extends Controller
         }
 
         // 3. إنشاء كائن المحاضرة الأساسي وحفظه
-        $lesson = new Lesson();
+        $lesson = new lesson();
         $lesson->teacher_id = $teacherId;
         $lesson->subject_id = $request->input('subject_id');
         $lesson->title      = $request->input('title');
@@ -113,7 +113,7 @@ class LessonController extends Controller
      */
     public function destroy($id)
     {
-        $lesson = Lesson::findOrFail($id);
+        $lesson = lesson::findOrFail($id);
         // 3. حذف ملف الشرح أو الفيديو من الـ Storage (إذا كان مخزناً محلياً) لتوفر مساحة
         if ($lesson->file_url && Storage::disk('public')->exists($lesson->file_url)) {
             Storage::disk('public')->delete($lesson->file_url);

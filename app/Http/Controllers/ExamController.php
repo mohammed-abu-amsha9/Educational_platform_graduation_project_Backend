@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Exam;
 use App\Models\Exam_question;
 use App\Models\QuestionBank;
-use App\Models\Subject;
+use App\Models\subject;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 
@@ -98,7 +98,7 @@ class ExamController extends Controller
 
         // 3. جلب اسم المادة من قاعدة البيانات بناءً على الـ ID
         // (تأكد من تغيير \App\Models\Subject إلى اسم موديل المادة الصحيح لديك في المشروع)
-        $subject = Subject::find($subjectId);
+        $subject = subject::find($subjectId);
 
         // إذا عثرنا على المادة نأخذ اسمها، وإلا نضع اسماً افتراضياً احتياطياً
         $subjectName = $subject ? $subject->name : 'مادة دراسية';

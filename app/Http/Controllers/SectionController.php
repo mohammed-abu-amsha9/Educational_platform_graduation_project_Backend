@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Grade;
-use App\Models\Section;
+use App\Models\grade;
+use App\Models\section;
 use Illuminate\Http\Request;
 
 class SectionController extends Controller
@@ -13,8 +13,8 @@ class SectionController extends Controller
      */
     public function index()
     {
-        $sections = Section::with('grade')->get();
-        $grades = Grade::all();
+        $sections = section::with('grade')->get();
+        $grades = grade::all();
         return response()->view('admin.sections', ['sections' => $sections, 'grades' => $grades]);
     }
 
@@ -36,7 +36,7 @@ class SectionController extends Controller
             'grade_id' => 'required|exists:grades,id'
         ]);
 
-        $section = new Section();
+        $section = new section();
         $section->name = $request->input('section_name');
         $section->grade_id = $request->input('grade_id');
         $section->save();
@@ -80,7 +80,7 @@ class SectionController extends Controller
      */
     public function destroy( $id)
     {
-        $section = Section::findOrFail($id);
+        $section = section::findOrFail($id);
         $section->delete();
         return redirect()->back()->with('success', 'تم حذف الشعبة بنجاح');
     }

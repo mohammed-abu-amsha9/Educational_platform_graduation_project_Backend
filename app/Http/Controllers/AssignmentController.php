@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assignment;
-use App\Models\Section;
+use App\Models\section;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 
@@ -62,7 +62,7 @@ class AssignmentController extends Controller
         if ($type === 'sec') {
             $assignment->section_id = $targetId;
             // جلب الصف التابع لهذه الشعبة (تحتاج علاقة في موديل Section)
-            $assignment->grade_id = Section::find($targetId)->grade_id;
+            $assignment->grade_id = section::find($targetId)->grade_id;
         } else {
             $assignment->grade_id = $targetId;
             $assignment->section_id = null; // أو القيمة الافتراضية لديك

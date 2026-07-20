@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Grade;
+use App\Models\grade;
 use Illuminate\Http\Request;
 
 class GradeController extends Controller
@@ -12,7 +12,7 @@ class GradeController extends Controller
      */
     public function index()
     {
-        $grades = Grade::all();
+        $grades = grade::all();
         return response()->view('admin.classes', ['grades' => $grades]);
     }
 
@@ -33,7 +33,7 @@ class GradeController extends Controller
             'grade_name' => 'required|string'
         ]);
 
-        $grade = new Grade();
+        $grade = new grade();
         $grade->name = $request->input('grade_name');
         $grade->save();
         return redirect()->back()->with('success', 'تم إضافة صف جديد!');
@@ -74,7 +74,7 @@ class GradeController extends Controller
      */
     public function destroy($id)
     {
-        $grade = Grade::findOrFail($id);
+        $grade = grade::findOrFail($id);
         // 🟢 خطوة إضافية: حذف جميع الشعب المرتبطة بهذا الصف أولاً
         $grade->sections()->delete(); // تأكد أن لديك علاقة باسم sections() في موديل Grade
         // حذف الصف نفسه

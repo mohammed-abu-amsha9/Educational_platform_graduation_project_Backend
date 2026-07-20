@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Lesson;
+use App\Models\lesson;
 use App\Models\Student;
-use App\Models\Subject;
+use App\Models\subject;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +29,7 @@ class materialContentController extends Controller
         }
 
         // جلب المواد الخاصة بصف الطالب مع معلميها
-        $contents = Subject::where('grade_id', $student->grade_id)
+        $contents = subject::where('grade_id', $student->grade_id)
             ->with('teachers')
             ->get();
 
@@ -38,7 +38,7 @@ class materialContentController extends Controller
             foreach ($subject->teachers as $teacher) {
 
                 // حساب عدد الدروس النشطة فقط (والتأكد أنها غير محذوفة)
-                $lessonCount = Lesson::where('subject_id', $subject->id)
+                $lessonCount = lesson::where('subject_id', $subject->id)
                     ->where('teacher_id', $teacher->id)
                     ->count();
 
@@ -81,11 +81,11 @@ class materialContentController extends Controller
         $teacher_id = $request->query('teacher_id');
 
         // جلب بيانات المادة والمعلم للتأكد من وجودهم (ولعرض أسمائهم في أعلى الصفحة كعنوان)
-        $subject = Subject::findOrFail($subject_id);
+        $subject = subject::findOrFail($subject_id);
         $teacher = Teacher::findOrFail($teacher_id);
 
         // جلب الدروس التابعة للمادة المحددة والمعلم المحدد فقط
-        $lessons = Lesson::where('subject_id', $subject_id)
+        $lessons = lesson::where('subject_id', $subject_id)
             ->where('teacher_id', $teacher_id)
             ->get();
 

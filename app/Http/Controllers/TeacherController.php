@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Grade;
+use App\Models\grade;
 use App\Models\Grade_teacher;
 use App\Models\QuestionBank;
 use App\Models\Role;
-use App\Models\Section;
-use App\Models\Subject;
+use App\Models\section;
+use App\Models\subject;
 use App\Models\Subject_teacher;
 use App\Models\Teacher;
 use App\Models\User;
@@ -24,9 +24,9 @@ class TeacherController extends Controller
         // 🟢 قمنا بإضافة 'grades' هنا لجلب صفوف المعلم من الجدول الوسيط تلقائياً
         $teachers = Teacher::with(['subjects', 'sections', 'role'])->get();
         $roles = Role::all();
-        $grades = Grade::with('sections')->get(); // كل الصفوف المتاحة في النظام
+        $grades = grade::with('sections')->get(); // كل الصفوف المتاحة في النظام
         // 🟢 جلب المواد من قاعدة البيانات لتصبح ديناميكية
-        $subjects = Subject::all();
+        $subjects = subject::all();
         return view('admin.teachers', [
             'teachers' => $teachers,
             'roles'    => $roles,
@@ -94,7 +94,7 @@ class TeacherController extends Controller
         if ($request->has('sections')) {
             foreach ($request->input('sections') as $sectionId) {
                 // جلب الـ Section لمعرفة الـ grade_id المرتبط به تلقائياً من قاعدة البيانات
-                $section = Section::find($sectionId); // تأكد من مسار الموديل لديك
+                $section = section::find($sectionId); // تأكد من مسار الموديل لديك
 
                 if ($section) {
                     $gradeTeacher = new Grade_teacher();

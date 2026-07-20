@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Grade;
+use App\Models\grade;
 use App\Models\Role;
-use App\Models\Section;
+use App\Models\section;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,7 +22,7 @@ class StudentController extends Controller
         $students = Student::filter($request->all())->with('grade')->get();
 
         // 2. جلب جميع الصفوف لعرضها في قائمة الـ Select
-        $grades = Grade::with('sections')->get();
+        $grades = grade::with('sections')->get();
 
         // 3. تمرير المتغيرين معاً إلى الـ View
         return view('admin.students', [
@@ -114,7 +114,7 @@ class StudentController extends Controller
         ]);
 
         // 💡 خطوة أمنية إضافية: التأكد من أن الشعبة المختارة تنتمي بالفعل للصف المختار
-        $isSectionBelongsToGrade = Section::where('id', $request->section_id)
+        $isSectionBelongsToGrade = section::where('id', $request->section_id)
             ->where('grade_id', $request->grade_id)
             ->exists();
 
