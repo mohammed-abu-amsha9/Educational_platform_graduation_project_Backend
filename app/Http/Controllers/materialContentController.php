@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\lesson;
-use App\Models\student;
-use App\Models\subject;
-use App\Models\teacher;
+use App\Models\Lesson;
+use App\Models\Student;
+use App\Models\Subject;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -21,7 +21,7 @@ class materialContentController extends Controller
 
         // 2. جلب بيانات الطالب من جدول students بناءً على معرف المستخدم لجلب رقم الصف (grade_id)
         // ملاحظة: بما أن id الطالب في قاعدة بياناتك هو نفسه id في جدول users (مثل 959295995)
-        $student = student::find($studentId);
+        $student = Student::find($studentId);
 
         // حماية في حال لم يتم العثور على سجل الطالب
         if (!$student) {
@@ -29,7 +29,7 @@ class materialContentController extends Controller
         }
 
         // جلب المواد الخاصة بصف الطالب مع معلميها
-        $contents = subject::where('grade_id', $student->grade_id)
+        $contents = Subject::where('grade_id', $student->grade_id)
             ->with('teachers')
             ->get();
 
@@ -38,7 +38,7 @@ class materialContentController extends Controller
             foreach ($subject->teachers as $teacher) {
 
                 // حساب عدد الدروس النشطة فقط (والتأكد أنها غير محذوفة)
-                $lessonCount = lesson::where('subject_id', $subject->id)
+                $lessonCount = Lesson::where('subject_id', $subject->id)
                     ->where('teacher_id', $teacher->id)
                     ->count();
 
@@ -81,8 +81,8 @@ class materialContentController extends Controller
         $teacher_id = $request->query('teacher_id');
 
         // جلب بيانات المادة والمعلم للتأكد من وجودهم (ولعرض أسمائهم في أعلى الصفحة كعنوان)
-        $subject = subject::findOrFail($subject_id);
-        $teacher = teacher::findOrFail($teacher_id);
+        $subject = Subject::findOrFail($subject_id);
+        $teacher = Teacher::findOrFail($teacher_id);
 
         // جلب الدروس التابعة للمادة المحددة والمعلم المحدد فقط
         $lessons = Lesson::where('subject_id', $subject_id)

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class exam_question extends Model
+class Exam_question extends Model
 {
     /** @use HasFactory<\Database\Factories\ExamQuestionFactory> */
     use HasFactory, SoftDeletes;

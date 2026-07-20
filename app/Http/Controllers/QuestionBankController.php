@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\grade;
+use App\Models\Grade;
 use App\Models\QuestionBank;
 use App\Models\QuestionOption;
 use App\Models\StudentExamAnswer;
-use App\Models\teacher;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 
 class QuestionBankController extends Controller
@@ -45,7 +45,7 @@ class QuestionBankController extends Controller
         $questionBank = $query->with(['grade', 'subject'])->latest()->get();
 
         // جلب المعلم مع المواد المربوطة به، والصفوف المربوطة به مباشرة عبر جدول الربط
-        $currentTeacher = teacher::with(['subjects', 'grades'])->find($teacherId);
+        $currentTeacher = Teacher::with(['subjects', 'grades'])->find($teacherId);
 
         // نرسل الصفوف والمواد الخاصة بهذا المعلم فقط إلى الـ Blade
         $teacherSubjects = $currentTeacher ? $currentTeacher->subjects : collect();

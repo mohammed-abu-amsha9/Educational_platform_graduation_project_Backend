@@ -3,13 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assignment;
-use App\Models\AssignmentSubmission;
-use App\Models\grade;
-use App\Models\lesson;
-use App\Models\section;
-use App\Models\subject;
-use App\Models\teacher;
-use Illuminate\Container\Attributes\Auth;
+use App\Models\Section;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 
 class AssignmentController extends Controller
@@ -21,7 +16,7 @@ class AssignmentController extends Controller
     {
         $teacherId = auth()->id();
         // 1. جلب المعلم مع المواد والصفوف والشعب (مع منع التكرار لاحقاً)
-        $currentTeacher = teacher::with(['subjects', 'grades.sections'])->find($teacherId);
+        $currentTeacher = Teacher::with(['subjects', 'grades.sections'])->find($teacherId);
         return response()->view('teacher.tasks_manage', [
             'currentTeacher' => $currentTeacher,
         ]);
@@ -67,7 +62,7 @@ class AssignmentController extends Controller
         if ($type === 'sec') {
             $assignment->section_id = $targetId;
             // جلب الصف التابع لهذه الشعبة (تحتاج علاقة في موديل Section)
-            $assignment->grade_id = section::find($targetId)->grade_id;
+            $assignment->grade_id = Section::find($targetId)->grade_id;
         } else {
             $assignment->grade_id = $targetId;
             $assignment->section_id = null; // أو القيمة الافتراضية لديك

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assignment;
-use App\Models\assignment_submission;
 use App\Models\AssignmentSubmission;
 use Illuminate\Http\Request;
 

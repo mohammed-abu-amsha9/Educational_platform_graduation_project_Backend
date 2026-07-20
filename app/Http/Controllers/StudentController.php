@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\grade;
-use App\Models\role;
-use App\Models\section;
-use App\Models\student;
+use App\Models\Grade;
+use App\Models\Role;
+use App\Models\Section;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,10 +19,10 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         // جلب جميع الطلاب من قاعدة البيانات
-        $students = student::filter($request->all())->with('grade')->get();
+        $students = Student::filter($request->all())->with('grade')->get();
 
         // 2. جلب جميع الصفوف لعرضها في قائمة الـ Select
-        $grades = grade::with('sections')->get();
+        $grades = Grade::with('sections')->get();
 
         // 3. تمرير المتغيرين معاً إلى الـ View
         return view('admin.students', [
@@ -56,7 +56,7 @@ class StudentController extends Controller
 
         // 2. توليد رقم الطالب التسلسلي تلقائياً (student_code)
         // نأتي بآخر طالب تم تسجيله للحصول على الكود الخاص به
-        $lastStudent = student::withTrashed()->latest('created_at')->first();
+        $lastStudent = Student::withTrashed()->latest('created_at')->first();
 
         // preg_match => تبحث عن نمبط معين داخل النص
         if ($lastStudent && preg_match('/STU_(\d+)/', $lastStudent->student_code, $matches)) {
@@ -72,7 +72,7 @@ class StudentController extends Controller
         $studentCode = 'STU_' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
 
         // 1. 🟢 جلب دور الطالب تلقائياً من قاعدة البيانات بناءً على اسمه
-        $studentRole = role::where('role_name', 'طالب')
+        $studentRole = Role::where('role_name', 'طالب')
             ->orWhere('role_name', 'student')
             ->first();
 
@@ -82,7 +82,7 @@ class StudentController extends Controller
         }
         DB::transaction(function () use ($request, $studentCode, $studentRole) {
             // 3. إنشاء طالب جديد وحفظ البيانات
-            $student = new student();
+            $student = new Student();
             $student->id = $request->input('id');
             $student->full_name = $request->input('full_name');
             $student->student_code = $studentCode;
@@ -114,7 +114,7 @@ class StudentController extends Controller
         ]);
 
         // 💡 خطوة أمنية إضافية: التأكد من أن الشعبة المختارة تنتمي بالفعل للصف المختار
-        $isSectionBelongsToGrade = section::where('id', $request->section_id)
+        $isSectionBelongsToGrade = Section::where('id', $request->section_id)
             ->where('grade_id', $request->grade_id)
             ->exists();
 
@@ -187,7 +187,7 @@ class StudentController extends Controller
     public function destroy($id)
     {
         // العثور على الطالب وحذفه
-        $student = student::findOrFail($id);
+        $student = Student::findOrFail($id);
         $student->account_status = 'no active';
         $student->save();
         $student->delete();

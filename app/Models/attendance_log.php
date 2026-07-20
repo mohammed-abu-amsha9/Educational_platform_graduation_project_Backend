@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class attendance_log extends Model
+class Attendance_log extends Model
 {
     /** @use HasFactory<\Database\Factories\AttendanceLogFactory> */
     use HasFactory;

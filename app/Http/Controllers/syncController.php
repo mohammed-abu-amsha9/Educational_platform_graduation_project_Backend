@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\AssignmentSubmission;
 use App\Models\Exam;
-use App\Models\student_exam;
-use App\Models\student_exam_result;
+use App\Models\Student_exam;
+use App\Models\Student_exam_result;
 use App\Models\StudentExamAnswer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -77,7 +77,7 @@ class syncController extends Controller
             // 2. لو كان "إنهاء الاختبار"، نفّذ نفس منطق التصحيح والحفظ النهائي
             if ($action == 'finish') {
 
-                student_exam::where('exam_id', $examId)
+                Student_exam::where('exam_id', $examId)
                     ->where('student_id', $studentId)
                     ->update([
                         'submit_time' => now()->toTimeString(),
@@ -105,7 +105,7 @@ class syncController extends Controller
                 $finalScore = $totalQuestions > 0 ? ($correctAnswersCount / $totalQuestions) * 100 : 0;
 
                 // تأكد إنه ما في نتيجة سابقة قبل ما تنشئ وحدة جديدة (تجنب تكرار النتيجة كمان)
-                student_exam_result::updateOrCreate(
+                Student_exam_result::updateOrCreate(
                     [
                         'student_id' => $studentId,
                         'exam_id'    => $examId,

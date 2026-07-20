@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exam;
-use App\Models\fee;
-use App\Models\grade;
-use App\Models\student;
-use App\Models\subject;
-use App\Models\teacher;
+use App\Models\Fee;
+use App\Models\Grade;
+use App\Models\Student;
+use App\Models\Subject;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class dashboardController extends Controller
 {
@@ -18,17 +17,17 @@ class dashboardController extends Controller
      */
     public function index()
     {
-        $totalStudents = student::withTrashed()->count(); // إجمالي الطلاب
-        $totalStudentsActive = student::where('account_status', 'active')->count(); // إجمالي الطلاب النشيطين
-        $activeTeachers = teacher::count(); // إجمالي المعلمين (يمكنك تصفيتها حسب النشطين)
+        $totalStudents = Student::withTrashed()->count(); // إجمالي الطلاب
+        $totalStudentsActive = Student::where('account_status', 'active')->count(); // إجمالي الطلاب النشيطين
+        $activeTeachers = Teacher::count(); // إجمالي المعلمين (يمكنك تصفيتها حسب النشطين)
         // نجيب إجمالي المبالغ المطلوبة بدون تكرار حسب الطالب والشهر
-        $totalRequired = student::sum('total_paid_amount'); // مجموع الرصيد من الطلاب
-        $totalPaid = fee::sum('paid_amount'); // مجموع المدفوع من الطلاب
-        $totalGrade = grade::count();
+        $totalRequired = Student::sum('total_paid_amount'); // مجموع الرصيد من الطلاب
+        $totalPaid = Fee::sum('paid_amount'); // مجموع المدفوع من الطلاب
+        $totalGrade = Grade::count();
         // المتبقي العام
         $totalRemaining = $totalRequired - $totalPaid;
         // عدد الطلاب الذين سددوا بالكامل
-        $totalFullyPaid = student::whereIn('id', function ($query) {
+        $totalFullyPaid = Student::whereIn('id', function ($query) {
             $query->select('student_id')
                 ->from('fees')
                 ->groupBy('student_id')
@@ -36,7 +35,7 @@ class dashboardController extends Controller
         })->count();
 
         // جلب الصفوف مع عدد طلابها
-        $grades = grade::withCount('students')->get()->map(function ($classroom) {
+        $grades = Grade::withCount('students')->get()->map(function ($classroom) {
             // السعة القصوى المحددة في الداتابيز، أو افتراضياً 20 لو مش موجود العمود
             $maxCapacity = $classroom->max_capacity ?? 40;
 
@@ -52,10 +51,10 @@ class dashboardController extends Controller
             return $classroom;
         });
 
-        $totalSubjects = subject::count();
+        $totalSubjects = Subject::count();
 
         // جلب آخر 5 مدفوعات تمت
-        $latestFees = fee::with('student')->latest()->take(5)->get();
+        $latestFees = Fee::with('student')->latest()->take(5)->get();
         $examPublish = Exam::where('status', 'Published')->get();
         return response()->view('admin.control_panel', [
             'totalStudents' => $totalStudents,

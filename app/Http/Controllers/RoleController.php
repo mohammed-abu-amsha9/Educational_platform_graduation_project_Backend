@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\permistion;
-use App\Models\role;
+use App\Models\Permistion;
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -13,8 +13,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = role::with('permistions')->get();
-        $permistions = permistion::all();
+        $roles = Role::with('permistions')->get();
+        $permistions = Permistion::all();
         return response()->view('admin.roles', ['roles' => $roles, 'permistions' => $permistions]);
     }
 
@@ -37,7 +37,7 @@ class RoleController extends Controller
             'permistions.*' => 'exists:permistions,id' // التحقق من أن كل ID موجود بالفعل في جدول الصلاحيات
         ]);
 
-        $role = new role();
+        $role = new Role();
         $role->role_name = $request->input('role_name');
         $role->save();
         // 3. ربط الصلاحيات المحددة بالدور في الجدول الوسيط (Pivot Table)
@@ -92,7 +92,7 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $role = role::findOrFail($id);
+        $role = Role::findOrFail($id);
         $role->delete();
         return redirect()->back()->with('success', 'تم حذف الدور بنجاح');
     }

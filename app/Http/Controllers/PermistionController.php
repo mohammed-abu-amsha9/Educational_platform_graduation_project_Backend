@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\permistion;
+use App\Models\Permistion;
 use Illuminate\Http\Request;
 
 class PermistionController extends Controller
@@ -12,7 +12,7 @@ class PermistionController extends Controller
      */
     public function index()
     {
-        $permistions = permistion::all();
+        $permistions = Permistion::all();
         return response()->view('admin.permistions', ['permistions' => $permistions]);
     }
 

@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exam;
-use App\Models\student_exam;
-use App\Models\student_exam_result;
+use App\Models\Student_exam;
+use App\Models\Student_exam_result;
 use App\Models\StudentExamAnswer;
-use App\Models\StudentExamResult;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -43,7 +42,7 @@ class StudentExamController extends Controller
 
         // 2. ✨ [المنطق الجديد]: تسجيل دخول الطالب في جدول student_exams إذا لم يكن مسجلاً مسبقاً
         // نستخدم firstOrCreate لحمايته من إنشاء سجل جديد في كل مرة ينتقل فيها بين صفحات الأسئلة
-        student_exam::firstOrCreate(
+        Student_exam::firstOrCreate(
             // 1. ابحث بدلالة هذه الحقول الثابتة فقط
             [
                 'exam_id'    => $examId,
@@ -108,7 +107,7 @@ class StudentExamController extends Controller
         if ($action === 'finish') {
 
             // 1. تحديث وقت تسليم الامتحان الفعلي في جدول student_exams
-            student_exam::where('exam_id', $examId)
+            Student_exam::where('exam_id', $examId)
                 ->where('student_id', $studentId)
                 ->update([
                     'submit_time' => now()->toTimeString(), // تسجيل وقت التسليم الحالي
@@ -144,7 +143,7 @@ class StudentExamController extends Controller
             $finalScore = $totalQuestions > 0 ? ($correctAnswersCount / $totalQuestions) * 100 : 0;
 
             // 6. الحفظ النهائي والرسمي في جدول نتيجة اختبار الطالب student_exam_results
-            $student_exam_result = new student_exam_result();
+            $student_exam_result = new Student_exam_result();
             $student_exam_result->student_id = $studentId;
             $student_exam_result->exam_id = $examId;
             $student_exam_result->score_obtained = $finalScore;

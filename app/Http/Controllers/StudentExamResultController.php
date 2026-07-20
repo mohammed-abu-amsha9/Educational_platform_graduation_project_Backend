@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\section;
-use App\Models\student;
+use App\Models\Student;
 use App\Models\StudentExamResult;
-use App\Models\subject;
-use App\Models\teacher;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 
 class StudentExamResultController extends Controller
@@ -20,7 +18,7 @@ class StudentExamResultController extends Controller
         $teacherId = auth()->id();
 
         // 1. جلب المعلم مع المواد والصفوف والشعب (مع منع التكرار لاحقاً)
-        $currentTeacher = teacher::with(['subjects', 'grades.sections'])->find($teacherId);
+        $currentTeacher = Teacher::with(['subjects', 'grades.sections'])->find($teacherId);
 
         // 2. استقبال معرف الشعبة المختارة من الرابط
         $selectedSection = $request->input('section_id');
@@ -30,7 +28,7 @@ class StudentExamResultController extends Controller
 
         // 4. إذا قام المعلم باختيار شعبة وضغط زر الجلب، نذهب لقاعدة البيانات ونجلب طلابها
         if ($selectedSection) {
-            $students = student::where('section_id', $selectedSection)->with('examResults')->get();
+            $students = Student::where('section_id', $selectedSection)->with('examResults')->get();
         }
 
         // 5. تمرير المتغيرات للـ Blade

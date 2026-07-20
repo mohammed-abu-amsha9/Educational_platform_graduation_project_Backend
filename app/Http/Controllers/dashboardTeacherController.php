@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Assignment;
-use App\Models\assignment_submission;
+use App\Models\Assignment_submission;
 use App\Models\Exam;
-use App\Models\teacher;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 
 class dashboardTeacherController extends Controller
@@ -15,17 +14,17 @@ class dashboardTeacherController extends Controller
      */
     public function index()
     {
-        $teacher = teacher::where('id', auth()->id())->first();
+        $teacher = Teacher::where('id', auth()->id())->first();
         // نستخدم withCount لجلب عدد الطلاب لكل صف يدرسه المعلم
         $studentCount = $teacher->grades()
             ->withCount('students') // نحسب عدد الطلاب في كل صف
             ->get()                 // نحصل على الصفوف
             ->sum('students_count'); // نجمع الأعداد من كل الصفوف
 
-        $assignmentUncorrection = assignment_submission::where('status', 'uncorrection')->get();
+        $assignmentUncorrection = Assignment_submission::where('status', 'uncorrection')->get();
         $examPublished = Exam::where('status', 'Published')->get();
 
-        $gradesTeacher = teacher::with(['subjects', 'grades', 'sections'])->where('id', auth()->id())->first();
+        $gradesTeacher = Teacher::with(['subjects', 'grades', 'sections'])->where('id', auth()->id())->first();
 
         return response()->view('teacher.control_panel', [
             'studentCount' => $studentCount,

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\attendance_log;
-use App\Models\student;
-use App\Models\teacher;
+use App\Models\Attendance_log;
+use App\Models\Student;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 
 class AttendanceLogController extends Controller
@@ -17,7 +17,7 @@ class AttendanceLogController extends Controller
         $teacherId = auth()->id();
 
         // جلب المعلم مع الصفوف الموكلة إليه (عبر علاقة grades وموادها)
-        $teacher = teacher::with(['grades.sections', 'subjects.grade'])->find($teacherId);
+        $teacher = Teacher::with(['grades.sections', 'subjects.grade'])->find($teacherId);
 
         // استخراج الصفوف الفريدة التابعة للمعلم
         $teacherClasses = $teacher ? $teacher->grades : collect();
@@ -35,12 +35,12 @@ class AttendanceLogController extends Controller
                 $sectionId = $parts[1]; // معرف الشعبة (Section ID)
 
                 // جلب الطلاب التابعين لهذا الصف وهذه الشعبة بدقة بناءً على المعرفات الرقمية (أفضل وأسرع وأدق لمشروعك)
-                $students = student::where('grade_id', $gradeId)
+                $students = Student::where('grade_id', $gradeId)
                     ->where('section_id', $sectionId)
                     ->get();
 
                 // جلب الحضور السابق
-                $existingAttendance = attendance_log::where('date', $request->input('date'))
+                $existingAttendance = Attendance_log::where('date', $request->input('date'))
                     ->where('teacher_id', $teacherId)
                     ->whereIn('student_id', $students->pluck('id'))
                     ->pluck('status', 'student_id')
@@ -85,7 +85,7 @@ class AttendanceLogController extends Controller
         foreach ($request->input('attendance') as $studentId => $status) {
 
             // استخدام الدالة الذكية لـ (التحديث أو الإنشاء) لمنع تكرار البيانات
-            attendance_log::updateOrCreate(
+            Attendance_log::updateOrCreate(
                 [
                     // شروط البحث (مفاتيح التحقق)
                     'student_id' => $studentId,

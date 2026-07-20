@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\grade;
-use App\Models\grade_teacher;
+use App\Models\Grade;
+use App\Models\Grade_teacher;
 use App\Models\QuestionBank;
-use App\Models\role;
-use App\Models\section;
-use App\Models\subject;
-use App\Models\subject_teacher;
-use App\Models\teacher;
+use App\Models\Role;
+use App\Models\Section;
+use App\Models\Subject;
+use App\Models\Subject_teacher;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -22,11 +22,11 @@ class TeacherController extends Controller
     public function index()
     {
         // 🟢 قمنا بإضافة 'grades' هنا لجلب صفوف المعلم من الجدول الوسيط تلقائياً
-        $teachers = teacher::with(['subjects', 'sections', 'role'])->get();
-        $roles = role::all();
-        $grades = grade::with('sections')->get(); // كل الصفوف المتاحة في النظام
+        $teachers = Teacher::with(['subjects', 'sections', 'role'])->get();
+        $roles = Role::all();
+        $grades = Grade::with('sections')->get(); // كل الصفوف المتاحة في النظام
         // 🟢 جلب المواد من قاعدة البيانات لتصبح ديناميكية
-        $subjects = subject::all();
+        $subjects = Subject::all();
         return view('admin.teachers', [
             'teachers' => $teachers,
             'roles'    => $roles,
@@ -56,7 +56,7 @@ class TeacherController extends Controller
         ]);
 
         // اطلب من لارافيل فحص الجدول بالكامل حتى المحذوفين مؤقتاً
-        $lastTeacher = teacher::withTrashed()->latest('created_at')->first();
+        $lastTeacher = Teacher::withTrashed()->latest('created_at')->first();
 
 
         if ($lastTeacher && preg_match('/TCH_(\d+)/', $lastTeacher->teacher_code, $matches)) {
@@ -66,7 +66,7 @@ class TeacherController extends Controller
         }
         $teacherCode = 'TCH_' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
         // إنشاء المعلم
-        $teacher = new teacher();
+        $teacher = new Teacher();
         $teacher->id    = $request->input('id');
         $teacher->full_name    = $request->input('full_name');
         $teacher->teacher_code = $teacherCode;
@@ -77,7 +77,7 @@ class TeacherController extends Controller
         // 4. إصلاح حفظ المواد في الجدول الوسيط (Many-to-Many)
         // نقوم بعمل حلقة تكرار لحفظ كل مادة تم اختيارها في الفورم بشكل مستقل
         foreach ($request->input('subjects') as $subjectId) {
-            $subjectTeacher = new subject_teacher();
+            $subjectTeacher = new Subject_teacher();
             $subjectTeacher->subject_id = $subjectId; // 🟢 المادة تأخذ ID المادة القادم من الفورم
             $subjectTeacher->teacher_id = $teacher->id; // 🟢 المعلم يأخذ ID المعلم الذي تم إنشاؤه للتو
             $subjectTeacher->save();
@@ -94,10 +94,10 @@ class TeacherController extends Controller
         if ($request->has('sections')) {
             foreach ($request->input('sections') as $sectionId) {
                 // جلب الـ Section لمعرفة الـ grade_id المرتبط به تلقائياً من قاعدة البيانات
-                $section = section::find($sectionId); // تأكد من مسار الموديل لديك
+                $section = Section::find($sectionId); // تأكد من مسار الموديل لديك
 
                 if ($section) {
-                    $gradeTeacher = new grade_teacher();
+                    $gradeTeacher = new Grade_teacher();
                     $gradeTeacher->teacher_id = $teacher->id;
                     $gradeTeacher->grade_id   = $section->grade_id; // جلب رقم الصف تلقائياً من الشعبة
                     $gradeTeacher->section_id = (int) $sectionId;   // 🟢 حفظ رقم الشعبة هنا
@@ -109,7 +109,7 @@ class TeacherController extends Controller
         // 2️⃣ ثانياً: حفظ الصفوف العامة (التي تم اختيارها مباشرة لأنها بدون شعب)
         if ($request->has('grades')) {
             foreach ($request->input('grades') as $gradeId) {
-                $gradeTeacher = new grade_teacher();
+                $gradeTeacher = new Grade_teacher();
                 $gradeTeacher->teacher_id = $teacher->id;
                 $gradeTeacher->grade_id   = (int) $gradeId;
                 $gradeTeacher->section_id = null; // 🟢 لا توجد شعبة لأن الصف عام
@@ -156,9 +156,9 @@ class TeacherController extends Controller
         // ملاحظة: إذا كنت تستخدم علاقات Laravel الرسمية (BelongsToMany) فالأفضل استخدام sync هكذا:
         // $teacher->subjects()->sync($request->input('subjects'));
         // ولكن بناءً على طريقتك الحالية بالـ Model اليدوي:
-        subject_teacher::where('teacher_id', $teacher->id)->delete();
+        Subject_teacher::where('teacher_id', $teacher->id)->delete();
         foreach ($request->input('subjects') as $subjectId) {
-            $subjectTeacher = new subject_teacher();
+            $subjectTeacher = new Subject_teacher();
             $subjectTeacher->subject_id = $subjectId;
             $subjectTeacher->teacher_id = $teacher->id;
             $subjectTeacher->save();
@@ -174,7 +174,7 @@ class TeacherController extends Controller
         $user->role_id  = $request->input('role_id');
         $user->save();
         // 4. تحديث الصفوف والشعب (تنظيف السجلات القديمة أولاً)
-        grade_teacher::where('teacher_id', $teacher->id)->delete();
+        Grade_teacher::where('teacher_id', $teacher->id)->delete();
 
         // 🟢 أولاً: حفظ الصفوف والشعب (الشعب التي تحتوي على section_id)
         if ($request->has('sections')) {
@@ -182,7 +182,7 @@ class TeacherController extends Controller
                 $section = section::find($sectionId);
 
                 if ($section) {
-                    $gradeTeacher = new grade_teacher();
+                    $gradeTeacher = new Grade_teacher();
                     $gradeTeacher->teacher_id = $teacher->id;
                     $gradeTeacher->grade_id   = $section->grade_id;
                     $gradeTeacher->section_id = (int) $sectionId;
@@ -194,7 +194,7 @@ class TeacherController extends Controller
         // 🟢 ثانياً: حفظ الصفوف العامة (التي تم اختيارها مباشرة لأنها بدون شعب)
         if ($request->has('grades')) {
             foreach ($request->input('grades') as $gradeId) {
-                $gradeTeacher = new grade_teacher();
+                $gradeTeacher = new Grade_teacher();
                 $gradeTeacher->teacher_id = $teacher->id;
                 $gradeTeacher->grade_id   = (int) $gradeId;
                 $gradeTeacher->section_id = null;
@@ -209,7 +209,7 @@ class TeacherController extends Controller
      */
     public function destroy($id)
     {
-        $teacher = teacher::findOrFail($id);
+        $teacher = Teacher::findOrFail($id);
         $teacher->delete();
         return redirect()->back()->with('error', 'تم حذف الموظف');
     }

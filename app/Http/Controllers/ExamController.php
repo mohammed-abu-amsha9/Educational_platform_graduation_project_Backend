@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exam;
-use App\Models\exam_question;
+use App\Models\Exam_question;
 use App\Models\QuestionBank;
-use App\Models\subject;
-use App\Models\teacher;
+use App\Models\Subject;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 
 class ExamController extends Controller
@@ -18,7 +18,7 @@ class ExamController extends Controller
     {
         $teacherId = auth()->id();
         // جلب المعلم مع المواد المربوطة به، والصفوف المربوطة به مباشرة عبر جدول الربط
-        $currentTeacher = teacher::with(['subjects', 'grades'])->find($teacherId);
+        $currentTeacher = Teacher::with(['subjects', 'grades'])->find($teacherId);
 
         // نرسل الصفوف والمواد الخاصة بهذا المعلم فقط إلى الـ Blade
         $teacherSubjects = $currentTeacher ? $currentTeacher->subjects : collect();
@@ -98,7 +98,7 @@ class ExamController extends Controller
 
         // 3. جلب اسم المادة من قاعدة البيانات بناءً على الـ ID
         // (تأكد من تغيير \App\Models\Subject إلى اسم موديل المادة الصحيح لديك في المشروع)
-        $subject = subject::find($subjectId);
+        $subject = Subject::find($subjectId);
 
         // إذا عثرنا على المادة نأخذ اسمها، وإلا نضع اسماً افتراضياً احتياطياً
         $subjectName = $subject ? $subject->name : 'مادة دراسية';
@@ -117,7 +117,7 @@ class ExamController extends Controller
 
         // 3. الحل: الدوران على المصفوفة وحفظ كل سؤال في جدول exam_questions
         foreach ($request->input('question_ids') as $questionId) {
-            $examQuestion = new exam_question(); // تأكد من كتابة اسم الموديل لحالة الأحرف الصحيحة لديك مثل ExamQuestion
+            $examQuestion = new Exam_question(); // تأكد من كتابة اسم الموديل لحالة الأحرف الصحيحة لديك مثل ExamQuestion
             $examQuestion->exam_id = $exam->id; // الـ id الذي تم توليده فورًا بعد الـ save للأعلى
             $examQuestion->question_bank_id = $questionId; // رقم السؤال القادم من البنك في هذه اللفة
             $examQuestion->save();

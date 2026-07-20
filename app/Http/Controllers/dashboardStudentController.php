@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\student;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class dashboardStudentController extends Controller
@@ -12,7 +12,7 @@ class dashboardStudentController extends Controller
      */
     public function index()
     {
-        $student = student::with('grade')->where('id', auth()->id())->first();
+        $student = Student::with('grade')->where('id', auth()->id())->first();
         return response()->view('student.control_panel',[
             'student' => $student,
         ]);
