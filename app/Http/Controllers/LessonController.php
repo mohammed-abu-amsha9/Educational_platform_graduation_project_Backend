@@ -73,7 +73,7 @@ class LessonController extends Controller
         }
 
         // 3. إنشاء كائن المحاضرة الأساسي وحفظه
-        $lesson = new Lesson();
+        $lesson = new lesson();
         $lesson->teacher_id = $teacherId;
         $lesson->subject_id = $request->input('subject_id');
         $lesson->title      = $request->input('title');
@@ -115,7 +115,7 @@ class LessonController extends Controller
      */
     public function destroy($id)
     {
-        $lesson = Lesson::findOrFail($id);
+        $lesson = lesson::findOrFail($id);
         // 3. حذف ملف الشرح أو الفيديو من الـ Storage (إذا كان مخزناً محلياً) لتوفر مساحة
         if ($lesson->file_url && Storage::disk('public')->exists($lesson->file_url)) {
             Storage::disk('public')->delete($lesson->file_url);

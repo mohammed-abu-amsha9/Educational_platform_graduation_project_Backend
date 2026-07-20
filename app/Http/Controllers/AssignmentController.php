@@ -6,6 +6,7 @@ use App\Models\Assignment;
 use App\Models\AssignmentSubmission;
 use App\Models\grade;
 use App\Models\lesson;
+use App\Models\section;
 use App\Models\subject;
 use App\Models\teacher;
 use Illuminate\Container\Attributes\Auth;
@@ -66,7 +67,7 @@ class AssignmentController extends Controller
         if ($type === 'sec') {
             $assignment->section_id = $targetId;
             // جلب الصف التابع لهذه الشعبة (تحتاج علاقة في موديل Section)
-            $assignment->grade_id = \App\Models\Section::find($targetId)->grade_id;
+            $assignment->grade_id = section::find($targetId)->grade_id;
         } else {
             $assignment->grade_id = $targetId;
             $assignment->section_id = null; // أو القيمة الافتراضية لديك

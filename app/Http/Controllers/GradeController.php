@@ -74,7 +74,7 @@ class GradeController extends Controller
      */
     public function destroy($id)
     {
-        $grade = Grade::findOrFail($id);
+        $grade = grade::findOrFail($id);
         // 🟢 خطوة إضافية: حذف جميع الشعب المرتبطة بهذا الصف أولاً
         $grade->sections()->delete(); // تأكد أن لديك علاقة باسم sections() في موديل Grade
         // حذف الصف نفسه

@@ -35,7 +35,7 @@ class AttendanceLogController extends Controller
                 $sectionId = $parts[1]; // معرف الشعبة (Section ID)
 
                 // جلب الطلاب التابعين لهذا الصف وهذه الشعبة بدقة بناءً على المعرفات الرقمية (أفضل وأسرع وأدق لمشروعك)
-                $students = Student::where('grade_id', $gradeId)
+                $students = student::where('grade_id', $gradeId)
                     ->where('section_id', $sectionId)
                     ->get();
 

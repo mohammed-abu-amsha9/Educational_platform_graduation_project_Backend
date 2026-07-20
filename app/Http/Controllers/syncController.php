@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AssignmentSubmission;
+use App\Models\Exam;
 use App\Models\student_exam;
 use App\Models\student_exam_result;
 use App\Models\StudentExamAnswer;
@@ -82,7 +83,7 @@ class syncController extends Controller
                         'submit_time' => now()->toTimeString(),
                     ]);
 
-                $exam = \App\Models\Exam::with('questions.options')->find($examId);
+                $exam = Exam::with('questions.options')->find($examId);
 
                 $studentAnswers = StudentExamAnswer::where('student_id', $studentId)
                     ->where('exam_id', $examId)

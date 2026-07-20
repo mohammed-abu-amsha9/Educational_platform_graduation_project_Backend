@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Exam;
 use App\Models\fee;
 use App\Models\grade;
-use App\Models\Student;
+use App\Models\student;
 use App\Models\subject;
-use App\Models\Teacher;
+use App\Models\teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,17 +18,17 @@ class dashboardController extends Controller
      */
     public function index()
     {
-        $totalStudents = Student::withTrashed()->count(); // إجمالي الطلاب
-        $totalStudentsActive = Student::where('account_status', 'active')->count(); // إجمالي الطلاب النشيطين
-        $activeTeachers = Teacher::count(); // إجمالي المعلمين (يمكنك تصفيتها حسب النشطين)
+        $totalStudents = student::withTrashed()->count(); // إجمالي الطلاب
+        $totalStudentsActive = student::where('account_status', 'active')->count(); // إجمالي الطلاب النشيطين
+        $activeTeachers = teacher::count(); // إجمالي المعلمين (يمكنك تصفيتها حسب النشطين)
         // نجيب إجمالي المبالغ المطلوبة بدون تكرار حسب الطالب والشهر
-        $totalRequired = Student::sum('total_paid_amount'); // مجموع الرصيد من الطلاب
+        $totalRequired = student::sum('total_paid_amount'); // مجموع الرصيد من الطلاب
         $totalPaid = fee::sum('paid_amount'); // مجموع المدفوع من الطلاب
         $totalGrade = grade::count();
         // المتبقي العام
         $totalRemaining = $totalRequired - $totalPaid;
         // عدد الطلاب الذين سددوا بالكامل
-        $totalFullyPaid = Student::whereIn('id', function ($query) {
+        $totalFullyPaid = student::whereIn('id', function ($query) {
             $query->select('student_id')
                 ->from('fees')
                 ->groupBy('student_id')
@@ -55,7 +55,7 @@ class dashboardController extends Controller
         $totalSubjects = subject::count();
 
         // جلب آخر 5 مدفوعات تمت
-        $latestFees = Fee::with('student')->latest()->take(5)->get();
+        $latestFees = fee::with('student')->latest()->take(5)->get();
         $examPublish = Exam::where('status', 'Published')->get();
         return response()->view('admin.control_panel', [
             'totalStudents' => $totalStudents,

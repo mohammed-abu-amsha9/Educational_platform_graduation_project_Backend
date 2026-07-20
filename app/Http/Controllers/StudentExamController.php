@@ -114,7 +114,7 @@ class StudentExamController extends Controller
                     'submit_time' => now()->toTimeString(), // تسجيل وقت التسليم الحالي
                 ]);
             // 2. جلب الامتحان مع الأسئلة والخيارات باستخدام Eloquent Model
-            $exam = \App\Models\Exam::with('questions.options')->find($examId);
+            $exam = Exam::with('questions.options')->find($examId);
 
             // 3. جلب كل الإجابات الفردية التي حفظناها للطالب في خطوة (1) لهذا الامتحان
             $studentAnswers = StudentExamAnswer::where('student_id', $studentId)

@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\grade;
 use App\Models\role;
-use App\Models\Student;
+use App\Models\section;
+use App\Models\student;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +19,7 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         // جلب جميع الطلاب من قاعدة البيانات
-        $students = Student::filter($request->all())->with('grade')->get();
+        $students = student::filter($request->all())->with('grade')->get();
 
         // 2. جلب جميع الصفوف لعرضها في قائمة الـ Select
         $grades = grade::with('sections')->get();
@@ -55,7 +56,7 @@ class StudentController extends Controller
 
         // 2. توليد رقم الطالب التسلسلي تلقائياً (student_code)
         // نأتي بآخر طالب تم تسجيله للحصول على الكود الخاص به
-        $lastStudent = Student::withTrashed()->latest('created_at')->first();
+        $lastStudent = student::withTrashed()->latest('created_at')->first();
 
         // preg_match => تبحث عن نمبط معين داخل النص
         if ($lastStudent && preg_match('/STU_(\d+)/', $lastStudent->student_code, $matches)) {
@@ -81,7 +82,7 @@ class StudentController extends Controller
         }
         DB::transaction(function () use ($request, $studentCode, $studentRole) {
             // 3. إنشاء طالب جديد وحفظ البيانات
-            $student = new Student();
+            $student = new student();
             $student->id = $request->input('id');
             $student->full_name = $request->input('full_name');
             $student->student_code = $studentCode;
@@ -113,7 +114,7 @@ class StudentController extends Controller
         ]);
 
         // 💡 خطوة أمنية إضافية: التأكد من أن الشعبة المختارة تنتمي بالفعل للصف المختار
-        $isSectionBelongsToGrade = \App\Models\Section::where('id', $request->section_id)
+        $isSectionBelongsToGrade = section::where('id', $request->section_id)
             ->where('grade_id', $request->grade_id)
             ->exists();
 
@@ -186,7 +187,7 @@ class StudentController extends Controller
     public function destroy($id)
     {
         // العثور على الطالب وحذفه
-        $student = Student::findOrFail($id);
+        $student = student::findOrFail($id);
         $student->account_status = 'no active';
         $student->save();
         $student->delete();

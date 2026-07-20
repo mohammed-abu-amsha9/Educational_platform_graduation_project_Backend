@@ -9,7 +9,7 @@ use App\Models\role;
 use App\Models\section;
 use App\Models\subject;
 use App\Models\subject_teacher;
-use App\Models\Teacher;
+use App\Models\teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -22,7 +22,7 @@ class TeacherController extends Controller
     public function index()
     {
         // 🟢 قمنا بإضافة 'grades' هنا لجلب صفوف المعلم من الجدول الوسيط تلقائياً
-        $teachers = Teacher::with(['subjects', 'sections', 'role'])->get();
+        $teachers = teacher::with(['subjects', 'sections', 'role'])->get();
         $roles = role::all();
         $grades = grade::with('sections')->get(); // كل الصفوف المتاحة في النظام
         // 🟢 جلب المواد من قاعدة البيانات لتصبح ديناميكية
@@ -56,7 +56,7 @@ class TeacherController extends Controller
         ]);
 
         // اطلب من لارافيل فحص الجدول بالكامل حتى المحذوفين مؤقتاً
-        $lastTeacher = Teacher::withTrashed()->latest('created_at')->first();
+        $lastTeacher = teacher::withTrashed()->latest('created_at')->first();
 
 
         if ($lastTeacher && preg_match('/TCH_(\d+)/', $lastTeacher->teacher_code, $matches)) {
@@ -66,7 +66,7 @@ class TeacherController extends Controller
         }
         $teacherCode = 'TCH_' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
         // إنشاء المعلم
-        $teacher = new Teacher();
+        $teacher = new teacher();
         $teacher->id    = $request->input('id');
         $teacher->full_name    = $request->input('full_name');
         $teacher->teacher_code = $teacherCode;
@@ -94,7 +94,7 @@ class TeacherController extends Controller
         if ($request->has('sections')) {
             foreach ($request->input('sections') as $sectionId) {
                 // جلب الـ Section لمعرفة الـ grade_id المرتبط به تلقائياً من قاعدة البيانات
-                $section = \App\Models\Section::find($sectionId); // تأكد من مسار الموديل لديك
+                $section = section::find($sectionId); // تأكد من مسار الموديل لديك
 
                 if ($section) {
                     $gradeTeacher = new grade_teacher();
@@ -209,7 +209,7 @@ class TeacherController extends Controller
      */
     public function destroy($id)
     {
-        $teacher = Teacher::findOrFail($id);
+        $teacher = teacher::findOrFail($id);
         $teacher->delete();
         return redirect()->back()->with('error', 'تم حذف الموظف');
     }
