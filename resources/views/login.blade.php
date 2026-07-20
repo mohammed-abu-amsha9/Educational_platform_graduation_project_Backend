@@ -168,12 +168,12 @@
                 </p>
             </div>
 
-            <form method="POST" action="{{ route('login') }}" class="space-y-5">
+            <form method="POST" action="{{ route('auth.login') }}" class="space-y-5">
                 @csrf
                 <div>
                     <label class="block text-md font-bold text-gray-700 dark:text-zinc-300 mb-2">اسم المستخدم</label>
                     <div class="relative">
-                        <input type="text" placeholder="أدخل اسم المستخدم" name="id"
+                        <input type="text"  name="id"
                             class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-600/40 text-gray-400 dark:text-zinc-400 rounded-xl py-3 pr-4 pl-10 text-right focus:outline-none focus:ring-2 focus:ring-emerald-600 dark:focus:ring-teal-500 focus:border-transparent text-sm transition-colors" />
                     </div>
                 </div>
@@ -181,7 +181,7 @@
                 <div>
                     <label class="block text-md font-bold text-gray-700 dark:text-zinc-300 mb-2">كلمة المرور</label>
                     <div class="relative">
-                        <input id="password" type="password" placeholder="........." name="password"
+                        <input id="password" type="password" name="password"
                             class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-600/40 text-slate-800 dark:text-zinc-100 rounded-xl py-3 pr-4 pl-10 text-right focus:outline-none focus:ring-2 focus:ring-emerald-600 dark:focus:ring-teal-500 focus:border-transparent text-sm transition-colors" />
                     </div>
                 </div>

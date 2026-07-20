@@ -99,10 +99,8 @@ class StudentController extends Controller
             $user->password = Hash::make($request->input('id'));
             $user->role_id = $studentRole->id;
             $user->save();
-            // حقل account_status سيأخذ القيمة الافتراضية 'active' تلقائياً من الـ migration
-            // 4. إعادة التوجيه مع رسالة نجاح
-            return redirect()->back()->with('success', 'تم إضافة بيانات الطالب وتثبيته بنجاح!');
         });
+        return redirect()->back()->with('success', 'تم إضافة بيانات الطالب وتثبيته بنجاح!');
     }
 
     // تعديل الصف والشعبة

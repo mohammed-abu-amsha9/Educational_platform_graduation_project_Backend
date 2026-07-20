@@ -22,12 +22,12 @@
 
             <div class="flex bg-gray-100 dark:bg-slate-950 p-1 rounded-2xl w-full sm:w-auto">
                 <a href="{{ route('assignments.index') }}" id="mainTabCreate"
-                    class="text-xs font-bold px-4 py-2 rounded-xl cursor-pointer bg-white dark:bg-slate-900 text-teal-600 shadow-sm transition-all">
+                    class="text-xs font-bold px-4 py-2 rounded-xl cursor-pointer bg-white dark:bg-slate-900 text-teal-600 shadow-sm ">
                     <i class="fa-solid fa-plus-circle ml-1"></i> إنشاء واجب جديد
                 </a>
 
                 <a href="{{ route('gradingassignments') }}"
-                    class="text-xs font-bold px-4 py-2 rounded-xl cursor-pointer text-gray-500 transition-all">
+                    class="text-xs font-bold px-4 py-2 rounded-xl cursor-pointer text-gray-500 ">
                     <i class="fa-solid fa-graduation-cap ml-1"></i> تصحيح ومتابعة
                     الواجبات
                 </a>
@@ -119,7 +119,7 @@
 
                 <div class="flex justify-end">
                     <button type="submit"
-                        class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-3 rounded-xl transition shadow-lg shadow-teal-600/10 cursor-pointer">
+                        class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-3 rounded-xl  shadow-lg shadow-teal-600/10 cursor-pointer">
                         نشر وتكليف الطلاب فوراً
                     </button>
                 </div>

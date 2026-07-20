@@ -33,17 +33,23 @@
             </div>
 
             <nav class="hidden md:flex items-center gap-1 bg-slate-100 dark:bg-slate-700 p-1.5 rounded-xl">
-                <a href="{{ route('dashboard.index') }}"
-                    class="px-5 py-2 rounded-lg text-sm font-semibold text-gray-600  hover:text-teal-700 dark:text-zinc-100">لوحة
-                    الإدارة</a>
-                <a href="{{ route('dashboardTeacher.index') }}"
-                    class="px-5 py-2 rounded-lg text-sm font-semibold bg-teal-700 text-white shadow-sm dark:text-zinc-100">بوابة
-                    المعلم</a>
-                <a href="{{ route('dashboardStudent.index') }}"
-                    class="px-5 py-2 rounded-lg text-sm font-semibold text-gray-600  hover:text-teal-700 dark:text-zinc-100">بوابة
-                    الطالب</a>
+                @php
+                    $role = auth()->user()->role->role_name;
+                @endphp
+                @if ($role == 'ادمن')
+                    <a href="{{ route('dashboard.index') }}"
+                        class="px-5 py-2 rounded-lg text-sm font-semibold text-gray-600  hover:text-teal-700 dark:text-zinc-100">لوحة
+                        الإدارة</a>
+                @elseif ($role == 'معلم')
+                    <a href="{{ route('dashboardTeacher.index') }}"
+                        class="px-5 py-2 rounded-lg text-sm font-semibold bg-teal-700 text-white shadow-sm dark:text-zinc-100">بوابة
+                        المعلم</a>
+                @elseif ($role == 'طالب')
+                    <a href="{{ route('dashboardStudent.index') }}"
+                        class="px-5 py-2 rounded-lg text-sm font-semibold text-gray-600  hover:text-teal-700 dark:text-zinc-100">بوابة
+                        الطالب</a>
+                @endif
             </nav>
-
             <div class="hidden md:flex items-center gap-4">
 
                 <button
@@ -94,16 +100,22 @@
 
         <div id="mobile-menu"
             class="hidden md:hidden border-t border-gray-100 bg-slate-100 dark:bg-slate-800 px-4 pt-2 pb-4 space-y-2 shadow-inner">
-            <a href="{{ route('dashboard.index') }}"
-                class="block px-4 py-2.5 rounded-xl text-sm font-bold text-gray-600  hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">لوحة
-                الإدارة</a>
-            <a href="{{ route('dashboardTeacher.index') }}"
-                class="block px-4 py-2.5 rounded-xl text-sm font-semibold bg-teal-700 text-white shadow-sm dark:text-zinc-100">بوابة
-                المعلم</a>
-            <a href="{{ route('dashboardStudent.index') }}"
-                class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-600  hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">بوابة
-                الطالب</a>
-
+            @php
+                $role = auth()->user()->role->role_name;
+            @endphp
+            @if ($role == 'ادمن')
+                <a href="{{ route('dashboard.index') }}"
+                    class="block px-4 py-2.5 rounded-xl text-sm font-bold text-gray-600  hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">لوحة
+                    الإدارة</a>
+            @elseif ($role == 'معلم')
+                <a href="{{ route('dashboardTeacher.index') }}"
+                    class="block px-4 py-2.5 rounded-xl text-sm font-semibold bg-teal-700 text-white shadow-sm dark:text-zinc-100">بوابة
+                    المعلم</a>
+            @elseif ($role == 'طالب')
+                <a href="{{ route('dashboardStudent.index') }}"
+                    class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-600  hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">بوابة
+                    الطالب</a>
+            @endif
             <div class="border-t border-gray-200 dark:border-slate-700 my-2 pt-2">
                 <button id="mobile-user-menu-btn"
                     class="w-full flex justify-between items-center px-4 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-700  cursor-pointer focus:outline-none">

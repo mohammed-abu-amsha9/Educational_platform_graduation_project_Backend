@@ -16,11 +16,11 @@
                         <option value="tf" {{ request('question_type') == 'tf' ? 'selected' : '' }}>صح أو خطأ</option>
                     </select>
                 </div>
-                <div class="w-full sm:w-64">
-                    <label class="block text-[10px] font-bold text-gray-700 dark:text-slate-400 mb-1">
+                <div class="w-full sm:w-64 ">
+                    <label class="block text-[10px] font-bold text-gray-700 dark:text-slate-400  mb-1">
                         الصف الدراسي والمادة
                     </label>
-                    <select name="class_section" class="w-full border border-gray-200 rounded-xl p-2 text-sm">
+                    <select name="class_section" class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100   rounded-xl p-2 text-sm">
                         <option value="">-- كل الصفوف والمواد --</option>
 
                         {{-- الدوران على صفوف المعلم المحددة له فقط --}}

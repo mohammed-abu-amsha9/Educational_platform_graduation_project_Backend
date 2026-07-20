@@ -28,7 +28,7 @@
                     @endphp
 
                     <div wire:click="selectPerson({{ $user->id }})"
-                        class="p-4 flex items-start gap-3 cursor-pointer transition-all border-r-4
+                        class="p-4 flex items-start gap-3 cursor-pointer  border-r-4
                         {{ $isActive
                             ? 'bg-teal-50/40 dark:bg-slate-900/40 border-teal-600'
                             : 'bg-white dark:bg-slate-900 border-transparent hover:bg-gray-50 dark:hover:bg-slate-800/30' }}">

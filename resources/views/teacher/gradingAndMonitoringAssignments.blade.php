@@ -27,7 +27,7 @@
                 </a>
 
                 <a href="{{ route('gradingassignments') }}"
-                    class="text-xs font-bold px-4 py-2 rounded-xl cursor-pointer  bg-white dark:bg-slate-900 text-teal-600 shadow-sm transition-all">
+                    class="text-xs font-bold px-4 py-2 rounded-xl cursor-pointer  bg-white dark:bg-slate-900 text-teal-600 shadow-sm ">
                     <i class="fa-solid fa-graduation-cap ml-1"></i> تصحيح ومتابعة
                     الواجبات
                 </a>
@@ -55,7 +55,7 @@
                         </thead>
                         <tbody class="divide-y divide-gray-100 dark:divide-slate-800/60">
                             @foreach ($assignments as $assignment)
-                                <tr class="hover:bg-gray-50/50 dark:hover:bg-slate-950/30 transition-colors">
+                                <tr class="hover:bg-gray-50/50 dark:hover:bg-slate-950/30 ">
                                     <td class="py-4 pl-4 font-medium text-slate-800 dark:text-zinc-200">
                                         {{ $assignment->title }}
                                     </td>
@@ -68,7 +68,7 @@
                                     <td class="py-4 pr-4 text-left">
                                         <!-- تمرير ID الواجب للراوت -->
                                         <a href="{{ route('studentsListView', $assignment->id) }}"
-                                            class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl font-bold cursor-pointer transition-colors shadow-sm">
+                                            class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl font-bold cursor-pointer  shadow-sm">
                                             عرض تسليمات الطلاب
                                             <i class="fa-solid fa-arrow-left mr-1 text-[10px]"></i>
                                         </a>

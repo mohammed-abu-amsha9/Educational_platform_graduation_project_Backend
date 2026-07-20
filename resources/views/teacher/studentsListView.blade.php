@@ -52,7 +52,7 @@
                                     </td>
                                     <td class="py-4 pr-4 text-left">
                                         <a href="{{ route('reviewAndCorrection', $submission->id) }}"
-                                            class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-zinc-200 hover:bg-teal-600 hover:text-white px-3 py-1.5 rounded-lg font-bold cursor-pointer transition-all">
+                                            class="bg-teal-600 text-white  px-3 py-1.5 rounded-lg font-bold cursor-pointer">
                                             فحص وتصحيح
                                         </a>
                                     </td>

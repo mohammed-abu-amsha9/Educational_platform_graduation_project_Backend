@@ -99,9 +99,9 @@
                             <div>
                                 <label
                                     class="block text-[11px] font-black text-slate-700 dark:text-zinc-300 mb-1.5 uppercase">الدور
-                                    الوظيفي (الصلاحيات)</label>
+                                    الوظيفي </label>
                                 <select name="role_id" required
-                                    class="w-full border border-gray-200 dark:border-slate-800 rounded-xl p-3 text-xs bg-slate-50/50 dark:bg-slate-800/30 text-slate-800 dark:text-zinc-300 focus:outline-none cursor-pointer focus:ring-2 focus:ring-teal-600">
+                                    class="w-full border border-gray-200 rounded-xl p-3 text-xs dark:border-slate-800 bg-white dark:bg-slate-800 text-slate-800 dark:text-zinc-300  focus:outline-none cursor-pointer focus:ring-2 focus:ring-teal-600">
                                     <option value="" disabled selected>اختر الدور المرتبط بالمعلم...</option>
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->id }}">{{ $role->role_name }}</option>

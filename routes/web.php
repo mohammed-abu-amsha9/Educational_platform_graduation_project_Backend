@@ -32,18 +32,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest'])->group(function () {
-    Route::get('/', [authcontroller::class, 'showLoginForm']);
-    Route::post('/login', [authcontroller::class, 'login'])->name('login')->middleware('throttle:login');
+    Route::get('/', [authcontroller::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [authcontroller::class, 'login'])->name('auth.login')->middleware('throttle:login');
 });
-Route::prefix('student')->middleware(['auth', 'role:1'])->group(function () {
+
+Route::prefix('student')->middleware(['auth', 'role:3'])->group(function () {
     Route::resource('dashboardStudent', dashboardStudentController::class);
     Route::resource('studentExams', StudentExamController::class);
     Route::resource('materialContents', materialContentController::class);
     Route::resource('syncs', syncController::class);
-});
-Route::prefix('student')->middleware(['auth', 'role:1,2'])->group(function () {
-    Route::resource('chats', ChatRoomController::class);
-    Route::resource('assignmentSubmissions', AssignmentSubmissionController::class);
 });
 
 
@@ -62,8 +59,12 @@ Route::prefix('teacher')->middleware(['auth', 'role:2'])->group(function () {
     Route::resource('studentExamResults', StudentExamResultController::class);
 });
 
+Route::prefix('student')->middleware(['auth', 'role:2,3'])->group(function () {
+    Route::resource('chats', ChatRoomController::class);
+    Route::resource('assignmentSubmissions', AssignmentSubmissionController::class);
+});
 
-Route::prefix('admin')->middleware(['auth', 'role:3'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
     Route::resource('dashboard', dashboardController::class);
     Route::resource('grades', GradeController::class);
     Route::resource('sections', SectionController::class);

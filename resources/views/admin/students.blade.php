@@ -184,7 +184,6 @@
                         @forelse ($students as $student)
                             <tr onclick="openStudentModal({{ json_encode($student) }})"
                                 class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 cursor-pointer transition-colors">
-
                                 <td class="p-4 flex items-center gap-3">
                                     <div
                                         class="w-9 h-9 rounded-full bg-teal-50 dark:bg-teal-950/40 flex items-center justify-center text-teal-600 dark:text-teal-400 font-bold">
@@ -197,15 +196,12 @@
                                             {{ $student->id }}</p>
                                     </div>
                                 </td>
-
                                 <td class="p-4 font-mono text-xs text-gray-500 dark:text-zinc-400">
                                     {{ $student->student_code }}
                                 </td>
-
                                 <td class="p-4 text-gray-600 dark:text-zinc-300">
                                     {{ $student->grade->name }}
                                 </td>
-
                                 <td class="p-4">
                                     <div class="flex items-center gap-2">
                                         <span
@@ -216,7 +212,6 @@
                                         </div>
                                     </div>
                                 </td>
-
                                 <td class="p-4">
                                     @if ($student->financial_status == 'paid')
                                         <span
@@ -232,11 +227,9 @@
                                             مدفوع</span>
                                     @endif
                                 </td>
-
                                 <td class="p-4 font-bold text-slate-700 dark:text-zinc-300">
                                     ₪ {{ $student->remaining_fees }}
                                 </td>
-
                                 <td class="p-4">
                                     <span
                                         class="px-2.5 py-1 text-xs font-bold rounded-lg bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400">
@@ -253,7 +246,6 @@
                             </tr>
                         @endforelse
                     </tbody>
-
                 </table>
             </div>
         </div>

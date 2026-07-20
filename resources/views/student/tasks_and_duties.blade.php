@@ -66,15 +66,15 @@
                 </div>
 
                 <!-- الجانب الأيسر: سجل التسليمات (التصحيح) -->
-                <div class="space-y-4">
+                <div class="space-y-4 w-full">
                     @foreach ($mySubmissions as $submission)
-                        <div class="p-4 border border-emerald-200 rounded-2xl flex justify-between items-center">
-                            <div>
-                                <h4 class="font-bold text-slate-800">واجب: {{ $submission->assignment->title }}</h4>
+                        <div class="p-4 border border-emerald-200 rounded-2xl flex justify-between items-center w-full">
+                            <div class="flex-1">
+                                <h4 class="font-bold text-slate-800 dark:text-zinc-100">واجب: {{ $submission->assignment->title }}</h4>
                             </div>
-                                <span class="text-amber-600 font-bold bg-amber-50 px-3 py-1 rounded-full text-xs">
-                                    تم التسليم
-                                </span>
+                            <span class="text-amber-600 font-bold bg-amber-50 px-3 py-1 rounded-full text-xs">
+                                تم التسليم
+                            </span>
                         </div>
                     @endforeach
                 </div>

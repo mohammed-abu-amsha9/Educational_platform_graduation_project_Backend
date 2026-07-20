@@ -72,7 +72,7 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1.5">طريقة الدفع</label>
                         <select name="payment_method"
-                            class="w-full border border-gray-200 dark:border-slate-800 focus:ring-2 focus:ring-teal-600 bg-white dark:bg-slate-800/50 rounded-xl py-2.5 px-4 text-xs outline-none pointer dark:text-zinc-200">
+                            class="w-full border border-gray-200 dark:border-slate-800 focus:ring-2 focus:ring-teal-600 bg-white dark:bg-slate-800 text-slate-800 dark:text-zinc-300  rounded-xl py-2.5 px-4 text-xs outline-none pointer">
                             <option value="نقداً">نقداً 💵</option>
                             <option value="تحويل بنكي">تحويل بنكي 🏦</option>
                             <option value="محفظة إلكترونية">محفظة إلكترونية 📱</option>

@@ -14,10 +14,26 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        // php artisan db:seed --class=UserSeeder
-        DB::table('roles')->insert([
-            'id' => 1,
-            'role_name' => 'ادمن',
-        ]);
+        // php artisan db:seed --class=RoleSeeder
+        DB::table('roles')->insert(
+            [
+                'id' => 1,
+                'role_name' => 'ادمن',
+            ]
+        );
+        DB::table('roles')->insert(
+           [
+                'id' => 2,
+                'role_name' => 'معلم',
+            ]
+        );
+        DB::table('roles')->insert(
+            [
+                'id' => 3,
+                'role_name' => 'طالب',
+            ]
+        );
     }
 }
+
+

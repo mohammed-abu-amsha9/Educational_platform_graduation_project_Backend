@@ -120,7 +120,7 @@
 
                     // حفظ البيانات
                     window.saveActionLocally('submit_quiz', quizData);
-                    showToast("تم الحفظ محلياً.", false);
+                    showToast("تم حفظ الاختبار محلياً، سيتم رفعه عند عودة الاتصال.", false);
 
                     if (this.id === "finalSubmitBtn") {
                         setTimeout(() => {

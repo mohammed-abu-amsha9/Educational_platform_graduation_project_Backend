@@ -80,7 +80,7 @@
     <form method="POST" action="{{route('exams.store')}}" class="my-6 mx-auto space-y-6" dir="rtl" id="quizGeneratorForm">
         @csrf
         <div id="setupSection"
-            class="bg-white dark:bg-slate-900 border border-gray-200 hover:border-emerald-400 dark:border-slate-800 p-6 rounded-3xl shadow-sm space-y-6 transition-all">
+            class="bg-white dark:bg-slate-900 border border-gray-200 hover:border-emerald-400 dark:border-slate-800 p-6 rounded-3xl shadow-sm space-y-6 ">
             <div class="flex items-center gap-2 border-b border-gray-100 dark:border-slate-800 pb-4">
                 <div
                     class="w-8 h-8 rounded-xl bg-teal-50 dark:bg-teal-950/40 flex items-center justify-center text-teal-600">
@@ -101,7 +101,7 @@
 
                 <div class="lg:col-span-2">
                     <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">المادة والصف الدراسي</label>
-                    <select name="class_section" class="w-full border border-gray-200 rounded-xl p-2 text-sm">
+                    <select name="class_section" class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl p-2 text-sm">
                         <option value="">-- كل الصفوف والمواد --</option>
 
                         {{-- الدوران على صفوف المعلم المحددة له فقط --}}
@@ -174,7 +174,7 @@
 
                 <div class="lg:col-span-2">
                     <button id="generateQuizBtn" type="button"
-                        class="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition shadow-lg shadow-teal-600/10 cursor-pointer h-[38px]">
+                        class="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2  shadow-lg shadow-teal-600/10 cursor-pointer h-[38px]">
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
                         <span class="whitespace-nowrap">توليد وبدء المعاينة</span>
                     </button>
@@ -184,7 +184,7 @@
         </div>
 
         <div id="quizPreviewSection"
-            class="bg-white dark:bg-slate-900 border border-gray-200 hover:border-emerald-400 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-6 transition-all hidden">
+            class="bg-white dark:bg-slate-900 border border-gray-200 hover:border-emerald-400 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-6  hidden">
             <div
                 class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 dark:border-slate-800 pb-4">
                 <div>
@@ -198,12 +198,12 @@
 
                 <div class="flex items-center gap-2">
                     <button id="printQuizBtn" type="button"
-                        class="bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-zinc-300 font-bold text-xs px-4 py-2.5 rounded-xl transition cursor-pointer flex items-center gap-1">
+                        class="bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-zinc-300 font-bold text-xs px-4 py-2.5 rounded-xl  cursor-pointer flex items-center gap-1">
                         <i class="fa-solid fa-print text-teal-600"></i>
                         <span>طباعة الاختبار للطلاب</span>
                     </button>
                     <button type="submit"
-                        class="bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition shadow-lg shadow-teal-600/10 cursor-pointer flex items-center gap-1">
+                        class="bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs px-5 py-2.5 rounded-xl  shadow-lg shadow-teal-600/10 cursor-pointer flex items-center gap-1">
                         <i class="fa-solid fa-floppy-disk"></i> اعتماد ونشر للطلاب
                     </button>
                 </div>

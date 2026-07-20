@@ -3,7 +3,7 @@
 @section('content')
     <div class="my-6 mx-auto space-y-6" dir="rtl">
         <div id="setupSection"
-            class="bg-white dark:bg-slate-900 border border-gray-200 hover:border-emerald-400 dark:border-slate-800 p-6 rounded-3xl shadow-sm space-y-6 transition-all">
+            class="bg-white dark:bg-slate-900 border border-gray-200 hover:border-emerald-400 dark:border-slate-800 p-6 rounded-3xl shadow-sm space-y-6 ">
             <div class="flex items-center gap-2 border-b border-gray-100 dark:border-slate-800 pb-4">
                 <div
                     class="w-8 h-8 rounded-xl bg-teal-50 dark:bg-teal-950/40 flex items-center justify-center text-teal-600">
@@ -21,18 +21,18 @@
 
             </div>
             <button onclick="printSection('printable-score-sheet')"
-                class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-xl text-xs flex justify-start items-center gap-2">
+                class="bg-teal-700 hover:bg-teal-800 text-white font-bold py-2 px-4 rounded-xl text-xs flex justify-start items-center gap-2">
                 <i class="fa-solid fa-print"></i>
                 طباعة الكشف فقط
             </button>
             <!-- 1. نموذج الفلتر المعتمد على لارافيل بالكامل (GET) -->
             <form action="{{ url()->current() }}" method="GET"
-                class="bg-white border p-6 rounded-3xl shadow-sm space-y-4">
+                class="bg-white dark:bg-slate-900  border border-gray-200 hover:border-emerald-400 dark:border-slate-800 p-6 rounded-3xl shadow-sm space-y-4">
                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end text-sm">
 
                     <div class="sm:col-span-3">
-                        <label class="block font-bold text-gray-700 mb-1">المادة والصف الدراسي</label>
-                        <select name="section_id" class="w-full border rounded-xl p-2.5 text-sm">
+                        <label class="block font-bold text-slate-800 dark:text-zinc-100 mb-1">المادة والصف الدراسي</label>
+                        <select name="section_id" class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl p-2.5 text-sm">
                             <option value="">-- اختر الصف والشعبة --</option>
 
                             @foreach ($currentTeacher->grades->unique('id') as $grade)
@@ -60,7 +60,7 @@
 
                     <div>
                         <button type="submit"
-                            class="w-full bg-slate-800 text-white font-bold py-2.5 px-4 rounded-xl text-xs">
+                            class="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-3.5 px-5 rounded-xl text-sm">
                             جلب كشف الطلاب
                         </button>
                     </div>
@@ -69,19 +69,19 @@
             <!-- 2. شرط لارافيل: إظهار الجدول فقط بعد اختيار الشعبة بنجاح -->
             @if ($selectedSection)
                 <div id="printable-score-sheet"
-                    class="bg-white border border-gray-200 rounded-3xl shadow-sm overflow-hidden transition-all">
+                    class="bg-white dark:bg-slate-900 border border-gray-200 hover:border-emerald-400 dark:border-slate-800 rounded-3xl shadow-sm overflow-hidden ">
                     <div class="p-4 border-b border-gray-100 flex items-center justify-between">
                         <div>
-                            <h3 class="text-xs font-black text-slate-800">كشف أسماء الطلاب المسجلين في الشعبة</h3>
+                            <h3 class="text-xs font-black text-slate-800 dark:text-zinc-100">كشف أسماء الطلاب المسجلين في الشعبة</h3>
                             <p class="text-[10px] text-teal-600 font-bold mt-0.5">يمكنك الآن رصد الدرجات وحفظ الكشف بالكامل
                             </p>
                         </div>
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="w-full text-right text-xs border-collapse">
+                        <table class="w-full text-right border-collapse text-xs">
                             <thead>
-                                <tr class="bg-gray-50 text-gray-700 font-bold border-b border-gray-100">
+                                <tr class=" border-b border-gray-100 dark:border-slate-800 text-gray-700 dark:text-gray-400 font-bold">
                                     <th class="py-3.5 px-6">رقم القيد</th>
                                     <th class="py-3.5 px-4">اسم الطالب</th>
                                     <th class="py-3.5 px-4 text-center">الدرجة المستحقة</th>
@@ -94,9 +94,9 @@
                                         $score = $exam ? $exam->score_obtained : null;
                                     @endphp
 
-                                    <tr class="hover:bg-gray-50/40 transition-colors">
+                                    <tr class="text-slate-800 dark:text-zinc-300">
                                         <td class="py-4 px-6 font-bold text-gray-400">#{{ $student->id }}</td>
-                                        <td class="py-4 px-4 text-slate-900 font-bold">{{ $student->full_name }}</td>
+                                        <td class="py-4 px-4 text-slate-800 dark:text-zinc-300 font-bold">{{ $student->full_name }}</td>
                                         <td class="py-4 px-4 text-center">
                                             @if ($exam)
                                                 @if ($exam->is_absent)

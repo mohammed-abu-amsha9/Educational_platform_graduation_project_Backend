@@ -30,9 +30,9 @@ class authcontroller extends Controller
             $user = Auth::user();
 
             return match ((int)$user->role_id) {
-                1 => redirect()->route('dashboardStudent.index'), // الطالب[cite: 1]
-                2 => redirect()->route('dashboardTeacher.index'), // المعلم[cite: 1]
-                3 => redirect()->route('dashboard.index'),   // الأدمن[cite: 1]
+                1 => redirect()->route('dashboard.index'), // الأدمن[cite: 1]
+                2 => redirect()->route('dashboardTeacher.index'), // المعلم[cite: 2]
+                3 => redirect()->route('dashboardStudent.index'),   // الطالب [cite: 3]
                 default => redirect('/'),
             };
         }
