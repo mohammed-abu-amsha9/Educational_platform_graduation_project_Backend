@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Exam;
 use App\Models\fee;
-use App\Models\Grade;
+use App\Models\grade;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
@@ -23,7 +23,7 @@ class dashboardController extends Controller
         // نجيب إجمالي المبالغ المطلوبة بدون تكرار حسب الطالب والشهر
         $totalRequired = Student::sum('total_paid_amount'); // مجموع الرصيد من الطلاب
         $totalPaid = fee::sum('paid_amount'); // مجموع المدفوع من الطلاب
-        $totalGrade = Grade::count();
+        $totalGrade = grade::count();
         // المتبقي العام
         $totalRemaining = $totalRequired - $totalPaid;
         // عدد الطلاب الذين سددوا بالكامل
@@ -35,7 +35,7 @@ class dashboardController extends Controller
         })->count();
 
         // جلب الصفوف مع عدد طلابها
-        $grades = Grade::withCount('students')->get()->map(function ($classroom) {
+        $grades = grade::withCount('students')->get()->map(function ($classroom) {
             // السعة القصوى المحددة في الداتابيز، أو افتراضياً 20 لو مش موجود العمود
             $maxCapacity = $classroom->max_capacity ?? 40;
 
