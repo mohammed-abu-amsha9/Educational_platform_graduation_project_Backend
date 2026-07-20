@@ -6,7 +6,7 @@ use App\Models\Exam;
 use App\Models\fee;
 use App\Models\grade;
 use App\Models\Student;
-use App\Models\Subject;
+use App\Models\subject;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 
@@ -51,7 +51,7 @@ class dashboardController extends Controller
             return $classroom;
         });
 
-        $totalSubjects = Subject::count();
+        $totalSubjects = subject::count();
 
         // جلب آخر 5 مدفوعات تمت
         $latestFees = fee::with('student')->latest()->take(5)->get();
