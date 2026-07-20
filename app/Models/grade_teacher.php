@@ -16,12 +16,12 @@ class grade_teacher extends Model
     // العلاقة مع الصف (Grade)
     public function grade()
     {
-        return $this->belongsTo(Grade::class, 'grade_id');
+        return $this->belongsTo(grade::class, 'grade_id');
     }
 
     // العلاقة مع الشعبة (Section)
     public function section()
     {
-        return $this->belongsTo(Section::class, 'section_id');
+        return $this->belongsTo(section::class, 'section_id');
     }
 }

@@ -15,7 +15,7 @@ class grade extends Model
      */
     public function sections()
     {
-        return $this->hasMany(Section::class, 'grade_id');
+        return $this->hasMany(section::class, 'grade_id');
     }
 
     /**
@@ -23,7 +23,7 @@ class grade extends Model
      */
     public function subjects()
     {
-        return $this->hasMany(Subject::class, 'grade_id');
+        return $this->hasMany(subject::class, 'grade_id');
     }
 
     /**
@@ -31,7 +31,7 @@ class grade extends Model
      */
     public function students()
     {
-        return $this->hasMany(Student::class, 'grade_id');
+        return $this->hasMany(student::class, 'grade_id');
     }
 
     /**
@@ -39,5 +39,5 @@ class grade extends Model
      */
     public function teachers()
     {
-        return $this->belongsToMany(Teacher::class, 'grade_teachers', 'grade_id', 'teacher_id');    }
+        return $this->belongsToMany(teacher::class, 'grade_teachers', 'grade_id', 'teacher_id');    }
 }

@@ -19,7 +19,7 @@ class student_exam_result extends Model
 
     public function student()
     {
-        return $this->belongsTo(Student::class, 'student_id');
+        return $this->belongsTo(student::class, 'student_id');
     }
     public function exam()
     {

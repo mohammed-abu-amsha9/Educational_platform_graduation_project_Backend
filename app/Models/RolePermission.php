@@ -14,6 +14,6 @@ class RolePermission extends Model
     // واحد لمتعدد (One-to-Many). الدور الواحد يمتلكه العديد من المعلمين
     public function teachers()
     {
-        return $this->hasMany(Teacher::class, 'role_id');
+        return $this->hasMany(teacher::class, 'role_id');
     }
 }

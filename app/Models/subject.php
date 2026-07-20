@@ -13,18 +13,18 @@ class subject extends Model
     // العلاقة: المادة تنتمي إلى صف دراسي محدد
     public function grade()
     {
-        return $this->belongsTo(Grade::class, 'grade_id');
+        return $this->belongsTo(grade::class, 'grade_id');
     }
 
     // العلاقة: المادة يدرسها العديد من المعلمين
     public function teachers()
     {
-        return $this->belongsToMany(Teacher::class, 'subject_teachers', 'subject_id', 'teacher_id');
+        return $this->belongsToMany(teacher::class, 'subject_teachers', 'subject_id', 'teacher_id');
     }
 
     // المادة الواحدة تحتوي على عدة دروس
     public function lessons()
     {
-        return $this->hasMany(Lesson::class, 'subject_id');
+        return $this->hasMany(lesson::class, 'subject_id');
     }
 }

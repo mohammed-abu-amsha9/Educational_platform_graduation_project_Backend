@@ -15,10 +15,10 @@ class chat_room extends Model
     }
     public function student()
     {
-        return $this->belongsTo(Student::class); // أو User حسب جدولك
+        return $this->belongsTo(student::class); // أو User حسب جدولك
     }
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class);
+        return $this->belongsTo(teacher::class);
     }
 }

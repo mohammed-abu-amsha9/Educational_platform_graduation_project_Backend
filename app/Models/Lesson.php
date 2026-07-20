@@ -15,12 +15,12 @@ class lesson extends Model
      */
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class, 'teacher_id');
+        return $this->belongsTo(teacher::class, 'teacher_id');
     }
 
     // الدرس ينتمي إلى مادة
     public function subject()
     {
-        return $this->belongsTo(Subject::class, 'subject_id');
+        return $this->belongsTo(subject::class, 'subject_id');
     }
 }

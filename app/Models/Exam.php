@@ -20,13 +20,13 @@ class Exam extends Model
     /** المعلم منشئ الامتحان */
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class, 'teacher_id');
+        return $this->belongsTo(teacher::class, 'teacher_id');
     }
 
     /** الطلاب الذين دخلوا هذا الامتحان وسجلات دخولهم */
     public function students()
     {
-        return $this->belongsToMany(Student::class, 'student_exams', 'exam_id', 'student_id')
+        return $this->belongsToMany(student::class, 'student_exams', 'exam_id', 'student_id')
             ->withPivot('enter_time', 'submit_time') // لجلب أوقات الدخول والتسليم من الجدول الوسيط
             ->withTimestamps();
     }

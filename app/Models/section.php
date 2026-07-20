@@ -15,6 +15,6 @@ class section extends Model
      */
     public function grade()
     {
-        return $this->belongsTo(Grade::class, 'grade_id');
+        return $this->belongsTo(grade::class, 'grade_id');
     }
 }

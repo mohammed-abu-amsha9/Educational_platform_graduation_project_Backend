@@ -19,13 +19,13 @@ class ChatRoom extends Model
     /** المعلم المشترك في هذه المحادثة */
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class, 'teacher_id');
+        return $this->belongsTo(teacher::class, 'teacher_id');
     }
 
     /** الطالب المشترك في هذه المحادثة */
     public function student()
     {
-        return $this->belongsTo(Student::class, 'student_id');
+        return $this->belongsTo(student::class, 'student_id');
     }
 
     /** كافة الرسائل المتبادلة داخل هذه الغرفة */

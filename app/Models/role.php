@@ -13,7 +13,7 @@ class role extends Model
     public function permistions()
     {
         // نحدد اسم الجدول الوسيط والـ Foreign Key بسبب التسمية الخاصة بك
-        return $this->belongsToMany(Permistion::class, 'permistion_roles', 'role_id', 'permistion_id');
+        return $this->belongsToMany(permistion::class, 'permistion_roles', 'role_id', 'permistion_id');
     }
 
     /**
@@ -21,6 +21,6 @@ class role extends Model
      */
     public function teachers()
     {
-        return $this->hasMany(Teacher::class, 'role_id');
+        return $this->hasMany(teacher::class, 'role_id');
     }
 }

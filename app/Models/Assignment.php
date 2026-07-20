@@ -14,7 +14,7 @@ class Assignment extends Model
     /** المعلم الذي نشر هذا الواجب */
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class, 'teacher_id');
+        return $this->belongsTo(teacher::class, 'teacher_id');
     }
     public function subject()
     {

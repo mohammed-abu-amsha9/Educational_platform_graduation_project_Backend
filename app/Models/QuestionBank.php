@@ -12,7 +12,7 @@ class QuestionBank extends Model
     /** المعلم الذي أضاف السؤال */
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class, 'teacher_id');
+        return $this->belongsTo(teacher::class, 'teacher_id');
     }
     public function grade()
     {

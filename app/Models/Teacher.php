@@ -25,7 +25,7 @@ class teacher extends Model
     public function subjects()
     {
         // نحدد اسم الجدول الوسيط subject_teachers
-        return $this->belongsToMany(Subject::class, 'subject_teachers', 'teacher_id', 'subject_id');
+        return $this->belongsToMany(subject::class, 'subject_teachers', 'teacher_id', 'subject_id');
     }
 
     /**
@@ -33,14 +33,14 @@ class teacher extends Model
      */
     public function grades()
     {
-        return $this->belongsToMany(Grade::class, 'grade_teachers', 'teacher_id', 'grade_id');
+        return $this->belongsToMany(grade::class, 'grade_teachers', 'teacher_id', 'grade_id');
     }
     /**
      * جلب جميع الدروس التي نشرها المعلم
      */
     public function lessons()
     {
-        return $this->hasMany(Lesson::class, 'teacher_id');
+        return $this->hasMany(lesson::class, 'teacher_id');
     }
 
     /**
@@ -78,7 +78,7 @@ class teacher extends Model
     // 🟢 جلب الشعب التي يدرسها المعلم بدقة (الحل السحري لمشكلتك)
     public function sections()
     {
-        return $this->belongsToMany(Section::class, 'grade_teachers', 'teacher_id', 'section_id')->distinct();
+        return $this->belongsToMany(section::class, 'grade_teachers', 'teacher_id', 'section_id')->distinct();
     }
 
     public function gradeAssignments()
