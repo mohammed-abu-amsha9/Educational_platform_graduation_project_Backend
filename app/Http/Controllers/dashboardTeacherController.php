@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Assignment_submission;
+use App\Models\AssignmentSubmission;
 use App\Models\Exam;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
@@ -21,7 +21,7 @@ class dashboardTeacherController extends Controller
             ->get()                 // نحصل على الصفوف
             ->sum('students_count'); // نجمع الأعداد من كل الصفوف
 
-        $assignmentUncorrection = Assignment_submission::where('status', 'uncorrection')->get();
+        $assignmentUncorrection = AssignmentSubmission::where('status', 'uncorrection')->get();
         $examPublished = Exam::where('status', 'Published')->get();
 
         $gradesTeacher = Teacher::with(['subjects', 'grades', 'sections'])->where('id', auth()->id())->first();
