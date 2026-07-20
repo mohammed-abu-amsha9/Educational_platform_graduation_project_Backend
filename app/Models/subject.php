@@ -19,7 +19,7 @@ class Subject extends Model
     // العلاقة: المادة يدرسها العديد من المعلمين
     public function teachers()
     {
-        return $this->belongsToMany(teacher::class, 'subject_teachers', 'subject_id', 'teacher_id');
+        return $this->belongsToMany(Teacher::class, 'subject_teachers', 'subject_id', 'teacher_id');
     }
 
     // المادة الواحدة تحتوي على عدة دروس

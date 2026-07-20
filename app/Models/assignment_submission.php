@@ -19,6 +19,6 @@ class Assignment_submission extends Model
     /** الطالب الذي قام برفع هذا الحل */
     public function student()
     {
-        return $this->belongsTo(student::class, 'student_id');
+        return $this->belongsTo(Student::class, 'student_id');
     }
 }

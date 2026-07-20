@@ -21,7 +21,7 @@ class Attendance_log extends Model
      */
     public function student()
     {
-        return $this->belongsTo(student::class, 'student_id');
+        return $this->belongsTo(Student::class, 'student_id');
     }
 
     /**
@@ -29,6 +29,6 @@ class Attendance_log extends Model
      */
     public function teacher()
     {
-        return $this->belongsTo(teacher::class, 'teacher_id');
+        return $this->belongsTo(Teacher::class, 'teacher_id');
     }
 }

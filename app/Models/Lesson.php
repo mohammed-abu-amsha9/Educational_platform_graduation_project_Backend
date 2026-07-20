@@ -15,7 +15,7 @@ class Lesson extends Model
      */
     public function teacher()
     {
-        return $this->belongsTo(teacher::class, 'teacher_id');
+        return $this->belongsTo(Teacher::class, 'teacher_id');
     }
 
     // الدرس ينتمي إلى مادة

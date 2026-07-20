@@ -31,7 +31,7 @@ class Grade extends Model
      */
     public function students()
     {
-        return $this->hasMany(student::class, 'grade_id');
+        return $this->hasMany(Student::class, 'grade_id');
     }
 
     /**
@@ -39,5 +39,5 @@ class Grade extends Model
      */
     public function teachers()
     {
-        return $this->belongsToMany(teacher::class, 'grade_teachers', 'grade_id', 'teacher_id');    }
+        return $this->belongsToMany(Teacher::class, 'grade_teachers', 'grade_id', 'teacher_id');    }
 }
