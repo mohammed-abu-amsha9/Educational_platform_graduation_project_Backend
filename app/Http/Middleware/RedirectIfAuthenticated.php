@@ -20,8 +20,8 @@ class RedirectIfAuthenticated
             $user = Auth::user();
 
             // التوجيه حسب الدور
-            return match ($user->role) {
-                 1 => redirect()->route('dashboard.index'), // الأدمن[cite: 1]
+            return match ($user->role_id) {
+                1 => redirect()->route('dashboard.index'), // الأدمن[cite: 1]
                 2 => redirect()->route('dashboardTeacher.index'), // المعلم[cite: 2]
                 3 => redirect()->route('dashboardStudent.index'),   // الطالب [cite: 3]
                 default => redirect('/'),

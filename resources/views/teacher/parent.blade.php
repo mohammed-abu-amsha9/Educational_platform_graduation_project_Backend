@@ -166,9 +166,13 @@
                     </h2>
                     <p
                         class="text-slate-500 dark:text-zinc-400 text-xs sm:text-sm font-medium flex items-center gap-1.5 whitespace-nowrap">
-                        <span>معلم الرياضيات</span>
+                        @foreach ($teacher->subjects as $subject)
+                            <span>مادة {{ $subject->name }}</span>
+                        @endforeach
+
                         <span class="text-slate-300 dark:text-slate-700">•</span>
-                        <span class="font-mono text-slate-400 dark:text-zinc-500">T-1001</span>
+
+                        <span class="font-mono text-slate-400 dark:text-zinc-500">{{ $teacher->teacher_code }}</span>
                     </p>
                 </div>
             </div>

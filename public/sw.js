@@ -1,65 +1,139 @@
-const CACHE_NAME = "materials-cache-v1";
+const CACHE_NAME = "sumoud-cache-v2";
 
-// سنكتفي بصفحة المواد والصفحة الاحتياطية لضمان عمل الكاش فوراً
-const urlsToCache = ["/materials", "/offline.html"];
+// الملفات الثابتة فقط
+const STATIC_ASSETS = [
+    "/offline.html",
+];
 
-// 1. مرحلة التثبيت المرنة
+// ======================
+// Install
+// ======================
 self.addEventListener("install", (event) => {
     self.skipWaiting();
+
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            console.log("جاري تخزين الملفات المتاحة...");
-            return Promise.all(
-                urlsToCache.map((url) => {
-                    return cache
-                        .add(url)
-                        .catch((err) =>
-                            console.warn(`تنبيه: تعذر كشّ ${url} حالياً.`),
-                        );
-                }),
-            );
-        }),
+            return cache.addAll(STATIC_ASSETS);
+        })
     );
 });
 
-// التنشيط الفوري
+// ======================
+// Activate
+// ======================
 self.addEventListener("activate", (event) => {
-    event.waitUntil(self.clients.claim());
+    event.waitUntil(
+        caches.keys().then((keys) => {
+            return Promise.all(
+                keys.map((key) => {
+                    if (key !== CACHE_NAME) {
+                        return caches.delete(key);
+                    }
+                })
+            );
+        })
+    );
+
+    self.clients.claim();
 });
 
-// 2. مرحلة جلب البيانات أوفلاين
-// مرحلة جلب البيانات أوفلاين (المحدثة لتصفية طلبات الـ Extensions)
+// ======================
+// Fetch
+// ======================
 self.addEventListener("fetch", (event) => {
-    // 1. نطبق الكاش فقط على طلبات القراءة (GET)
+
+    // نتعامل فقط مع GET
     if (event.request.method !== "GET") return;
 
-    // 2. [الحل الحاسم]: تجاهل أي طلبات قادمة من إضافات كروم أو بروتوكولات خارجية
+    // تجاهل أي بروتوكول غير http/https
+    if (!event.request.url.startsWith("http")) return;
+
+    const url = new URL(event.request.url);
+
+    // ======================
+    // صفحات لا يتم عمل Cache لها إطلاقاً
+    // ======================
     if (
-        !event.request.url.startsWith("http://") &&
-        !event.request.url.startsWith("https://")
+        url.pathname.startsWith("/login") ||
+        url.pathname.startsWith("/logout") ||
+        url.pathname.startsWith("/admin") ||
+        url.pathname.startsWith("/teacher") ||
+        url.pathname.startsWith("/register") ||
+        url.pathname.startsWith("/password") ||
+        url.pathname.startsWith("/sanctum") ||
+        url.pathname.startsWith("/csrf")
     ) {
         return;
     }
 
-    event.respondWith(
-        caches.match(event.request).then((cachedResponse) => {
-            if (cachedResponse) {
-                return cachedResponse;
-            }
+    // ======================
+    // الملفات الثابتة فقط
+    // ======================
+    if (
+        event.request.destination === "style" ||
+        event.request.destination === "script" ||
+        event.request.destination === "image" ||
+        event.request.destination === "font"
+    ) {
 
-            return fetch(event.request)
-                .then((networkResponse) => {
-                    if (networkResponse && networkResponse.status === 200) {
-                        let responseToCache = networkResponse.clone();
+        event.respondWith(
+            caches.match(event.request).then((response) => {
+
+                if (response) {
+                    return response;
+                }
+
+                return fetch(event.request).then((networkResponse) => {
+
+                    if (networkResponse.ok) {
+                        const clone = networkResponse.clone();
+
                         caches.open(CACHE_NAME).then((cache) => {
-                            cache.put(event.request, responseToCache);
+                            cache.put(event.request, clone);
                         });
                     }
+
                     return networkResponse;
-                })
-                .catch(() => {
-                    return caches.match("/offline.html");
                 });
-        }),
-    );
+
+            })
+        );
+
+        return;
+    }
+
+    // ======================
+    // صفحة المواد فقط (Network First)
+    // ======================
+    if (url.pathname.startsWith("/materials")) {
+
+        event.respondWith(
+
+            fetch(event.request)
+
+                .then((networkResponse) => {
+
+                    const clone = networkResponse.clone();
+
+                    caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(event.request, clone);
+                    });
+
+                    return networkResponse;
+
+                })
+
+                .catch(() => {
+
+                    return caches.match(event.request)
+                        .then((cached) => {
+                            return cached || caches.match("/offline.html");
+                        });
+
+                })
+
+        );
+
+    }
+
 });

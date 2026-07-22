@@ -32,7 +32,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest'])->group(function () {
-    Route::get('/', [authcontroller::class, 'showLoginForm'])->name('login');
+    Route::get('/login', [AuthController::class, 'showLoginForm'])
+        ->name('login')
+        ->middleware('guest');
     Route::post('/login', [authcontroller::class, 'login'])->name('auth.login')->middleware('throttle:login');
 });
 

@@ -2,12 +2,16 @@
 
 namespace App\Providers;
 
+use App\Models\Student;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\View;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -31,6 +35,13 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('login', function (Request $request) {
             // يسمح بـ 5 محاولات تسجيل دخول فقط في الدقيقة الواحدة
             return Limit::perMinute(5)->by($request->ip());
+        });
+
+        View::composer('teacher.parent', function ($view) {
+            $teacher = Teacher::with('subjects')
+                ->where('id', auth()->id())
+                ->first();
+            $view->with('teacher', $teacher);
         });
     }
 }

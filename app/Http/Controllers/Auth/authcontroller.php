@@ -10,7 +10,6 @@ class authcontroller extends Controller
 {
     public function showLoginForm()
     {
-
         return view('login'); // تأكد من وجود ملف الـ View
     }
 
@@ -48,6 +47,6 @@ class authcontroller extends Controller
         $request->session()->invalidate(); // إلغاء الجلسة
         $request->session()->regenerateToken(); // تجديد الـ Token للحماية
 
-        return redirect('/'); // التوجيه لصفحة تسجيل الدخول
+        return redirect('/login'); // التوجيه لصفحة تسجيل الدخول
     }
 }
