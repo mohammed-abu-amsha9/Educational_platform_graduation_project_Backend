@@ -13,8 +13,9 @@ return new class extends Migration
     {
         // جدول الاختبارات
         Schema::create('exams', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
-            $table->foreignId('teacher_id')->constrained()->onDelete('cascade'); // المعلم منشئ الامتحان والمسؤول الأول عن نشر تقييمه
+            $table->foreignId('teacher_id')->constrained()->cascadeOnDelete(); // المعلم منشئ الامتحان والمسؤول الأول عن نشر تقييمه
             $table->string('title', 150); // عنوان الامتحان ومسمى المادة (مثل: اختبار الكيمياء النصفي)
             $table->integer('Exam_duration'); // مدة الاختبار بالدقائق لضبط ساعة العداد التنازلي البرمجي
             $table->integer('total_questions'); // عدد الأسئلة الإجمالي التي سيتعرض لها الطالب في الامتحان

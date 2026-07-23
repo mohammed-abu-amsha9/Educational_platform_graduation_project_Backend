@@ -13,9 +13,10 @@ return new class extends Migration
     {
         // جدول اختبارات الطلاب
         Schema::create('student_exams', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
-            $table->foreignId('exam_id')->constrained()->onDelete('cascade');
-            $table->foreignId('student_id')->constrained()->onDelete('cascade');
+            $table->foreignId('exam_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('student_id')->constrained()->cascadeOnDelete();
             $table->string('enter_time'); // وقت دخول الطالب الفعلي
             $table->string('submit_time'); // وقت تسليم الامتحان - إن وجد
             $table->timestamps();

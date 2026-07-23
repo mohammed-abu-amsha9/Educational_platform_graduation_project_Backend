@@ -13,8 +13,9 @@ return new class extends Migration
     {
         // جدول المسجات
         Schema::create('messages', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
-            $table->foreignId('chat_room_id')->constrained()->onDelete('cascade'); // يربط الرسالة الحالية بغرفة المحادثة الشاملة التابعة لها
+            $table->foreignId('chat_room_id')->constrained()->cascadeOnDelete(); // يربط الرسالة الحالية بغرفة المحادثة الشاملة التابعة لها
             $table->string('sender_type', 20); // تحديد جهة فئة المرسل لحقن وترتيب الرسالة في الواجهات (teacher/student)
             $table->text('message_text'); // المضمون والنص المكتوب والمتبادل بداخل الشات التعليمي المباشر
             $table->string('attachment_url', 255)->nullable(); // رابط أو مسار ملف أو صورة مرفقة بشكل اختياري بداخل حزمة الرسالة

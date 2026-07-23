@@ -13,9 +13,10 @@ return new class extends Migration
     {
         // جدول اسئلة الاختبارات
         Schema::create('exam_questions', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
-            $table->foreignId('exam_id')->constrained()->onDelete('cascade'); // المفتاح الأجنبي المرتبط بجدول الامتحانات الرأسية
-            $table->foreignId('question_bank_id')->constrained()->onDelete('cascade'); // المفتاح الأجنبي المرتبط بالسؤال الأصلي المستدعى من البنك
+            $table->foreignId('exam_id')->constrained()->cascadeOnDelete(); // المفتاح الأجنبي المرتبط بجدول الامتحانات الرأسية
+            $table->foreignId('question_bank_id')->constrained()->cascadeOnDelete(); // المفتاح الأجنبي المرتبط بالسؤال الأصلي المستدعى من البنك
             $table->timestamps();
         });
     }

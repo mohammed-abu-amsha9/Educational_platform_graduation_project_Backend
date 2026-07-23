@@ -13,6 +13,7 @@ return new class extends Migration
     {
         // جدول الادوار
         Schema::create('roles', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string('role_name', 50); // اسم الدور الممنوح (معلم، مشرف، مدير، إلخ)
             $table->timestamps();

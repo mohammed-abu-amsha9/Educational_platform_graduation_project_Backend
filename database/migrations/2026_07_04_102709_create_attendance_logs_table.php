@@ -13,9 +13,10 @@ return new class extends Migration
     {
         // جدول الحضور والغياب
         Schema::create('attendance_logs', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
-            $table->foreignId('student_id')->constrained()->onDelete('cascade'); // يربط الحركة بالطالب المرصود حضورياً
-            $table->foreignId('teacher_id')->constrained()->onDelete('cascade'); // يرتبط بالمعلم الذي قام بمراجعة ورصد الحضور والغياب
+            $table->foreignId('student_id')->constrained()->cascadeOnDelete(); // يربط الحركة بالطالب المرصود حضورياً
+            $table->foreignId('teacher_id')->constrained()->cascadeOnDelete(); // يرتبط بالمعلم الذي قام بمراجعة ورصد الحضور والغياب
             $table->date('date'); // التاريخ الفعلي والرسمي لليوم الدراسي الحاضر
             $table->enum('status', ['present', 'absent', 'late'])->default('present'); // حالة الانضباط المرصودة للطالب (حاضر - غائب - متأخر)
             $table->timestamps();

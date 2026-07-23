@@ -13,9 +13,10 @@ return new class extends Migration
     {
         // جدول الدروس
         Schema::create('lessons', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
-            $table->foreignId('teacher_id')->constrained()->onDelete('cascade'); // يربط الدرس بالمعلم الناشر والمعد للمادة الشارحة
-            $table->foreignId('subject_id')->constrained()->onDelete('cascade'); // يربط الدرس بالمعلم الناشر والمعد للمادة الشارحة
+            $table->foreignId('teacher_id')->constrained()->cascadeOnDelete(); // يربط الدرس بالمعلم الناشر والمعد للمادة الشارحة
+            $table->foreignId('subject_id')->constrained()->cascadeOnDelete(); // يربط الدرس بالمعلم الناشر والمعد للمادة الشارحة
             $table->string('title', 200); // عنوان المحاضرة (مثل: الكيمياء الأساسية وعناصر الجدول الدوري)
             $table->string('file_type', 50); // نوع الملف المرفق لدعم الواجهة (فيديو شرح، ملف PDF)
             $table->string('file_url', 255)->nullable(); // المسار السحابي أو رابط تخزين الملف على خوادم المنصة

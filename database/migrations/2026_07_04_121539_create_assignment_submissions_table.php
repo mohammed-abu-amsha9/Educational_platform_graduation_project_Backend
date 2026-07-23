@@ -13,9 +13,10 @@ return new class extends Migration
     {
         // تسليم واجبات الطالب
         Schema::create('assignment_submissions', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
-             $table->foreignId('assignment_id')->constrained()->onDelete('cascade'); // يربط حركة التسليم بالواجب الأصلي المطلوب تسليمه
-            $table->foreignId('student_id')->constrained()->onDelete('cascade'); // يرتبط بالطالب الذي قام بحل ورفع ملف الواجب للمنصة
+             $table->foreignId('assignment_id')->constrained()->cascadeOnDelete(); // يربط حركة التسليم بالواجب الأصلي المطلوب تسليمه
+            $table->foreignId('student_id')->constrained()->cascadeOnDelete(); // يرتبط بالطالب الذي قام بحل ورفع ملف الواجب للمنصة
             $table->string('submitted_file_url', 255); // رابط ومسار ملف الحل المرفوع من الطالب (كراسة إجابة PDF أو صورة)
             $table->integer('mark')->nullable(); // الدرجة والعلامة المستحقة التي يضعها المعلم يدوياً بعد مراجعة ملف الحل
             $table->enum('status', ['correction', 'uncorrection'])->default('uncorrection'); // حالة تصحيح التسليم الحالي لمتابعة الواجهات (لم يتم التصحيح، تم التصحيح)

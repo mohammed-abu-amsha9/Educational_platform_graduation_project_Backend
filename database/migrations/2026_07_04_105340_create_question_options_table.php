@@ -13,8 +13,9 @@ return new class extends Migration
     {
         // جدول خيارات السؤال
         Schema::create('question_options', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
-            $table->foreignId('question_bank_id')->constrained()->onDelete('cascade'); // يربط مجموعة الخيارات المتعددة بالسؤال الأم التابعة له في البنك
+            $table->foreignId('question_bank_id')->constrained()->cascadeOnDelete(); // يربط مجموعة الخيارات المتعددة بالسؤال الأم التابعة له في البنك
             $table->string('option_text', 255); // النص أو الحقل الرقمي المعروض كخيار للحل أمام الطالب
             $table->boolean('is_correct'); // علم منطقي (true/false) يعتمد الإجابة الصحيحة للتصحيح الفوري تلقائياً
             $table->timestamps();

@@ -13,9 +13,10 @@ return new class extends Migration
     {
         // جدول مواد المعلم
         Schema::create('subject_teachers', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
-            $table->foreignId('subject_id')->constrained();
-            $table->foreignId('teacher_id')->constrained();
+            $table->foreignId('subject_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('teacher_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

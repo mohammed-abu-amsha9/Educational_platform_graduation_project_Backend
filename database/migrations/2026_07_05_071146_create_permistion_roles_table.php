@@ -13,9 +13,10 @@ return new class extends Migration
     {
         // 3. الجدول الوسيط الجديد للربط بينهما (اسمه يدمج الاسمين بالمفرد)
         Schema::create('permistion_roles', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
-            $table->foreignId('role_id')->constrained()->onDelete('cascade');
-            $table->foreignId('permistion_id')->constrained()->onDelete('cascade');
+            $table->foreignId('role_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('permistion_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

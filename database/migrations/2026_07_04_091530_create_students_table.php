@@ -13,11 +13,12 @@ return new class extends Migration
     {
         // جدول الطلاب
         Schema::create('students', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string('full_name', 150); // الاسم الكامل للطالب المستخدم في القوائم والشهادات
             $table->string('student_code', 50)->unique(); // الرقم التسلسلي الفريد والخاص بالطالب داخل المنصة
-            $table->foreignId('grade_id')->constrained();
-            $table->foreignId('section_id')->constrained();
+            $table->foreignId('grade_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('section_id')->constrained()->cascadeOnDelete();
             $table->string('total_paid_amount'); // اجمالي الرسوم
             $table->string('parent_id', 20); // رقم هوية ولي الأمر
             $table->string('parent_phone', 20); // رقم التواصل الأساسي لولي الأمر

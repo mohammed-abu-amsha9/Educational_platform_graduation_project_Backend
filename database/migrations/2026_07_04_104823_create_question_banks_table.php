@@ -13,9 +13,10 @@ return new class extends Migration
     {
         // جدول بنك الاسئلة
         Schema::create('question_banks', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
-            $table->foreignId('teacher_id')->constrained()->onDelete('cascade'); // المعلم معد ومبتكر هذا السؤال البرمجي
-            $table->foreignId('subject_id')->constrained()->onDelete('cascade'); // المعلم معد ومبتكر هذا السؤال البرمجي
+            $table->foreignId('teacher_id')->constrained()->cascadeOnDelete(); // المعلم معد ومبتكر هذا السؤال البرمجي
+            $table->foreignId('subject_id')->constrained()->cascadeOnDelete(); // المعلم معد ومبتكر هذا السؤال البرمجي
             $table->foreignId('grade_id')->constrained()->onDelete('cascade'); // المعلم معد ومبتكر هذا السؤال البرمجي
             $table->text('question_text'); // نص ومضمون السؤال التعليمي الظاهر للطلاب أثناء تقديم التقييم
             $table->string('question_type', 30); // نوع طبيعة السؤال البرمجية (الاختيار من متعدد mcq / صح وخطأ true_false)

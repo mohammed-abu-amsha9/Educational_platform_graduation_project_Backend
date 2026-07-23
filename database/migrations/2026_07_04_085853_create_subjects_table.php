@@ -13,9 +13,10 @@ return new class extends Migration
     {
         // جدول المواد
         Schema::create('subjects', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string('name');
-            $table->foreignId('grade_id')->constrained();
+            $table->foreignId('grade_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

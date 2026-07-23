@@ -32,7 +32,7 @@ class authcontroller extends Controller
                 1 => redirect()->route('dashboard.index'), // الأدمن[cite: 1]
                 2 => redirect()->route('dashboardTeacher.index'), // المعلم[cite: 2]
                 3 => redirect()->route('dashboardStudent.index'),   // الطالب [cite: 3]
-                default => redirect('/'),
+                default => redirect('/login'),
             };
         }
 

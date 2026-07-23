@@ -13,6 +13,7 @@ return new class extends Migration
     {
         // جدول الصف الدراسي
         Schema::create('grades', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string('name', 50); //
             $table->timestamps();

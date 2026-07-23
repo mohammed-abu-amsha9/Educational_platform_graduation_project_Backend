@@ -13,11 +13,12 @@ return new class extends Migration
     {
         // الواجبات المنشورة
         Schema::create('assignments', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
-            $table->foreignId('teacher_id')->constrained()->onDelete('cascade'); 
-            $table->foreignId('subject_id')->constrained()->onDelete('cascade'); 
-            $table->foreignId('grade_id')->constrained()->onDelete('cascade');   
-            $table->foreignId('section_id')->constrained()->onDelete('cascade'); 
+            $table->foreignId('teacher_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('subject_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('grade_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('section_id')->constrained()->cascadeOnDelete();
             $table->string('title', 200); // عنوان الواجب الرئيسي (مثل: واجب إعراب الجملة الفعلية والأفعال الخمس)
             $table->dateTime('due_date'); // آخر موعد وتاريخ محدد وصارم متاح أمام الطالب لإرسال حل الواجب
             $table->text('description'); // التوصيف والتوجيه النصي التفصيلي لمضمون وحل الواجب المطلوبة

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         // جدول الصلاحيات
         Schema::create('permistions', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string('permistion_name', 50); // اسم الصلاحية  (تسجيل حضور، رصد علامات ،إلخ)
             $table->timestamps();

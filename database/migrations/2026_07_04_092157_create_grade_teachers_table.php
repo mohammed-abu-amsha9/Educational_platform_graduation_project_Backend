@@ -13,10 +13,11 @@ return new class extends Migration
     {
         // جدول صفوف المعلمين
         Schema::create('grade_teachers', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
-            $table->foreignId('teacher_id')->constrained()->onDelete('cascade'); // يرتبط بالمعلم المعني بالصف الدراسي
-            $table->foreignId('grade_id')->constrained()->onDelete('cascade');
-            $table->foreignId('section_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('teacher_id')->constrained()->cascadeOnDelete(); // يرتبط بالمعلم المعني بالصف الدراسي
+            $table->foreignId('grade_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('section_id')->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

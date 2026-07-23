@@ -13,9 +13,10 @@ return new class extends Migration
     {
         // جدول الشعب
         Schema::create('sections', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string('name', 50);
-            $table->foreignId('grade_id')->constrained()->onDelete('cascade');
+            $table->foreignId('grade_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

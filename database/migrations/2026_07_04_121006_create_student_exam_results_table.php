@@ -13,9 +13,10 @@ return new class extends Migration
     {
         // جدول نتيجة اختبار الطالب
         Schema::create('student_exam_results', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
-            $table->foreignId('student_id')->constrained()->onDelete('cascade'); // يربط العلامة النهائية الكلية بالطالب صاحب التقييم
-            $table->foreignId('exam_id')->constrained()->onDelete('cascade'); // يربط النتيجة بالامتحان الإجمالي الذي تم رصده وتصحيحه
+            $table->foreignId('student_id')->constrained()->cascadeOnDelete(); // يربط العلامة النهائية الكلية بالطالب صاحب التقييم
+            $table->foreignId('exam_id')->constrained()->cascadeOnDelete(); // يربط النتيجة بالامتحان الإجمالي الذي تم رصده وتصحيحه
             $table->integer('score_obtained'); // الدرجة الرقمية الكلية المحصلة والمستحقة للطالب فور إنهاء الحل
             $table->string('status', 50); // حالة رصد النتيجة وتدقيقها (مصحح تلقائياً، تم رصده، غياب تلقائي)
             $table->string('submission_method', 100); // طريقة تقديم الطالب للامتحان (حساب الطالب الإلكتروني أو لم يدخل)

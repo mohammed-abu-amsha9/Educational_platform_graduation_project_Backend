@@ -13,8 +13,9 @@ return new class extends Migration
     {
         // جدول الرسوم
         Schema::create('fees', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
-            $table->foreignId('student_id')->constrained()->onDelete('cascade'); // يربط الحركة بالطالب المستحق عليه القسط المالي
+            $table->foreignId('student_id')->constrained()->cascadeOnDelete(); // يربط الحركة بالطالب المستحق عليه القسط المالي
             $table->string('billing_month', 20); // الشهر والسنة المستحق فيها القسط (مثل: 06-2026)
             $table->decimal('monthly_amount', 10, 2); // قيمة القسط الشهري الإجمالي المطلوب دفعه (مثال: 500.00)
             $table->decimal('paid_amount', 10, 2)->default(0.00); // إجمالي المبالغ التي تم سدادها وتراكمها فعلياً من قسط هذا الشهر

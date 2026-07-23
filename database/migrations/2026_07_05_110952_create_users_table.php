@@ -13,10 +13,11 @@ return new class extends Migration
     {
         // جدول المستخدمين
         Schema::create('users', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id(); //رقم الهوية الشخصي الفريد للمستخدم كمفتاح دخول أساسي
             $table->string('name'); // الاسم المستخدم عند تسجيل الدخول للنظام
             $table->string('password', 255); // كلمة المرور السرية المخزنة بشكل تلقائي من بيانات الطالب  اللي هيا نفس قيمة id اللي رقم الهوية
-            $table->foreignId('role_id')->constrained()->onDelete('cascade'); // يربط الرسالة الحالية بغرفة المحادثة الشاملة التابعة لها
+            $table->foreignId('role_id')->constrained()->cascadeOnDelete(); // يربط الرسالة الحالية بغرفة المحادثة الشاملة التابعة لها
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
