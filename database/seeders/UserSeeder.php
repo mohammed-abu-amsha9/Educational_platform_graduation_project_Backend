@@ -16,9 +16,9 @@ class UserSeeder extends Seeder
     {
         // php artisan db:seed --class=UserSeeder
         DB::table('users')->insert([
-            'id' => 409273190,
+            'id' => 1,
             'name' => 'محمد اياد يونس ابو عمشة',
-            'password' => Hash::make('409273190'), // تشفير كلمة المرور
+            'password' => Hash::make('1'), // تشفير كلمة المرور
             'role_id' => 1,
         ]);
     }

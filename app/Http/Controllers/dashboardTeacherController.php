@@ -19,7 +19,7 @@ class dashboardTeacherController extends Controller
         $studentCount = $teacher->grades()
             ->withCount('students') // نحسب عدد الطلاب في كل صف
             ->get()                 // نحصل على الصفوف
-            ->sum('students_count'); // نجمع الأعداد من كل الصفوف
+            ->sum('students_count');// نجمع الأعداد من كل الصفوف
 
         $assignmentUncorrection = AssignmentSubmission::where('status', 'uncorrection')->get();
         $examPublished = Exam::where('status', 'Published')->get();

@@ -20,7 +20,7 @@ class AttendanceLogController extends Controller
         $teacher = Teacher::with(['grades.sections', 'subjects.grade'])->find($teacherId);
 
         // استخراج الصفوف الفريدة التابعة للمعلم
-        $teacherClasses = $teacher ? $teacher->grades : collect();
+        $teacherClasses = $teacher ? $teacher->grades->unique('id') : collect();
 
         $students = [];
         $existingAttendance = [];

@@ -50,7 +50,7 @@ class LessonController extends Controller
         $request->validate([
             'subject_id' => 'required|exists:subjects,id',
             'grades'     => 'required|array',
-            'grades.*'   => 'exists:grades,id',
+            'grades.*'   => 'exists:sections,id',
             'title'      => 'required|string|max:255',
             'file_type'  => 'required|in:video,pdf,link',
             'file'       => 'nullable', // جعلناه nullable مرن لأن المعلم قد يضع رابطًا أو يرفع ملفًا

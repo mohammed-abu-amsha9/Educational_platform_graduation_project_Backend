@@ -506,20 +506,6 @@
         }
     </script>
     <script>
-        // التأكد من أن المتصفح يدعم ميزة الـ Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(registration => {
-                        console.log('تم تسجيل Service Worker بنجاح في النطاق: ', registration.scope);
-                    })
-                    .catch(error => {
-                        console.log('فشل تسجيل Service Worker: ', error);
-                    });
-            });
-        }
-    </script>
-    <script>
         window.triggerSync = async function() {
             if (!window.isOnline()) return;
 

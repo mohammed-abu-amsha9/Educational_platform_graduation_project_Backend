@@ -55,7 +55,7 @@
             class="bg-white dark:bg-slate-900 border border-gray-200 hover:border-emerald-400 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-4 ">
             <div class="flex items-center justify-between border-b border-gray-100 dark:border-slate-800 pb-4">
                 <h2 class="text-sm font-black text-slate-800 dark:text-zinc-100 flex items-center gap-2">
-                    الأسئلة المخزنة (<span>1</span>)
+                    الأسئلة المخزنة (<span>{{ $questionBank->count() }}</span>)
                 </h2>
             </div>
 

@@ -17,16 +17,16 @@
                     </span>
                 </div>
 
-                <select name="academic_level" id="classFilter" onchange="document.getElementById('filterForm').submit()"
+                <select name="grade_id" id="classFilter" onchange="document.getElementById('filterForm').submit()"
                     class="w-full sm:w-48 border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 text-sm rounded-xl py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-teal-600 text-slate-800 dark:text-zinc-100 cursor-pointer">
                     <option value="all"
-                        {{ request('academic_level') == 'all' || !request('academic_level') ? 'selected' : '' }}>
+                        {{ request('grade_id') == 'all' || !request('grade_id') ? 'selected' : '' }}>
                         جميع الصفوف
                     </option>
                     <optgroup class="text-xs text-gray-400 bg-gray-50 dark:bg-slate-900">
                         @foreach ($grades as $grade)
                             <option value="{{ $grade->id }}"
-                                {{ request('academic_level') == $grade->id ? 'selected' : '' }}>
+                                {{ request('grade_id') == $grade->id ? 'selected' : '' }}>
                                 {{ $grade->name }}
                             </option>
                         @endforeach

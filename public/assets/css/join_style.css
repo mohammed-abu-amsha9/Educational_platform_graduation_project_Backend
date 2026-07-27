@@ -121,4 +121,6 @@ body {
 /* تطبيق الخط كخط افتراضي للموقع بالكامل */
 body {
     font-family: 'Cairo', sans-serif;
+    transiti: 0.4s ease
 }
+
