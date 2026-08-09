@@ -103,7 +103,7 @@
                             </div>
                         @endforelse
 
-                        <div id="editSectionModal"
+                        <div id="myModal"
                             class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm ">
                             <div
                                 class="bg-white dark:bg-slate-900 border border-emerald-400 rounded-3xl w-full max-w-lg shadow-2xl relative z-10 flex flex-col max-h-[90vh]">
@@ -112,7 +112,7 @@
                                     <h2 class="text-sm font-black text-teal-600 dark:text-teal-400 flex items-center gap-2">
                                         <i class="fa-solid fa-user-gear text-sm"></i> تعديل الشعبة
                                     </h2>
-                                    <button onclick="closeModal('editSectionModal')"
+                                    <button onclick="closeModal('myModal')"
                                         class="text-gray-400 hover:text-gray-600 dark:hover:text-white  cursor-pointer text-sm">
                                         <i class="fa-solid fa-xmark"></i>
                                     </button>
@@ -142,7 +142,7 @@
                                         </select>
                                     </div>
                                     <div class="flex justify-end gap-2 pt-4 border-t border-gray-100 dark:border-slate-800">
-                                        <button type="button" onclick="closeModal('editSectionModal')"
+                                        <button type="button" onclick="closeModal('myModal')"
                                             class="px-5 py-2.5 text-xs font-bold text-gray-500 dark:text-slate-400 bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:hover:text-white rounded-xl  cursor-pointer">
                                             إلغاء
                                         </button>
@@ -176,7 +176,7 @@
             selectGrade.value = gradeId; // سيقوم باختيار الصف المرتبط تلقائياً
 
             // 4. إظهار المودال
-            openModal('editSectionModal');
+            openModal('myModal');
         }
     </script>
 @endsection

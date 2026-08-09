@@ -1,0 +1,3 @@
+ npx @tailwindcss/cli -i ./public/assets/css/style.css -o ./public/assets/css/output.css --watch --poll
+ يراقب التغييرات ويولد الكلاسات أوتوماتيكي
+ 

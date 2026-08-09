@@ -19,14 +19,12 @@
 
                 <select name="grade_id" id="classFilter" onchange="document.getElementById('filterForm').submit()"
                     class="w-full sm:w-48 border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 text-sm rounded-xl py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-teal-600 text-slate-800 dark:text-zinc-100 cursor-pointer">
-                    <option value="all"
-                        {{ request('grade_id') == 'all' || !request('grade_id') ? 'selected' : '' }}>
+                    <option value="all" {{ request('grade_id') == 'all' || !request('grade_id') ? 'selected' : '' }}>
                         جميع الصفوف
                     </option>
                     <optgroup class="text-xs text-gray-400 bg-gray-50 dark:bg-slate-900">
                         @foreach ($grades as $grade)
-                            <option value="{{ $grade->id }}"
-                                {{ request('grade_id') == $grade->id ? 'selected' : '' }}>
+                            <option value="{{ $grade->id }}" {{ request('grade_id') == $grade->id ? 'selected' : '' }}>
                                 {{ $grade->name }}
                             </option>
                         @endforeach
@@ -382,36 +380,29 @@
             <form id="form_edit_class" method="POST" class="space-y-4">
                 @csrf
                 @method('PUT')
+
                 <div>
                     <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">الصف الدراسي</label>
-                    <select name="academic_level" id="input_academic_level" required
+                    <select name="grade_id" id="input_grade_name" required
                         class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 rounded-xl py-2.5 px-3 text-sm outline-none text-slate-800 dark:text-zinc-100">
                         <option value="">اختر الصف...</option>
-                        <option value="الصف الأول الابتدائي">الصف الأول الابتدائي</option>
-                        <option value="الصف الثاني الابتدائي">الصف الثاني الابتدائي</option>
-                        <option value="الصف الثالث الابتدائي">الصف الثالث الابتدائي</option>
-                        <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
-                        <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
-                        <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
-                        <option value="الصف السابع">الصف السابع</option>
-                        <option value="الصف الثامن">الصف الثامن</option>
-                        <option value="الصف التاسع">الصف التاسع</option>
-                        <option value="الصف العاشر">الصف العاشر</option>
-                        <option value="الصف الحادي عشر">الصف الحادي عشر</option>
-                        <option value="توجيهي">توجيهي (الثاني عشر)</option>
+                        @foreach ($grades as $grade)
+                            <option value="{{ $grade->id }}">{{ $grade->name }}</option>
+                        @endforeach
                     </select>
                 </div>
+
                 <div>
                     <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">الشعبة</label>
-                    <select required name="section_name" id="input_section_name"
+                    <select required name="section_id" id="input_section_name"
                         class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 rounded-xl py-2.5 px-3 text-sm outline-none text-slate-800 dark:text-zinc-100">
                         <option value="">اختر الشعبة...</option>
-                        <option value="شعبة (أ)">شعبة (أ)</option>
-                        <option value="شعبة (ب)">شعبة (ب)</option>
-                        <option value="شعبة (ج)">شعبة (ج)</option>
-                        <option value="بدون شعبة">بدون شعبة / عام</option>
+                        @foreach ($grade->sections as $section)
+                            <option value="{{ $section->id }}">{{ $section->name }}</option>
+                        @endforeach
                     </select>
                 </div>
+
                 <div class="flex justify-end gap-2">
                     <button type="button" onclick="switchModal('editClassModal', 'mainStudentModal')"
                         class="px-4 py-2 text-xs font-bold text-gray-400 bg-gray-100 rounded-xl">رجوع</button>
@@ -472,78 +463,12 @@
                 openModal(targetModalId);
             }, 150);
         }
-        // تفعيل الفرز والبحث الديناميكي
-        document.addEventListener("DOMContentLoaded", () => {
-            const searchInput = document.getElementById("searchInput");
-            const financeFilter = document.getElementById("financeFilter");
-            const classFilter = document.getElementById("classFilter");
-
-            // دالة الفحص والفلترة
-            function filterStudents() {
-                const searchValue = searchInput.value.trim().toLowerCase();
-                const financeValue = financeFilter.value;
-                const classValue = classFilter.value;
-
-                // جلب جميع أسطر الطلاب داخل الجدول (تأكد أن الأسطر داخل tbody)
-                const rows = document.querySelectorAll("tbody tr");
-
-                rows.forEach((row) => {
-                    // جلب النصوص من الحقول الداخلية لكل طالب داخل السطر
-                    const studentName = row.cells[0]
-                        .querySelector("h4")
-                        .innerText.toLowerCase();
-                    const studentId = row.cells[1].innerText.toLowerCase();
-                    const studentClass = row.cells[2].innerText.trim();
-                    const financeStatus = row.cells[4]
-                        .querySelector("span")
-                        .innerText.trim();
-
-                    // شروط المطابقة
-                    const matchesSearch =
-                        studentName.includes(searchValue) ||
-                        studentId.includes(searchValue);
-                    const matchesFinance =
-                        financeValue === "all" || financeStatus === financeValue;
-                    const matchesClass =
-                        classValue === "all" || studentClass === classValue;
-
-                    // إذا تحققت كل الشروط اظهر السطر، وإلا قم بإخفائه
-                    if (matchesSearch && matchesFinance && matchesClass) {
-                        row.style.display = "";
-                    } else {
-                        row.style.display = "none";
-                    }
-                });
-            }
-
-            // ربط الأحداث بمجرد الكتابة أو تغيير الفلاتر ليعمل الفرز فوراً بدون تحديث الصفحة
-            searchInput.addEventListener("input", filterStudents);
-            financeFilter.addEventListener("change", filterStudents);
-            classFilter.addEventListener("change", filterStudents);
-        });
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
             const filterForm = document.getElementById('filterForm');
-
-            // 1. عند الضغط على زر Enter داخل حقل البحث
-            searchInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault(); // منع الفورم من الإرسال التقليدي المكسور
-                    filterForm.submit(); // إرسال الفورم كاملاً بالصف والبحث معاً
-                }
-            });
-
-            // 2. الحل الحاسم لمشكلة مسح الاسم:
-            // عند تغيير النص، لو أصبح الحقل فارغاً تماماً (تم مسحه بالكامل) سيرسل الفورم فوراً ليحتفظ بالصف المختار ويعيد بقية الطلاب
-            searchInput.addEventListener('input', function() {
-                if (this.value.trim() === '') {
-                    filterForm.submit();
-                }
-            });
-
-            // 3. مستمع لزر الـ X الصغير الذي يظهر في المتصفحات لمسح الحقل دفعة واحدة
+            // . مستمع لزر الـ X الصغير الذي يظهر في المتصفحات لمسح الحقل دفعة واحدة
             searchInput.addEventListener('search', function() {
                 if (this.value.trim() === '') {
                     filterForm.submit();
@@ -558,7 +483,7 @@
             document.getElementById('modal_full_name').innerText = student.full_name;
             document.getElementById('modal_student_code').innerText = student.student_code;
             document.getElementById('modal_academic_badge').innerText =
-                `${student.academic_level} - ${student.section_name}`;
+                `${student.grade.name} - ${student.section.name}`;
 
             // استخراج اسم ولي الأمر (حذف أول اسم من الاسم الرباعي)
             let nameParts = student.full_name.split(' ');
@@ -569,7 +494,7 @@
             document.getElementById('modal_student_id').innerText = student.id;
             document.getElementById('modal_parent_id').innerText = student.parent_id;
             document.getElementById('modal_fees').innerText =
-                `₪${student.total_paid_amount} / ₪${student.total_required_fees}`;
+                `₪${student.total_required_fees} / ₪${student.total_paid_amount}`;
 
             // 2. تجهيز وتهيئة قيم فورم تعديل البيانات الأساسية
             document.getElementById('input_full_name').value = student.full_name;
@@ -580,8 +505,8 @@
                 `/admin/students/${student.id}`; // قم بتغيير مسار الـ Route حسب التسمية لديك
 
             // 3. تجهيز فورم تعديل الصف والشعبة
-            document.getElementById('input_academic_level').value = student.academic_level;
-            document.getElementById('input_section_name').value = student.section_name;
+            document.getElementById('input_grade_name').value = student.grade_id;
+            document.getElementById('input_section_name').value = student.section_id;
             document.getElementById('form_edit_class').action =
                 `/admin/students/edit-class/${student.id}`; // عدّل الـ URL حسب الـ routes عندك
 
@@ -594,20 +519,6 @@
             document.getElementById('form_delete_student').action =
                 `/admin/students/${student.id}`; // 5. إظهار المودال الرئيسي
             openModal('mainStudentModal');
-        }
-
-        // الدوال المساعدة الخاصة بك لفتح وإغلاق المودالات
-        function openModal(id) {
-            document.getElementById(id).classList.remove('hidden');
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
-        }
-
-        function switchModal(closeId, openId) {
-            closeModal(closeId);
-            openModal(openId);
         }
     </script>
     <script>

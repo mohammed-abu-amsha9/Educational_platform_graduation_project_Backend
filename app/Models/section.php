@@ -17,4 +17,9 @@ class Section extends Model
     {
         return $this->belongsTo(grade::class, 'grade_id');
     }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class, 'section_id');
+    }
 }

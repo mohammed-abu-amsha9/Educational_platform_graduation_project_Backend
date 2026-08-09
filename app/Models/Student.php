@@ -25,7 +25,10 @@ class Student extends Model
     {
         return $this->belongsTo(grade::class, 'grade_id');
     }
-
+    public function section()
+    {
+        return $this->belongsTo(Section::class, 'section_id');
+    }
 
     /**
      * جلب سجلات حضور وغياب الطالب بالكامل
@@ -102,27 +105,7 @@ class Student extends Model
     public function getTotalRequiredFeesAttribute()
     {
         // 1. نجلب القيمة الأساسية المحدثة من جدول الطلاب أولاً (الـ 1500 أو الـ 1000 الحالية)
-        $studentAmount = (float) ($this->attributes['total_paid_amount'] ?? 0);
-
-        // 2. نتحقق من وجود السجل المالي للشهر الحالي في جدول المدفوعات
-        $currentMonthFee = $this->fees()->where('billing_month', date('m-Y'))->first();
-
-        if ($currentMonthFee) {
-            // 🔥 حركة ذكية: إذا تم تعديل رسوم الطالب الأساسية لتصبح مختلفة عن فاتورة الشهر، نقوم بتحديث الفاتورة فوراً خلف الكواليس
-            if ((float)$currentMonthFee->monthly_amount !== $studentAmount) {
-                $currentMonthFee->monthly_amount = $studentAmount;
-                // إعادة حساب المتبقي داخل الجدول إذا كان الحقل موجوداً
-                if (Schema::hasColumn('fees', 'remaining_amount')) {
-                    $currentMonthFee->remaining_amount = $studentAmount - $currentMonthFee->paid_amount;
-                }
-                $currentMonthFee->save();
-            }
-
-            return (float) $currentMonthFee->monthly_amount;
-        }
-
-        // 3. إذا لم يكن له سجل دفع أصلاً (طالب جديد)، نرجع القيمة من جدول الطالب مباشرة
-        return $studentAmount;
+        return (float) ($this->attributes['total_paid_amount'] ?? 0);
     }
     // 3. الحسبة الذهبية للمبلغ المتبقي: (المطلوب للشهر الحالي - المدفوع للشهر الحالي)
     public function getRemainingFeesAttribute()
@@ -135,8 +118,8 @@ class Student extends Model
     // 4. الحالات المرتبطة بـ ألوان الـ Blade (paid, partial, unpaid)
     public function getFinancialStatusAttribute()
     {
-        $totalRequired = $this->total_required_fees;
-        $totalPaid     = $this->total_paid_amount;
+        $totalRequired = $this->total_required_fees; // اجمال المطلوب
+        $totalPaid     = $this->total_paid_amount; // اجمالي المدفوع
 
         // إذا دفع كامل المطلوب أو أكثر، فهو مسدد بالكامل (Remaining = 0)
         if ($totalRequired > 0 && $totalPaid >= $totalRequired) {

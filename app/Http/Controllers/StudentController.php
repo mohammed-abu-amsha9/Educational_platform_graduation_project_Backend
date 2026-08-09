@@ -19,7 +19,7 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         // جلب جميع الطلاب من قاعدة البيانات
-        $students = Student::filter($request->all())->with('grade')->get();
+        $students = Student::filter($request->all())->with(['grade', 'section'])->get();
 
         // 2. جلب جميع الصفوف لعرضها في قائمة الـ Select
         $grades = grade::with('sections')->get();
@@ -188,6 +188,8 @@ class StudentController extends Controller
     {
         // العثور على الطالب وحذفه
         $student = Student::findOrFail($id);
+        // 1. 🟢 حذف سجلات الرسوم المرتبطة بالطالب
+        $student->fees()->delete(); // تأكد من أن اسم العلاقة في نموذج Student هو fees أو حسب المسمى لديك
         $student->account_status = 'no active';
         $student->save();
         $student->delete();
