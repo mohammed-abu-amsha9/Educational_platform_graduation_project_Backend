@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exam;
+use App\Models\Student;
 use App\Models\student_exam;
 use App\Models\student_exam_result;
 use App\Models\studentExamAnswer;
@@ -16,8 +17,13 @@ class StudentExamController extends Controller
      */
     public function index()
     {
-        // جلب الاختبارات المنشورة مع جلب علاقة الـ examQuestions التابعة لها
-        $exams = Exam::where('status', 'Published')->get();
+        $studentId = auth()->id();
+
+        $student = Student::find($studentId);
+
+        $exams = Exam::where('status', 'Published')
+            ->where('grade_id', $student->grade_id)
+            ->get();
 
         return view('student.tests', ['exams' => $exams]);
     }

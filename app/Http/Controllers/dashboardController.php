@@ -37,7 +37,7 @@ class dashboardController extends Controller
         // جلب الصفوف مع عدد طلابها
         $grades = grade::withCount('students')->get()->map(function ($classroom) {
             // السعة القصوى المحددة في الداتابيز، أو افتراضياً 20 لو مش موجود العمود
-            $maxCapacity = $classroom->max_capacity ?? 40;
+            $maxCapacity =  40;
 
             // حساب النسبة المئوية
             $percentage = $maxCapacity > 0
@@ -45,7 +45,7 @@ class dashboardController extends Controller
                 : 0;
 
             // حط النسبة داخل الموديل بشكل مؤقت لاستخدامها في الـ View
-            $classroom->percentage = $percentage;
+            $classroom->percentage = $percentage; // النسبة المئوية
             $classroom->is_full = $percentage >= 100;
 
             return $classroom;
@@ -56,6 +56,7 @@ class dashboardController extends Controller
         // جلب آخر 5 مدفوعات تمت
         $latestFees = fee::with('student')->latest()->take(5)->get();
         $examPublish = Exam::where('status', 'Published')->get();
+        
         return response()->view('admin.control_panel', [
             'totalStudents' => $totalStudents,
             'totalStudentsActive' => $totalStudentsActive,

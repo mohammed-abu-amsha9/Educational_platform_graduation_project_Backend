@@ -32,15 +32,11 @@ class ExamController extends Controller
     // دالة جلب الأسئلة العشوائية للمعاينة الحية (AJAX)
     public function fetchQuestions(Request $request)
     {
-        $classSection = $request->input('class_section');
-        $totalQuestions = $request->input('total_questions', 5);
-
-        if (!$classSection) {
-            return response()->json(['success' => false, 'message' => 'الرجاء تحديد الصف والمادة أولاً'], 400);
-        }
+        $classSubject = $request->input('class_subject');
+        $totalQuestions = $request->input('total_questions', 10);
 
         // تفكيك سلسلة "grade_id|subject_id"
-        $parts = explode('|', $classSection);
+        $parts = explode('|', $classSubject);
         $gradeId = $parts[0] ?? null;
         $subjectId = $parts[1] ?? null;
 
@@ -49,16 +45,9 @@ class ExamController extends Controller
         $questions = QuestionBank::with('options')
             ->where('grade_id', $gradeId)
             ->where('subject_id', $subjectId)
-            ->inRandomOrder()
+            ->inRandomOrder() // لاختلاف الاشئلة
             ->limit($totalQuestions)
             ->get();
-
-        if ($questions->isEmpty()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'عذراً، لا توجد أسئلة كافية متوفرة في بنك الأسئلة لهذا الصف والمادة.'
-            ]);
-        }
 
         return response()->json([
             'success' => true,
@@ -81,18 +70,18 @@ class ExamController extends Controller
     public function store(Request $request)
     {
         // 1. التحقق من صحة البيانات القادمة من الفورم
-        $validatedData = $request->validate([
-            'class_section'    => 'required|string', // يحتوي على "grade_id|subject_id"
+        $request->validate([
+            'class_subject'    => 'required|string', // يحتوي على "grade_id|subject_id"
             'Total_score'      => 'required|numeric|min:1',
             'total_questions'  => 'required|integer|min:1',
-            'Exam_duration'    => 'required|integer|min:5',
+            'Exam_duration'    => 'required|integer',
             'Start_time'       => 'required',
             'End_Time'         => 'required',
             'question_ids'     => 'required|array|min:1', // مصفوفة الـ IDs التي حقنها الجافاسكريبت
             'question_ids.*'   => 'required|integer',
         ]);
-        // 2. تفكيك قيمة الـ class_section (مثال: "1|3" تصبح صفيف يحتوي على 1 و 3)
-        $parts = explode('|', $request->input('class_section'));
+        // 2. تفكيك قيمة الـ class_subject (مثال: "1|3" تصبح صفيف يحتوي على 1 و 3)
+        $parts = explode('|', $request->input('class_subject'));
         $gradeId   = $parts[0] ?? null;
         $subjectId = $parts[1] ?? null; // هذا هو معرف المادة الذي نحتاجه
 
@@ -106,6 +95,7 @@ class ExamController extends Controller
         $teacherId = auth()->id();
         $exam = new Exam();
         $exam->teacher_id = $teacherId;
+        $exam->grade_id = $gradeId;
         $exam->title = "اختبار " . $subjectName;
         $exam->Total_score = $request->input('Total_score');
         $exam->total_questions = $request->input('total_questions');

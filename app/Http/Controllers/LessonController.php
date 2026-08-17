@@ -19,8 +19,6 @@ class LessonController extends Controller
         $lessons = Lesson::with('subject')->where('teacher_id', $teacherId)->get();
         // جلب المواد الفريدة التي يدرسها هذا المعلم
         $teacher = Teacher::with(['subjects.grade', 'grades.sections'])->find($teacherId);
-
-        // جلب الصفوف الدراسية الموكلة لهذا المعلم
         // 3. جلب المواد الفريدة والصفوف الموكلة له
         $teacherSubjects = $teacher->subjects;
         $teacherGrades   = $teacher->grades;
@@ -28,7 +26,7 @@ class LessonController extends Controller
         // 4. تمرير البيانات الصحيحة إلى صفحة الـ Blade
         return view('teacher.lessons', [
             'lessons' => $lessons,
-            'teacherSubjects' => $teacherSubjects, // 🟢 تم إصلاح الاسم هنا
+            'teacherSubjects' => $teacherSubjects,
             'teacherGrades'   => $teacherGrades
         ]);
     }
@@ -69,7 +67,6 @@ class LessonController extends Controller
             // 💡 لمسة إضافية: إذا كان نوع الملف "رابط خارجي" وقام بكتابة الرابط في نفس الحقل
             $fileUrl = $request->input('file');
         }
-
         // 3. إنشاء كائن المحاضرة الأساسي وحفظه
         $lesson = new Lesson();
         $lesson->teacher_id = $teacherId;

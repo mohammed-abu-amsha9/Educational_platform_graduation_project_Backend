@@ -32,22 +32,14 @@
                 </div>
             </div>
 
-            <nav class="hidden md:flex items-center gap-1 bg-slate-100 dark:bg-slate-700 p-1.5 rounded-xl">
+            <nav class="hidden md:flex items-center gap-1 p-1.5 rounded-xl">
                 @php
                     $role = auth()->user()->role->role_name;
                 @endphp
-                @if ($role == 'ادمن')
-                    <a href="{{ route('dashboard.index') }}"
-                        class="px-5 py-2 rounded-lg text-sm font-semibold text-gray-600  hover:text-teal-700 dark:text-zinc-100">لوحة
-                        الإدارة</a>
-                @elseif ($role == 'معلم')
+                @if ($role == 'معلم')
                     <a href="{{ route('dashboardTeacher.index') }}"
                         class="px-5 py-2 rounded-lg text-sm font-semibold bg-teal-700 text-white shadow-sm dark:text-zinc-100">بوابة
                         المعلم</a>
-                @elseif ($role == 'طالب')
-                    <a href="{{ route('dashboardStudent.index') }}"
-                        class="px-5 py-2 rounded-lg text-sm font-semibold text-gray-600  hover:text-teal-700 dark:text-zinc-100">بوابة
-                        الطالب</a>
                 @endif
             </nav>
             <div class="hidden md:flex items-center gap-4">
@@ -103,18 +95,10 @@
             @php
                 $role = auth()->user()->role->role_name;
             @endphp
-            @if ($role == 'ادمن')
-                <a href="{{ route('dashboard.index') }}"
-                    class="block px-4 py-2.5 rounded-xl text-sm font-bold text-gray-600  hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">لوحة
-                    الإدارة</a>
-            @elseif ($role == 'معلم')
+            @if ($role == 'معلم')
                 <a href="{{ route('dashboardTeacher.index') }}"
                     class="block px-4 py-2.5 rounded-xl text-sm font-semibold bg-teal-700 text-white shadow-sm dark:text-zinc-100">بوابة
                     المعلم</a>
-            @elseif ($role == 'طالب')
-                <a href="{{ route('dashboardStudent.index') }}"
-                    class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-600  hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">بوابة
-                    الطالب</a>
             @endif
             <div class="border-t border-gray-200 dark:border-slate-700 my-2 pt-2">
                 <button id="mobile-user-menu-btn"
@@ -260,7 +244,6 @@
     <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
             // 1. حالة النجاح (Success Toast)
             @if (session('success'))
                 Swal.mixin({
@@ -389,34 +372,6 @@
             // تدوير السهم الصغير بزاوية 180 درجة لإعطاء حركة تفاعلية
             mobileArrow.classList.toggle("rotate-180");
         });
-    </script>
-    <script>
-        // ==========================================
-        // إدارة قائمة الإشعارات المنسدلة
-        // ==========================================
-        const notifBtn = document.getElementById("notification-btn");
-        const notifDropdown = document.getElementById("notification-dropdown");
-
-        if (notifBtn && notifDropdown) {
-            // عند الضغط على الجرس: اظهر أو اخفي القائمة
-            notifBtn.addEventListener("click", (e) => {
-                e.stopPropagation(); // يمنع انتشار الضغطة
-                notifDropdown.classList.toggle("hidden");
-
-                // إخفاء قائمة المستخدم إذا كانت مفتوحة لعدم التداخل
-                document.getElementById("user-dropdown")?.classList.add("hidden");
-            });
-
-            // إغلاق قائمة الإشعارات تلقائياً إذا ضغط المستخدم في أي مكان خارجها
-            document.addEventListener("click", (e) => {
-                if (
-                    !notifDropdown.contains(e.target) &&
-                    !notifBtn.contains(e.target)
-                ) {
-                    notifDropdown.classList.add("hidden");
-                }
-            });
-        }
     </script>
     @yield('scripts')
     @livewireScripts

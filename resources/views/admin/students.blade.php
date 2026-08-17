@@ -387,7 +387,8 @@
                         class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 rounded-xl py-2.5 px-3 text-sm outline-none text-slate-800 dark:text-zinc-100">
                         <option value="">اختر الصف...</option>
                         @foreach ($grades as $grade)
-                            <option value="{{ $grade->id }}">{{ $grade->name }}</option>
+                            <option value="{{ $grade->id }}" data-sections='@json($grade->sections)'>
+                                {{ $grade->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -397,9 +398,7 @@
                     <select required name="section_id" id="input_section_name"
                         class="w-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 rounded-xl py-2.5 px-3 text-sm outline-none text-slate-800 dark:text-zinc-100">
                         <option value="">اختر الشعبة...</option>
-                        @foreach ($grade->sections as $section)
-                            <option value="{{ $section->id }}">{{ $section->name }}</option>
-                        @endforeach
+
                     </select>
                 </div>
 
@@ -505,8 +504,58 @@
                 `/admin/students/${student.id}`; // قم بتغيير مسار الـ Route حسب التسمية لديك
 
             // 3. تجهيز فورم تعديل الصف والشعبة
-            document.getElementById('input_grade_name').value = student.grade_id;
-            document.getElementById('input_section_name').value = student.section_id;
+            const gradeSelect = document.getElementById('input_grade_name');
+            const sectionSelect = document.getElementById('input_section_name');
+
+            // أولاً: اختيار صف الطالب
+            gradeSelect.value = student.grade_id;
+
+            // ثانياً: إيجاد الـ option الخاص بهذا الصف
+            const selectedGradeOption =
+                gradeSelect.options[gradeSelect.selectedIndex];
+
+            // ثالثاً: تفريغ قائمة الشعب القديمة
+            sectionSelect.innerHTML = '<option value="">اختر الشعبة...</option>';
+
+            // رابعاً: جلب شعب الصف المختار
+            if (selectedGradeOption && selectedGradeOption.dataset.sections) {
+
+                const sections = JSON.parse(selectedGradeOption.dataset.sections);
+
+                // خامساً: إضافة شعب الصف إلى القائمة
+                sections.forEach(section => {
+
+                    const option = document.createElement('option');
+
+                    option.value = section.id;
+                    option.textContent = section.name;
+
+                    sectionSelect.appendChild(option);
+                });
+            }
+
+            // سادساً: اختيار شعبة الطالب
+            sectionSelect.value = student.section_id;
+            gradeSelect.addEventListener('change', function() {
+
+                sectionSelect.innerHTML = '<option value="">اختر الشعبة...</option>';
+
+                const selectedOption = this.options[this.selectedIndex];
+
+                if (selectedOption && selectedOption.dataset.sections) {
+
+                    const sections = JSON.parse(selectedOption.dataset.sections);
+
+                    sections.forEach(section => {
+                        const option = document.createElement('option');
+
+                        option.value = section.id;
+                        option.textContent = section.name;
+
+                        sectionSelect.appendChild(option);
+                    });
+                }
+            });
             document.getElementById('form_edit_class').action =
                 `/admin/students/edit-class/${student.id}`; // عدّل الـ URL حسب الـ routes عندك
 

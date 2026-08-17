@@ -77,7 +77,8 @@
     </style>
 @endsection
 @section('content')
-    <form method="POST" action="{{route('exams.store')}}" class="my-6 mx-auto space-y-6" dir="rtl" id="quizGeneratorForm">
+    <form method="POST" action="{{ route('exams.store') }}" class="my-6 mx-auto space-y-6" dir="rtl"
+        id="quizGeneratorForm">
         @csrf
         <div id="setupSection"
             class="bg-white dark:bg-slate-900 border border-gray-200 hover:border-emerald-400 dark:border-slate-800 p-6 rounded-3xl shadow-sm space-y-6 ">
@@ -101,7 +102,8 @@
 
                 <div class="lg:col-span-2">
                     <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">المادة والصف الدراسي</label>
-                    <select name="class_section" class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl p-2 text-sm">
+                    <select name="class_subject"
+                        class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl p-2 text-sm">
                         <option value="">-- كل الصفوف والمواد --</option>
 
                         {{-- الدوران على صفوف المعلم المحددة له فقط --}}
@@ -117,7 +119,7 @@
                                     $valueString = $grade->id . '|' . $subject->id;
                                 @endphp
                                 <option value="{{ $valueString }}"
-                                    {{ request('class_section') == $valueString ? 'selected' : '' }}>
+                                    {{ request('class_subject') == $valueString ? 'selected' : '' }}>
                                     {{ $grade->name }} - مادة ({{ $subject->name }})
                                 </option>
                             @endforeach
@@ -215,7 +217,7 @@
     </form>
 @endsection
 @section('scripts')
-    <script font-theme="pure-js">
+    <script>
         document.addEventListener("DOMContentLoaded", function() {
             const generateBtn = document.getElementById("generateQuizBtn");
             const previewSection = document.getElementById("quizPreviewSection");
@@ -223,8 +225,8 @@
             const printBtn = document.getElementById("printQuizBtn");
 
             // تأكد من لقط عنصر الـ select سواء كان له id أو اسم
-            const classSectionSelect = document.getElementById('class_section_select') || document.querySelector(
-                'select[name="class_section"]');
+            const classSectionSelect = document.getElementById('class_subject_select') || document.querySelector(
+                'select[name="class_subject"]');
 
             if (generateBtn) {
                 generateBtn.addEventListener("click", function(e) {
@@ -253,7 +255,7 @@
                                 "X-CSRF-TOKEN": "{{ csrf_token() }}"
                             },
                             body: JSON.stringify({
-                                class_section: classSectionValue,
+                                class_subject: classSectionValue,
                                 total_questions: totalQuestions
                             })
                         })
@@ -273,7 +275,7 @@
                                 const totalScoreInput = parseFloat(document.getElementsByName(
                                     "Total_score")[0]?.value) || 10;
                                 const markPerQuestion = (totalScoreInput / data.questions.length)
-                                    .toFixed(1);
+                                    .toFixed(0);
 
                                 // بناء الأسئلة ديناميكياً بناءً على النوع
                                 data.questions.forEach((question, index) => {
@@ -291,7 +293,7 @@
                                                 optionsHtml += `
                                             <div class="${isCorrect ? 'correct-option p-2.5 rounded-xl border border-teal-200 dark:border-teal-900/60 bg-teal-50/30 dark:bg-teal-950/10 text-teal-700 dark:text-teal-400 font-bold' : 'p-2.5 rounded-xl border border-gray-200 dark:border-slate-800 text-gray-500 dark:text-zinc-400'} flex items-center gap-2">
                                                 <i class="${isCorrect ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle'}"></i>
-                                                <span>${opt.text || opt.option_text} ${isCorrect ? '<span class="correct-text font-normal text-xs text-teal-600/80 mr-1">(الإجابة الصحيحة)</span>' : ''}</span>
+                                                <span>${opt.option_text} ${isCorrect ? '<span class="correct-text font-normal text-xs text-teal-600/80 mr-1">(الإجابة الصحيحة)</span>' : ''}</span>
                                             </div>`;
                                             });
                                         }
@@ -301,30 +303,31 @@
                                         const isTrueCorrect = question.correct_answer ===
                                             'true' || question.correct_answer == 1;
                                         optionsHtml = `
-                                    <div class="flex items-center gap-6 pt-1">
-                                        <div class="flex items-center gap-2 text-gray-500 dark:text-zinc-400">
-                                            <i class="${isTrueCorrect ? 'fa-solid fa-square-check text-emerald-600' : 'fa-regular fa-square'}"></i>
-                                            <span>صح ${isTrueCorrect ? '<span class="correct-text text-[11px] font-bold text-emerald-600">(الإجابة الصحيحة)</span>' : ''}</span>
-                                        </div>
-                                        <div class="flex items-center gap-2 text-gray-500 dark:text-zinc-400">
-                                            <i class="${!isTrueCorrect ? 'fa-solid fa-square-check text-emerald-600' : 'fa-regular fa-square'}"></i>
-                                            <span>خطأ ${!isTrueCorrect ? '<span class="correct-text text-[11px] font-bold text-emerald-600">(الإجابة الصحيحة)</span>' : ''}</span>
-                                        </div>
-                                    </div>`;
+                                        <div class="flex items-center gap-6 pt-1">
+                                            <div class="flex items-center gap-2 text-gray-500 dark:text-zinc-400">
+                                                <i class="${isTrueCorrect ? 'fa-solid fa-square-check text-emerald-600' : 'fa-regular fa-square'}"></i>
+                                                <span>صح ${isTrueCorrect ? '<span class="correct-text text-[11px] font-bold text-emerald-600">(الإجابة الصحيحة)</span>' : ''}</span>
+                                            </div>
+                                            <div class="flex items-center gap-2 text-gray-500 dark:text-zinc-400">
+                                                <i class="${!isTrueCorrect ? 'fa-solid fa-square-check text-emerald-600' : 'fa-regular fa-square'}"></i>
+                                                <span>خطأ ${!isTrueCorrect ? '<span class="correct-text text-[11px] font-bold text-emerald-600">(الإجابة الصحيحة)</span>' : ''}</span>
+                                            </div>
+                                        </div>`;
                                     }
 
                                     const questionTemplate = `
-                                <div class="p-4 border border-gray-200 hover:border-gray-400 dark:border-slate-800 bg-gray-50/50 dark:bg-slate-950/20 rounded-2xl space-y-3 relative group">
-                                    <input type="hidden" name="question_ids[]" value="${question.id}">
-                                    <div class="flex items-start justify-between gap-4">
-                                        <div class="space-y-1">
-                                            <span class="text-gray-400 font-bold">سؤال ${index + 1}</span>
-                                            <p class="font-medium text-slate-800 dark:text-zinc-200 text-sm">${question.text || question.question_text}</p>
+                                        <div class="p-4 border border-gray-200 hover:border-gray-400 dark:border-slate-800 bg-gray-50/50 dark:bg-slate-950/20 rounded-2xl space-y-3 relative group">
+                                            <input type="hidden" name="question_ids[]" value="${question.id}">
+                                            <div class="flex items-start justify-between gap-4">
+                                                <div class="space-y-1">
+                                                    <span class="text-gray-400 font-bold">سؤال ${index + 1}</span>
+                                                    <p class="font-medium text-slate-800 dark:text-zinc-200 text-sm">${question.question_text}</p>
+                                                </div>
+                                                <span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400 font-bold text-[10px] shrink-0">${markPerQuestion} درجة</span>
+                                            </div>
+
                                         </div>
-                                        <span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400 font-bold text-[10px] shrink-0">${markPerQuestion} درجة</span>
-                                    </div>
-                                    ${optionsHtml}
-                                </div>`;
+                                    `;
 
                                     questionsContainer.insertAdjacentHTML('beforeend',
                                         questionTemplate);
@@ -355,6 +358,7 @@
                 });
             }
 
+            // الطباعة
             if (printBtn) {
                 printBtn.addEventListener("click", function() {
                     window.print();
@@ -379,34 +383,14 @@
         }
 
         // 2. ربط فلتر "الصف والمادة" ليعيد تحميل الصفحة فوراً عند تغيير الاختيار
-        // تأكد أن عنصر الـ select يحتوي على المعرف id="class_section_select" أو أضفه له
-        const classSectionSelect = document.getElementById('class_section_select') || document.querySelector(
-            'select[name="class_section"]');
+        // تأكد أن عنصر الـ select يحتوي على المعرف id="class_subject_select" أو أضفه له
+        const classSectionSelect = document.getElementById('class_subject_select') || document.querySelector(
+            'select[name="class_subject"]');
 
         if (classSectionSelect) {
             classSectionSelect.addEventListener('change', function() {
                 // استدعاء دالة الفلترة وتمرير الاسم والقيمة المركبة (مثل 1|3)
-                filterQuestions('class_section', this.value);
-            });
-        }
-
-        // 3. الجزء الخاص بتبديل واجهة إضافة الأسئلة (MCQ / True-False) كما هي لديك
-        const questionTypeSelect = document.getElementById('questionTypeSelect');
-        if (questionTypeSelect) {
-            questionTypeSelect.addEventListener('change', function() {
-                const mcqSection = document.getElementById('mcqSection');
-                const tfSection = document.getElementById('tfSection');
-
-                if (this.value === 'mcq') {
-                    mcqSection?.classList.remove('hidden');
-                    tfSection?.classList.add('hidden');
-                } else if (this.value === 'tf') {
-                    tfSection?.classList.remove('hidden');
-                    mcqSection?.classList.add('hidden');
-                } else {
-                    mcqSection?.classList.add('hidden');
-                    tfSection?.classList.add('hidden');
-                }
+                filterQuestions('class_subject', this.value);
             });
         }
     </script>

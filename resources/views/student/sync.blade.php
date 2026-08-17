@@ -53,78 +53,6 @@
             <div id="pendingContainer" class="space-y-2.5">
                 <div id="pendingItem-1"
                     class="bg-white dark:bg-slate-900/60 border border-amber-500/20 p-4 rounded-2xl flex items-center justify-between gap-4">
-                    <div class="flex items-start gap-3">
-                        <div
-                            class="w-8 h-8 rounded-xl bg-amber-950/60 text-amber-500 border border-amber-500/20 flex items-center justify-center shrink-0">
-                            <i class="fa-solid fa-file-signature text-xs"></i>
-                        </div>
-                        <div class="space-y-1">
-                            <h5 class="font-bold text-gray-700 dark:text-white">
-                                نتيجة اختبار: اختبار العلوم - الكيمياء الأساسية (3/4)
-                            </h5>
-                            <p class="text-[11px] text-gray-600 dark:text-gray-400">
-                                تم الحفظ محلياً: 2026-06-19 • 03:15 م
-                            </p>
-                        </div>
-                    </div>
-                    <span
-                        class="bg-amber-950/80 text-amber-500 border border-amber-500/20 text-[9px] font-black px-2 py-1 rounded-lg shrink-0">
-                        بانتظار شبكة
-                        <i class="fa-solid fa-wifi-slash mr-0.5 text-[8px]"></i>
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <div class="space-y-3">
-            <h4 class="font-black text-emerald-400 px-1 flex items-center gap-1.5">
-                <i class="fa-solid fa-circle-check text-[11px]"></i> تمت مزامنتها
-                (<span id="successLabelCount">2</span>)
-            </h4>
-
-            <div class="space-y-2.5">
-                <div
-                    class="bg-white dark:bg-slate-900/40 border border-slate-400 p-4 rounded-2xl flex items-center justify-between gap-4 opacity-85">
-                    <div class="flex items-start gap-3">
-                        <div
-                            class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-400 flex items-center justify-center shrink-0">
-                            <i class="fa-solid fa-square-poll-vertical text-xs"></i>
-                        </div>
-                        <div class="space-y-1">
-                            <h5 class="font-bold text-gray-700 dark:text-white">
-                                نتيجة اختبار: اختبار التربية الإسلامية (2/3)
-                            </h5>
-                            <p class="text-[11px] text-gray-600 dark:text-gray-400">
-                                تمت المزامنة: 2026-06-15 • 02:44 م
-                            </p>
-                        </div>
-                    </div>
-                    <span
-                        class="bg-emerald-100 text-emerald-400 border border-emerald-500/20 text-[9px] font-bold px-2 py-1 rounded-lg shrink-0">
-                        تمت المزامنة <i class="fa-solid fa-check text-[8px]"></i>
-                    </span>
-                </div>
-
-                <div
-                    class="bg-white dark:bg-slate-900/40 border border-slate-400 p-4 rounded-2xl flex items-center justify-between gap-4 opacity-85">
-                    <div class="flex items-start gap-3">
-                        <div
-                            class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-400 flex items-center justify-center shrink-0">
-                            <i class="fa-solid fa-envelope text-xs"></i>
-                        </div>
-                        <div class="space-y-1">
-                            <h5 class="font-bold text-gray-700 dark:text-white">
-                                رسالة جديدة مبعوثة للأستاذ: ورقة عمل الرياضيات
-                            </h5>
-                            <p class="text-[10px] text-gray-500">
-                                تمت المزامنة: 2026-06-15 • 02:54 م
-                            </p>
-                        </div>
-                    </div>
-                    <span
-                        class="bg-emerald-100 text-emerald-400 border border-emerald-500/20 text-[9px] font-bold px-2 py-1 rounded-lg shrink-0">
-                        تمت المزامنة <i class="fa-solid fa-check text-[8px]"></i>
-                    </span>
                 </div>
             </div>
         </div>
@@ -181,7 +109,6 @@
                     // تحديث العدادات العلوية في واجهتك ديناميكياً (هنا سيتم التصفير)
                     document.getElementById("totalSyncCount").innerText = pendingList.length + successList.length;
                     document.getElementById("successSyncCount").innerText = successList.length;
-                    document.getElementById("successLabelCount").innerText = successList.length;
                     document.getElementById("pendingSyncCount").innerText = pendingList.length;
                     document.getElementById("pendingLabelCount").innerText = pendingList.length;
 

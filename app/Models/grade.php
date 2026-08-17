@@ -18,6 +18,11 @@ class Grade extends Model
         return $this->hasMany(section::class, 'grade_id');
     }
 
+    public function exams()
+    {
+        return $this->hasMany(Exam::class, 'grade_id');
+    }
+
     /**
      * جلب كافة المواد التابعة لهذا الصف
      */

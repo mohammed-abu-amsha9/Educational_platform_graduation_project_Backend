@@ -23,6 +23,11 @@ class Exam extends Model
         return $this->belongsTo(Teacher::class, 'teacher_id');
     }
 
+    public function grade()
+    {
+        return $this->belongsTo(grade::class, 'grade_id');
+    }
+
     /** الطلاب الذين دخلوا هذا الامتحان وسجلات دخولهم */
     public function students()
     {

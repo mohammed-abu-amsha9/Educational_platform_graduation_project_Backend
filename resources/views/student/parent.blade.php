@@ -34,19 +34,11 @@
                 </div>
             </div>
 
-            <nav class="hidden md:flex items-center gap-1 bg-gray-100 dark:bg-slate-800 p-1.5 rounded-xl">
+            <nav class="hidden md:flex items-center  p-1.5 rounded-xl">
                 @php
                     $role = auth()->user()->role->role_name;
                 @endphp
-                @if ($role == 'ادمن')
-                    <a href="{{ route('dashboard.index') }}"
-                        class="px-5 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">لوحة
-                        الإدارة</a>
-                @elseif ($role == 'معلم')
-                    <a href="{{ route('dashboardTeacher.index') }}"
-                        class="px-5 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">بوابة
-                        المعلم</a>
-                @elseif ($role == 'طالب')
+                @if ($role == 'طالب')
                     <a href="{{ route('dashboardStudent.index') }}"
                         class="px-5 py-2 rounded-lg text-sm font-semibold bg-teal-700 text-white shadow-sm">بوابة
                         الطالب</a>
@@ -104,15 +96,7 @@
             @php
                 $role = auth()->user()->role->role_name;
             @endphp
-            @if ($role == 'ادمن')
-                <a href="{{ route('dashboard.index') }}"
-                    class="block px-4 py-2.5 rounded-xl text-sm font-bold text-gray-600 hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">لوحة
-                    الإدارة</a>
-            @elseif ($role == 'معلم')
-                <a href="{{ route('dashboardTeacher.index') }}"
-                    class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-600 hover:text-teal-700 dark:text-zinc-300 dark:hover:text-teal-400">بوابة
-                    المعلم</a>
-            @elseif ($role == 'طالب')
+            @if ($role == 'طالب')
                 <a href="{{ route('dashboardStudent.index') }}"
                     class="block px-4 py-2.5 rounded-xl text-sm font-semibold bg-teal-700 text-white shadow-sm">بوابة
                     الطالب</a>

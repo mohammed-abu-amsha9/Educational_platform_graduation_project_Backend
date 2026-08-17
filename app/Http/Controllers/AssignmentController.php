@@ -17,6 +17,7 @@ class AssignmentController extends Controller
         $teacherId = auth()->id();
         // 1. جلب المعلم مع المواد والصفوف والشعب (مع منع التكرار لاحقاً)
         $currentTeacher = Teacher::with(['subjects', 'grades.sections'])->find($teacherId);
+
         return response()->view('teacher.tasks_manage', [
             'currentTeacher' => $currentTeacher,
         ]);

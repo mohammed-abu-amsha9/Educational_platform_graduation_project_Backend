@@ -27,9 +27,9 @@ class QuestionBankController extends Controller
         }
 
         // 3. الفرز الذكي المصلح حسب الصف والمادة (تفكيك القيمة المركبة)
-        if ($request->filled('class_section')) {
+        if ($request->filled('class_subject')) {
             // تفكيك القيمة القادمة مثل "1|1" إلى مصفوفة تحتوي على [grade_id, subject_id]
-            $parts = explode('|', $request->input('class_section'));
+            $parts = explode('|', $request->input('class_subject'));
 
             if (count($parts) === 2) {
                 $gradeId   = $parts[0];
@@ -41,8 +41,8 @@ class QuestionBankController extends Controller
             }
         }
 
-        // 4. جلب الأسئلة المفلترة (يفضل استخدام الـ العلاقات مثل مع الصف والمادة إذا كانت متوفرة)
-        $questionBank = $query->with(['grade', 'subject'])->latest()->get();
+        // 4. جلب الأسئلة المفلترة (يفضل استخدام الـ العلاقات  مع الصف والمادة إذا كانت متوفرة)
+        $questionBank = $query->with(['grade', 'subject'])->latest()->get(); // latest ترتيب تنازليلا
 
         // جلب المعلم مع المواد المربوطة به، والصفوف المربوطة به مباشرة عبر جدول الربط
         $currentTeacher = Teacher::with(['subjects', 'grades'])->find($teacherId);
@@ -72,16 +72,16 @@ class QuestionBankController extends Controller
     {
         // 1. التحقق من البيانات الأساسية للسؤال
         $request->validate([
-            'class_section'    => 'required|string', // الحقل الذي يحتوي على الصف والمادة معاً
+            'class_subject'    => 'required|string', // الحقل الذي يحتوي على الصف والمادة معاً
             'question_text'    => 'required|string',
             'question_type'    => 'required|in:mcq,tf',
             'difficulty_level' => 'required|in:easy,medium,hard',
         ]);
 
-        $teacher_id = auth()->id(); // مُثبت مؤقتاً لمشروع التخرج
+        $teacher_id = auth()->id();
 
         // تفكيك سلسلة "الصف|المادة" المرسلة من الـ Blade
-        $parts = explode('|', $request->input('class_section'));
+        $parts = explode('|', $request->input('class_subject'));
         if (count($parts) !== 2) {
             return redirect()->back()->with('error', 'بيانات الصف والمادة غير صالحة.');
         }
@@ -164,9 +164,9 @@ class QuestionBankController extends Controller
      */
     public function destroy($id)
     {
-        $question = QuestionBank::findOrFail($id);
-        $question->options()->delete();
-        studentExamAnswer::where('question_bank_id', $id)->delete();
+        $question = QuestionBank::findOrFail($id); // حذف السؤال
+        $question->options()->delete(); // حذف خيارات السؤال
+        studentExamAnswer::where('question_bank_id', $id)->delete(); // حذف اجابة الطالب المتعلقة لاسؤال
         $question->delete();
         return redirect()->back()->with('success', 'تم حذف السؤال من البنك، وإزالته من كافة الاختبارات وإجابات الطلاب بنجاح!');
 

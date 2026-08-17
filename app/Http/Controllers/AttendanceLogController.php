@@ -17,7 +17,7 @@ class AttendanceLogController extends Controller
         $teacherId = auth()->id();
 
         // جلب المعلم مع الصفوف الموكلة إليه (عبر علاقة grades وموادها)
-        $teacher = Teacher::with(['grades.sections', 'subjects.grade'])->find($teacherId);
+        $teacher = Teacher::with('grades.sections')->find($teacherId);
 
         // استخراج الصفوف الفريدة التابعة للمعلم
         $teacherClasses = $teacher ? $teacher->grades->unique('id') : collect();
@@ -42,8 +42,8 @@ class AttendanceLogController extends Controller
                 // جلب الحضور السابق
                 $existingAttendance = Attendance_log::where('date', $request->input('date'))
                     ->where('teacher_id', $teacherId)
-                    ->whereIn('student_id', $students->pluck('id'))
-                    ->pluck('status', 'student_id')
+                    ->whereIn('student_id', $students->pluck('id')) // بجيب قائمة student_id من مجموهة طلاب
+                    ->pluck('status', 'student_id') // وبجيب حالتهم
                     ->toArray();
             }
         }
@@ -78,7 +78,7 @@ class AttendanceLogController extends Controller
         // معرف المعلم الحالي (مثبت مؤقتاً برقم 1)
         $teacherId = auth()->id();
 
-        // التاريخ المرسل من الحقل المخفي في الواجهة
+        // التاريخ المرسل من الحقل  في الواجهة
         $date = $request->input('date');
 
         // 2. الدوران على مصفوفة الحضور لمعالجة كل طالب على حدة

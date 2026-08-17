@@ -41,20 +41,22 @@
                             class="grid grid-cols-2 gap-2 border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-950 rounded-xl p-3 max-h-40 overflow-y-auto">
 
                             {{-- الدوران حول الشعب المستخرجة عبر صفوف المعلم --}}
-                            @foreach ($teacherSubjects as $section)
-                                <label data-grade="{{ $section->grade_id }}"
-                                    class="section-checkbox-item hidden border border-gray-200 dark:border-slate-800 rounded-xl p-2 flex items-center justify-between gap-2 cursor-pointer bg-gray-50/30 dark:bg-slate-950/20 hover:border-teal-500 transition-all">
-                                    <div class="flex items-center gap-2">
-                                        <input type="checkbox" name="grades[]" value="{{ $section->id }}"
-                                            class="accent-teal-600 rounded w-4 h-4 section-input" />
-                                        <span class="font-bold text-xs text-slate-700 dark:text-zinc-300">
-                                            {{ $section->grade->name ?? '' }} - شعبة ({{ $section->name }})
+                            @foreach ($teacherGrades as $grade)
+                                @foreach ($grade->sections as $section)
+                                    <label data-grade="{{ $grade->id }}"
+                                        class="section-checkbox-item hidden border border-gray-200 dark:border-slate-800 rounded-xl p-2 flex items-center justify-between gap-2 cursor-pointer bg-gray-50/30 dark:bg-slate-950/20 hover:border-teal-500 transition-all">
+                                        <div class="flex items-center gap-2">
+                                            <input type="checkbox" name="grades[]" value="{{ $section->id }}"
+                                                class="accent-teal-600 rounded w-4 h-4 section-input" />
+                                            <span class="font-bold text-xs text-slate-700 dark:text-zinc-300">
+                                                {{ $grade->name }} - شعبة ({{ $section->name }})
+                                            </span>
+                                        </div>
+                                        <span class="text-teal-600 text-xs">
+                                            <i class="fa-solid fa-users text-[10px]"></i>
                                         </span>
-                                    </div>
-                                    <span class="text-teal-600 text-xs">
-                                        <i class="fa-solid fa-users text-[10px]"></i>
-                                    </span>
-                                </label>
+                                    </label>
+                                @endforeach
                             @endforeach
 
                             <div id="no_subject_hint"
@@ -73,10 +75,10 @@
 
                     <div class="space-y-1">
                         <label class="font-bold mt-3 text-slate-700 dark:text-zinc-300 block">نوع الملف:</label>
-                        <div class="grid grid-cols-3 gap-2">
+                        <div class="grid grid-cols-2 gap-2">
                             <label
                                 class="border border-gray-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center justify-center gap-1 cursor-pointer hover:border-teal-500">
-                                <input type="radio" name="file_type" value="video"  class="accent-teal-600" />
+                                <input type="radio" name="file_type" value="video" class="accent-teal-600" />
                                 <i class="fa-solid fa-video text-amber-500 text-xs"></i>
                                 <span class="font-bold text-[10px]">فيديو شرح</span>
                             </label>
@@ -86,12 +88,7 @@
                                 <i class="fa-solid fa-file-pdf text-rose-500 text-xs"></i>
                                 <span class="font-bold text-[10px]">ملف PDF</span>
                             </label>
-                            <label
-                                class="border border-gray-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center justify-center gap-1 cursor-pointer hover:border-teal-500">
-                                <input type="radio" name="file_type" value="link" class="accent-teal-600" />
-                                <i class="fa-solid fa-bezier-curve text-indigo-500 text-xs"></i>
-                                <span class="font-bold text-[10px]">مرفق خارجي</span>
-                            </label>
+
                         </div>
                     </div>
 
@@ -144,10 +141,11 @@
                                         المادة:
                                         <span
                                             class="text-teal-600 font-bold">{{ $lesson->subject->name ?? 'مادة محذوفة أو غير معرفة' }}</span>
-                                        • الشُعب:
+                                        •
                                         <span class="font-medium text-slate-600 dark:text-zinc-300">
                                             @if ($lesson->subject && $lesson->subject->grade)
                                                 @foreach ($lesson->subject->grade->sections as $section)
+                                                    {{ $section->grade->name }}
                                                     ({{ $section->name }})
                                                     {{ !$loop->last ? '، ' : '' }}
                                                 @endforeach
@@ -195,7 +193,7 @@
             const sectionItems = document.querySelectorAll('.section-checkbox-item');
 
             // إعادة إلغاء تحديد الـ checkboxes عند تغيير المادة لمنع إرسال بيانات خاطئة
-            document.querySelectorAll('.grade-input').forEach(input => input.checked = false);
+            document.querySelectorAll('.section-input').forEach(input => input.checked = false);
 
             if (!targetGradeId) {
                 // إذا لم يتم اختيار مادة، نخفي كل الصفوف ونظهر رسالة التنبيه

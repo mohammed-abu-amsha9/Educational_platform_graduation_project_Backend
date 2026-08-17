@@ -1,5 +1,5 @@
 @extends('teacher.parent')
-@section('title', 'مولد الاختبارات')
+@section('title', 'الاختبارات')
 @section('content')
     <div class="container mx-auto px-4 py-8" dir="rtl">
 
@@ -86,7 +86,7 @@
                                 <td class="p-4">
                                     <div class="flex flex-col gap-1">
                                         <span class="font-bold text-slate-800 dark:text-zinc-200 text-sm">
-                                            {{ $exam->title }}
+                                            {{ $exam->title }} - {{ $exam->grade->name }}
                                         </span>
                                         <span class="text-[10px] text-gray-400 dark:text-slate-500 font-medium">
                                             تاريخ الإنشاء: {{ $exam->created_at->format('Y-m-d') }}
@@ -175,9 +175,6 @@
                     </tbody>
                 </table>
             </div>
-
-
         </div>
-
     </div>
 @endsection

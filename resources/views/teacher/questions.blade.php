@@ -20,9 +20,9 @@
                     <label class="block text-[10px] font-bold text-gray-700 dark:text-slate-400  mb-1">
                         الصف الدراسي والمادة
                     </label>
-                    <select name="class_section" class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100   rounded-xl p-2 text-sm">
+                    <select name="class_subject" id="class_section_select"
+                        class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100   rounded-xl p-2 text-sm">
                         <option value="">-- كل الصفوف والمواد --</option>
-
                         {{-- الدوران على صفوف المعلم المحددة له فقط --}}
                         @foreach ($teacherGrades as $grade)
                             {{-- فلترة المواد: نعرض فقط مواد المعلم التي تنتمي لهذا الصف الحالي (بناءً على grade_id داخل المادة) --}}
@@ -36,7 +36,7 @@
                                     $valueString = $grade->id . '|' . $subject->id;
                                 @endphp
                                 <option value="{{ $valueString }}"
-                                    {{ request('class_section') == $valueString ? 'selected' : '' }}>
+                                    {{ request('class_subject') == $valueString ? 'selected' : '' }}>
                                     {{ $grade->name }} - مادة ({{ $subject->name }})
                                 </option>
                             @endforeach
@@ -131,9 +131,6 @@
                 </table>
             </div>
         </div>
-
-
-
         <div id="questionModal"
             class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 hidden"
             dir="rtl">
@@ -151,12 +148,13 @@
                 </div>
 
                 <form action="{{ route('questions.store') }}" method="POST" class="p-6 space-y-4 text-xs">
-                    @csrf
+                    @csrf {{-- @csrf رمز حماية --}}
                     <div class="w-full">
                         <label class="block text-[10px] font-bold text-gray-700 dark:text-slate-400 mb-1">المادة
                             والصف</label>
                         {{-- 🟢 تم تعديل الـ name هنا ليتوافق مع استقبال الباك إند --}}
-                        <select name="class_section" class="w-full border border-gray-200 rounded-xl p-2 text-sm">
+                        <select name="class_subject"
+                            class="w-full border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100  py-2.5 px-4 outline-none focus:border-teal-500 cursor-pointer rounded-xl p-2 text-sm">
                             <option value="">-- كل الصفوف والمواد --</option>
 
                             {{-- الدوران على صفوف المعلم المحددة له فقط --}}
@@ -171,8 +169,8 @@
                                         // تركيب القيمة الفريدة المكونة من معرف الصف ومعرف المادة
                                         $valueString = $grade->id . '|' . $subject->id;
                                     @endphp
-                                    <option value="{{ $valueString }}"
-                                        {{ request('class_section') == $valueString ? 'selected' : '' }}>
+                                    <option class="" value="{{ $valueString }}"
+                                        {{ request('class_subject') == $valueString ? 'selected' : '' }}>
                                         {{ $grade->name }} - مادة ({{ $subject->name }})
                                     </option>
                                 @endforeach
@@ -290,7 +288,6 @@
             const openCreateBtn = document.getElementById("openModalBtn");
             const closeCreateBtn = document.getElementById("closeModalBtn");
             const closeCreateCross = document.getElementById("closeModalCross");
-
             const createTypeSelect = document.getElementById("questionTypeSelect");
             const createMcqSection = document.getElementById("mcqSection");
             const createTfSection = document.getElementById("tfSection");
@@ -312,49 +309,16 @@
                 if (val === "mcq") createMcqSection.classList.remove("hidden");
                 if (val === "tf") createTfSection.classList.remove("hidden");
             }
+
             createTypeSelect.addEventListener("change", toggleCreateSections);
             toggleCreateSections();
-
-            // --- 2) إدارة مودال التعديل المنفصل (Edit Modal) ---
-            const editModal = document.getElementById("editQuestionModal");
-            const openEditButtons = document.querySelectorAll(".openEditModalBtn");
-            const closeEditBtn = document.getElementById("closeEditBtn");
-            const closeEditCross = document.getElementById("closeEditCross");
-
-            const editTypeSelect = document.getElementById(
-                "editQuestionTypeSelect",
-            );
-            const editMcqSection = document.getElementById("editMcqSection");
-            const editTfSection = document.getElementById("editTfSection");
-
-            openEditButtons.forEach((btn) => {
-                btn.addEventListener("click", () =>
-                    editModal.classList.remove("hidden"),
-                );
-            });
-            [closeEditBtn, closeEditCross].forEach((btn) =>
-                btn.addEventListener("click", () =>
-                    editModal.classList.add("hidden"),
-                ),
-            );
-
-            function toggleEditSections() {
-                const val = editTypeSelect.value;
-                [editMcqSection, editTfSection].forEach((s) =>
-                    s.classList.add("hidden"),
-                );
-                if (val === "mcq") editMcqSection.classList.remove("hidden");
-                if (val === "tf") editTfSection.classList.remove("hidden");
-            }
-            editTypeSelect.addEventListener("change", toggleEditSections);
-            toggleEditSections();
         });
     </script>
     <script>
         // 1. الدالة الأساسية لتحديث الرابط وإعادة تحميل الصفحة بناءً على الفلتر
         function filterQuestions(key, value) {
-            let url = new URL(window.location.href);
-            let params = new URLSearchParams(url.search);
+            let url = new URL(window.location.href); // بياخذ رابط الصفحة الحالي من المتصفح.
+            let params = new URLSearchParams(url.search); // بحث البحث
 
             if (value === '' || value === 'all') {
                 params.delete(key);
@@ -363,40 +327,22 @@
             }
 
             // إعادة توجيه المتصفح للرابط الجديد مع الحفاظ على الفلاتر الأخرى
-            window.location.href = url.pathname + '?' + params.toString();
+            window.location.href = url.pathname + '?' + params.toString(); // pathname مسار الصفحة مختصر
         }
 
         // 2. ربط فلتر "الصف والمادة" ليعيد تحميل الصفحة فوراً عند تغيير الاختيار
         // تأكد أن عنصر الـ select يحتوي على المعرف id="class_section_select" أو أضفه له
         const classSectionSelect = document.getElementById('class_section_select') || document.querySelector(
-            'select[name="class_section"]');
+            'select[name="class_subject"]');
 
         if (classSectionSelect) {
             classSectionSelect.addEventListener('change', function() {
                 // استدعاء دالة الفلترة وتمرير الاسم والقيمة المركبة (مثل 1|3)
-                filterQuestions('class_section', this.value);
+                filterQuestions('class_subject', this.value);
             });
         }
 
-        // 3. الجزء الخاص بتبديل واجهة إضافة الأسئلة (MCQ / True-False) كما هي لديك
-        const questionTypeSelect = document.getElementById('questionTypeSelect');
-        if (questionTypeSelect) {
-            questionTypeSelect.addEventListener('change', function() {
-                const mcqSection = document.getElementById('mcqSection');
-                const tfSection = document.getElementById('tfSection');
-
-                if (this.value === 'mcq') {
-                    mcqSection?.classList.remove('hidden');
-                    tfSection?.classList.add('hidden');
-                } else if (this.value === 'tf') {
-                    tfSection?.classList.remove('hidden');
-                    mcqSection?.classList.add('hidden');
-                } else {
-                    mcqSection?.classList.add('hidden');
-                    tfSection?.classList.add('hidden');
-                }
-            });
-        }
+        
     </script>
 
 @endsection

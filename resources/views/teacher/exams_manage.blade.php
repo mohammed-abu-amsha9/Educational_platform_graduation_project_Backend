@@ -32,7 +32,8 @@
 
                     <div class="sm:col-span-3">
                         <label class="block font-bold text-slate-800 dark:text-zinc-100 mb-1">المادة والصف الدراسي</label>
-                        <select name="section_id" class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl p-2.5 text-sm">
+                        <select name="section_id"
+                            class="w-full border border-gray-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl p-2.5 text-sm">
                             <option value="">-- اختر الصف والشعبة --</option>
 
                             @foreach ($currentTeacher->grades->unique('id') as $grade)
@@ -53,9 +54,6 @@
                                 @endif
                             @endforeach
                         </select>
-
-                        <!-- حقل مخفي لتمرير المادة الحالية المراد عرض علاماتها (تأكد من تمرير المعرف الصحيح للمادة) -->
-                        <input type="hidden" name="subject_id" value="1">
                     </div>
 
                     <div>
@@ -72,7 +70,8 @@
                     class="bg-white dark:bg-slate-900 border border-gray-200 hover:border-emerald-400 dark:border-slate-800 rounded-3xl shadow-sm overflow-hidden ">
                     <div class="p-4 border-b border-gray-100 flex items-center justify-between">
                         <div>
-                            <h3 class="text-xs font-black text-slate-800 dark:text-zinc-100">كشف أسماء الطلاب المسجلين في الشعبة</h3>
+                            <h3 class="text-xs font-black text-slate-800 dark:text-zinc-100">كشف أسماء الطلاب المسجلين في
+                                الشعبة</h3>
                             <p class="text-[10px] text-teal-600 font-bold mt-0.5">يمكنك الآن رصد الدرجات وحفظ الكشف بالكامل
                             </p>
                         </div>
@@ -81,9 +80,11 @@
                     <div class="overflow-x-auto">
                         <table class="w-full text-right border-collapse text-xs">
                             <thead>
-                                <tr class=" border-b border-gray-100 dark:border-slate-800 text-gray-700 dark:text-gray-400 font-bold">
+                                <tr
+                                    class=" border-b border-gray-100 dark:border-slate-800 text-gray-700 dark:text-gray-400 font-bold">
                                     <th class="py-3.5 px-6">رقم القيد</th>
                                     <th class="py-3.5 px-4">اسم الطالب</th>
+                                    <th class="py-3.5 px-4 text-center">آلية تقديم الإختبار</th>
                                     <th class="py-3.5 px-4 text-center">الدرجة المستحقة</th>
                                 </tr>
                             </thead>
@@ -96,20 +97,14 @@
 
                                     <tr class="text-slate-800 dark:text-zinc-300">
                                         <td class="py-4 px-6 font-bold text-gray-400">#{{ $student->id }}</td>
-                                        <td class="py-4 px-4 text-slate-800 dark:text-zinc-300 font-bold">{{ $student->full_name }}</td>
+                                        <td class="py-4 px-4 text-slate-800 dark:text-zinc-300 font-bold">
+                                            {{ $student->full_name }}</td>
                                         <td class="py-4 px-4 text-center">
                                             @if ($exam)
-                                                @if ($exam->is_absent)
-                                                    <span
-                                                        class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600 text-[10px] font-bold">
-                                                        <i class="fa-solid fa-user-slash ml-1"></i> غائب
-                                                    </span>
-                                                @else
-                                                    <span
-                                                        class="px-2.5 py-1 rounded-lg bg-teal-50 text-teal-600 text-[10px] font-bold">
-                                                        <i class="fa-solid fa-laptop ml-1"></i> قدم الاختبار إلكترونياً
-                                                    </span>
-                                                @endif
+                                                <span
+                                                    class="px-2.5 py-1 rounded-lg bg-teal-50 text-teal-600 text-[10px] font-bold">
+                                                    <i class="fa-solid fa-laptop ml-1"></i> قدم الاختبار إلكترونياً
+                                                </span>
                                             @else
                                                 <span
                                                     class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-600 text-[10px] font-bold">

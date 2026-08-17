@@ -29,8 +29,6 @@
     {{-- تدوين الحقول داخل فورم واحد يرسل البيانات لـ Controller --}}
     <form method="POST" action="{{ route('attendance.store') }}" class="mx-auto my-6 space-y-6" dir="rtl">
         @csrf
-        {{-- حقول مخفية لحفظ التاريخ الحالي المختار لإرساله مع الحضور --}}
-        <input type="hidden" name="date" value="{{ request('date', date('Y-m-d')) }}">
         <div
             class="bg-white dark:bg-slate-900 border border-gray-100 hover:border-emerald-400 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
             <div class="w-full md:w-auto flex flex-col sm:flex-row items-center gap-4 flex-1 justify-start">
@@ -117,7 +115,6 @@
 
                             {{-- أزرار رصد الحضور الذكية عبر الـ Radio Buttons المخفية بمظهر تيلويند الأنيق --}}
                             <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-
                                 <label class="cursor-pointer">
                                     <input type="radio" name="attendance[{{ $student->id }}]" value="present"
                                         class="hidden present-radio" {{ $status == 'present' ? 'checked' : '' }}>
