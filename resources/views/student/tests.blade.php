@@ -62,22 +62,9 @@
                     @endforelse
                 </div>
 
-                <!-- قسم نتائج وتاريخ الاختبارات (متروك ثابت كلوج للجلسة الحالية كما في تصميمك) -->
-                <div class="space-y-4">
-                    <h4 class="font-black text-slate-800 dark:text-zinc-200 px-2">
-                        📊 نتائج وتاريخ الاختبارات
-                    </h4>
-                    <div id="resultsLogContainer" class="space-y-3">
-                        <div
-                            class="bg-gray-50/50 dark:bg-slate-900/40 border border-dashed border-gray-200 dark:border-slate-800 p-8 rounded-3xl text-center text-gray-400">
-                            لا توجد اختبارات مقدمة في الجلسة الحالية. اضغط بدء الاختبار لتجربة المحاكي الواقعي.
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
     </div>
 @endsection
-@section('scripts')
-    <script></script>
-@endsection
+
