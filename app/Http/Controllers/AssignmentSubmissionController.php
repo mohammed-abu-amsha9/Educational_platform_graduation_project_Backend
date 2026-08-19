@@ -13,10 +13,10 @@ class AssignmentSubmissionController extends Controller
      */
     public function index()
     {
-        $assignments = Assignment::with(['subject', 'grade', 'section'])->get();
-        // جلب تسليمات الطالب الحالي فقط
         $studentId = auth()->id();
-        $mySubmissions = AssignmentSubmission::where('student_id', $studentId)->get();
+        $assignments = Assignment::with('subject')->get();
+        // جلب تسليمات الطالب الحالي فقط
+        $mySubmissions = AssignmentSubmission::where('student_id', $studentId)->with('assignment')->get();
         return response()->view('student.tasks_and_duties', ['assignments' => $assignments, 'mySubmissions' => $mySubmissions]);
     }
 

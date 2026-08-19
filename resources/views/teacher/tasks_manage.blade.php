@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <div id="createSection" class="space-y-6 block">
+        <div class="space-y-6 block">
             <form action="{{ route('assignments.store') }}" method="POST" enctype="multipart/form-data"
                 class="space-y-6 text-xs">
                 @csrf
@@ -57,7 +57,7 @@
                         <div>
                             <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">المادة والصف
                                 المستهدف</label>
-                            <select name="section_id"
+                            <select name="section_id" required
                                 class="w-full border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 outline-none focus:border-teal-500 cursor-pointer">
                                 <option value="">-- اختر المادة والصف والشعبة --</option>
 
@@ -100,7 +100,7 @@
                         <div>
                             <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">وصف الواجب أو النص
                                 المطلوب</label>
-                            <textarea rows="3" placeholder="اكتب تعليماتك للطلاب هنا..." name="description"
+                            <textarea rows="3" placeholder="اكتب تعليماتك للطلاب هنا..." name="description" required
                                 class="w-full border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2.5 px-4 outline-none focus:border-teal-500 resize-none"></textarea>
                         </div>
                         <div>
@@ -110,8 +110,9 @@
                                 class="w-full border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2 px-4 focus:border-teal-500 cursor-pointer" />
                         </div>
                         <div>
-                            <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">درجة الواجب الاجمالية</label>
-                            <input type="number"  name="total_mark"
+                            <label class="block font-bold text-gray-700 dark:text-slate-400 mb-1">درجة الواجب
+                                الاجمالية</label>
+                            <input type="number" name="total_mark" required
                                 class="w-full border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-zinc-100 rounded-xl py-2 px-4 focus:border-teal-500 cursor-pointer" />
                         </div>
                     </div>

@@ -17,6 +17,9 @@
                     <span>⏳ واجبات قادمة ومطلوبة</span>
                 </h4>
                 @foreach ($assignments as $assignment)
+                    @php
+                        $submission = $mySubmissions->where('assignment_id', $assignment->id)->first();
+                    @endphp
                     <div id="assignment-card-1"
                         class="bg-white dark:bg-slate-900 border border-gray-100 hover:border-teal-400 dark:border-slate-800/80 p-5 rounded-3xl shadow-sm hover:shadow-xl space-y-4">
                         <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
@@ -37,15 +40,20 @@
                                 class="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-2xl border border-gray-100 dark:border-slate-800 text-center shrink-0 min-w-[100px]">
                                 <p class="text-gray-400 text-[9px] font-bold">آخر موعد للتسليم</p>
                                 <p class="font-black text-rose-500 text-[11px] mt-0.5">
-                                    {{ \Carbon\Carbon::parse($assignment->due_date)->format('d-m') }}
-                                    - {{ \Carbon\Carbon::parse($assignment->due_date)->format('h:i A') }}</p>
+                                    {{ \Carbon\Carbon::parse($assignment->due_date)->format('d-m-Y') }}
+                                    / {{ \Carbon\Carbon::parse($assignment->due_date)->format('h:i A') }}</p>
                             </div>
                         </div>
                         <div
                             class="flex items-center justify-between pt-3 border-t border-dashed border-gray-100 dark:border-slate-800">
                             <span class="text-gray-400 font-medium text-[10px]"><i
                                     class="fa-solid fa-award text-indigo-600 ml-0.5"></i> العلامة:
-                                {{ $assignment->total_mark }} درجات</span>
+                                @if ($submission && !is_null($submission->mark))
+                                    {{ $submission->mark }} / {{ $assignment->total_mark }} درجات
+                                @else
+                                    لم يتم الرصد بعد
+                                @endif
+                            </span>
                             <button id="btn-{{ $assignment->id }}"
                                 onclick="openSubmitModal('{{ $assignment->title }}', '{{ $assignment->id }}')"
                                 class="bg-indigo-600 hover:bg-indigo-700 text-white font-black px-4 py-2 rounded-xl shadow-3xs cursor-pointer">
@@ -70,7 +78,8 @@
                     @foreach ($mySubmissions as $submission)
                         <div class="p-4 border border-emerald-200 rounded-2xl flex justify-between items-center w-full">
                             <div class="flex-1">
-                                <h4 class="font-bold text-slate-800 dark:text-zinc-100">واجب: {{ $submission->assignment->title }}</h4>
+                                <h4 class="font-bold text-slate-800 dark:text-zinc-100">واجب:
+                                    {{ $submission->assignment->title }}</h4>
                             </div>
                             <span class="text-amber-600 font-bold bg-amber-50 px-3 py-1 rounded-full text-xs">
                                 تم التسليم
@@ -81,6 +90,7 @@
             </div>
         </div>
     </div>
+
     <form id="submitAssignmentModal" action="{{ route('assignmentSubmissions.store') }}" method="POST"
         enctype="multipart/form-data"
         class="fixed inset-0 z-50 hidden bg-slate-900/80 backdrop-blur-xs items-center justify-center p-4" dir="rtl">
@@ -112,7 +122,6 @@
             <div class="p-5 space-y-4">
                 <div
                     class="border-2 border-dashed border-gray-200 dark:border-slate-800 hover:border-indigo-500/50 rounded-2xl p-6 text-center cursor-pointer relative bg-gray-50/30 dark:bg-slate-950/10">
-                    <!-- تأكد أن الـ input هذا موجود داخل الـ form -->
                     <input type="file" name="file" id="assignmentFileInput" onchange="handleFileSelection()"
                         class="absolute inset-0 opacity-0 w-full h-full cursor-pointer" />
 
@@ -175,8 +184,8 @@
             document.getElementById("hiddenAssignmentId").value = id; // تمرير الـ ID للـ form
 
             const modal = document.getElementById("submitAssignmentModal");
-            modal.classList.remove("hidden");
-            modal.classList.add("flex");
+            modal.classList.remove("hidden"); // اخفاء المودال
+            modal.classList.add("flex"); // اطهار المودال
         }
 
         function closeSubmitModal() {
@@ -216,12 +225,12 @@
                     event.preventDefault();
                     event.stopPropagation();
 
-                    const fileInput = document.getElementById('assignmentFileInput');
-                    const file = fileInput.files[0];
+                    const fileInput = document.getElementById('assignmentFileInput'); // ملف الواجب
+                    const file = fileInput.files[0]; // اول عنصر
 
                     // تحويل الملف لقراءة محتواه
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
+                    const reader = new FileReader(); // قراءة المحتوى الي تم رفعه
+                    reader.onload = function(e) { // نفذ بعد ما يخلص من قراءة الملف الكامل
                         // حفظ البيانات + محتوى الملف الفعلي
                         const submissionData = {
                             assignment_id: document.getElementById('hiddenAssignmentId').value,

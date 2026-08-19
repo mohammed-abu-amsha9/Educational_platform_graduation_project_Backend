@@ -80,4 +80,72 @@
         </div>
     </div>
 @endsection
+@section('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function showToast(message, isSuccess = false) {
+                const container = document.getElementById('toast-container');
 
+                if (container) {
+                    const toast = document.createElement('div');
+
+                    toast.className = `
+                    ${isSuccess ? "bg-emerald-600" : "bg-rose-600"}
+                    text-white px-6 py-3 rounded-2xl shadow-xl
+                    pointer-events-auto animate-fade-in
+                `;
+
+                    toast.innerText = message;
+
+                    container.appendChild(toast);
+
+                    setTimeout(() => {
+                        toast.remove();
+                    }, 5000);
+                }
+            }
+
+            // ربط الأزرار
+            document.querySelectorAll('#finalSubmitBtn, #nextQuestionBtn').forEach(button => {
+                button.addEventListener("click", function(event) {
+                    if (window.isOnline()) return;
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    let form = this.closest('form');
+
+                    // استخدام FormData لجلب كل شيء من الفورم تلقائياً
+                    let formData = new FormData(form);
+
+                    // إضافة الأكشن بناءً على الزر
+                    formData.append('action', this.id === "finalSubmitBtn" ? "finish" : "next");
+                    formData.append('type', 'submit_quiz');
+                    formData.append('student_id', 1);
+
+                    // تحويل FormData إلى Object لحفظه في IndexedDB
+                    let quizData = Object.fromEntries(formData.entries());
+
+                    // حفظ البيانات
+                    window.saveActionLocally('submit_quiz', quizData);
+                    showToast("تم حفظ الاختبار محلياً، سيتم رفعه عند عودة الاتصال.", false);
+                    if (this.id === 'nextQuestionBtn') {
+                        const nextPage = this.dataset.nextPage;
+
+                        setTimeout(() => {
+                            const url = new URL(window.location.href);
+
+                            url.searchParams.set('page', nextPage);
+
+                            window.location.href = url.toString();
+                        }, 300);
+                    }
+                    if (this.id === "finalSubmitBtn") {
+                        setTimeout(() => {
+                            window.location.replace("{{ route('studentExams.index') }}");
+                        }, 2000);
+                    }
+                });
+            });
+        });
+    </script>

@@ -47,11 +47,23 @@
                                 </div>
                             </div>
 
-                            <a href="{{ route('studentExams.create', ['exam_id' => $exam->id]) }}"
-                                class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-4 py-2 rounded-xl cursor-pointer shadow-3xs shrink-0">
-                                بدء الاختبار
-                                <i class="fa-solid fa-chevron-left text-[9px] mr-1"></i>
-                            </a>
+                            @php
+                                $student_exam = $student_exams->get($exam->id);
+                            @endphp
+
+                            @if (!$student_exam || !$student_exam->submit_time)
+                                <a href="{{ route('studentExams.create', ['exam_id' => $exam->id]) }}"
+                                    class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-4 py-2 rounded-xl cursor-pointer shadow-3xs shrink-0">
+                                    بدء الاختبار
+                                    <i class="fa-solid fa-chevron-left text-[9px] mr-1"></i>
+                                </a>
+                            @else
+                                <button type="button" disabled
+                                    class="bg-gray-400 text-white font-bold px-4 py-2 rounded-xl cursor-not-allowed opacity-60 shrink-0">
+                                    تم تقديم الاختبار
+                                    <i class="fa-solid fa-check text-[9px] mr-1"></i>
+                                </button>
+                            @endif
                         </div>
                     @empty
                         <!-- رسالة تظهر للطالب إذا لم يقم المعلمون بنشر أي اختبارات بعد -->
@@ -67,4 +79,3 @@
         </div>
     </div>
 @endsection
-

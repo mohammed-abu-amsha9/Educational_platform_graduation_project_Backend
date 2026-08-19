@@ -10,8 +10,7 @@
                         class="text-gray-400 hover:text-gray-600 dark:hover:text-zinc-200 font-bold cursor-pointer">
                         <i class="fa-solid fa-arrow-right"></i> عودة للواجبات
                     </a>
-                    <span class="text-xs font-black text-slate-800 dark:text-zinc-100">ملفات تسليم الطلاب لـ:
-                        <span class="text-teal-600">واجب النحو</span></span>
+
                 </div>
 
                 <div class="overflow-x-auto">

@@ -25,7 +25,11 @@ class StudentExamController extends Controller
             ->where('grade_id', $student->grade_id)
             ->get();
 
-        return view('student.tests', ['exams' => $exams]);
+        $student_exams = student_exam::where('student_id', $studentId)
+            ->get()
+            ->keyBy('exam_id');// بدل ما يجيب الملف كله بجيب فقط العمود
+
+        return view('student.tests', ['exams' => $exams, 'student_exams' => $student_exams]);
     }
 
 
@@ -60,9 +64,6 @@ class StudentExamController extends Controller
                 'submit_time' => 'لم يسلم بعد',       // قيمة افتراضية حتى يضغط إنهاء
             ]
         );
-
-        // 2. جلب الأسئلة المرتبطة بالامتحان مجزأة (سؤال واحد في كل صفحة) مع خياراتها
-        // لارافيل سيتعرف تلقائياً على رقم السؤال من الرابط عبر المتغير ?page=1
         $questions = $exam->questions()->with('options')->paginate(1);
         return response()->view('student.testSolution', ['exam' => $exam, 'questions' => $questions]);
     }

@@ -60,10 +60,6 @@
 
             <!-- أزرار الإجراءات -->
             <div class="flex justify-end gap-2 pt-4 border-t border-gray-100 dark:border-slate-800">
-                <button type="button"
-                    class="bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-zinc-300 font-bold px-5 py-2 rounded-xl cursor-pointer">
-                    إلغاء
-                </button>
                 <button type="submit"
                     class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-6 py-2 rounded-xl shadow-md cursor-pointer">
                     حفظ واعتماد التقييم

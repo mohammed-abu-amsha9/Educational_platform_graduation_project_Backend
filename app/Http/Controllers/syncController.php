@@ -55,72 +55,167 @@ class syncController extends Controller
         if ($request->type == 'submit_quiz') {
 
             $examId = $request->exam_id;
-            $questionId = $request->question_id;
-            $selectedOptionId = $request->selected_option;
-            $action = $request->action; // 👈 لازم نجيبها من الطلب
-            $studentId = $studentId; // اللي عندك مسبقاً
 
-            // 1. حفظ/تحديث إجابة السؤال (نفس منطق الأونلاين، بدون تكرار)
-            if ($questionId && $selectedOptionId) {
+            $questionId = $request->question_id;
+
+            $selectedOptionId =
+                $request->selected_option;
+
+            $action =
+                $request->action;
+
+            // استخدم الطالب المسجل دخول فعلياً
+            $studentId = auth()->id();
+
+
+            // ==========================================
+            // 1. حفظ إجابة السؤال
+            // ==========================================
+
+            if (
+                $questionId &&
+                $selectedOptionId
+            ) {
+
                 studentExamAnswer::updateOrCreate(
                     [
-                        'student_id'       => $studentId,
-                        'exam_id'          => $examId,
-                        'question_bank_id' => $questionId
+                        'student_id' =>
+                        $studentId,
+
+                        'exam_id' =>
+                        $examId,
+
+                        'question_bank_id' =>
+                        $questionId
                     ],
                     [
-                        'selected_option_id' => $selectedOptionId
+                        'selected_option_id' =>
+                        $selectedOptionId
                     ]
                 );
             }
 
-            // 2. لو كان "إنهاء الاختبار"، نفّذ نفس منطق التصحيح والحفظ النهائي
-            if ($action == 'finish') {
 
-                student_exam::where('exam_id', $examId)
-                    ->where('student_id', $studentId)
+            // ==========================================
+            // 2. إذا كان Finish
+            // ==========================================
+
+            if ($action === 'finish') {
+
+                student_exam::where(
+                    'exam_id',
+                    $examId
+                )
+                    ->where(
+                        'student_id',
+                        $studentId
+                    )
                     ->update([
-                        'submit_time' => now()->toTimeString(),
+                        'submit_time' =>
+                        now()->toTimeString(),
                     ]);
 
-                $exam = Exam::with('questions.options')->find($examId);
 
-                $studentAnswers = studentExamAnswer::where('student_id', $studentId)
-                    ->where('exam_id', $examId)
+                $exam =
+                    Exam::with(
+                        'questions.options'
+                    )->findOrFail(
+                        $examId
+                    );
+
+
+                $studentAnswers =
+                    studentExamAnswer::where(
+                        'student_id',
+                        $studentId
+                    )
+                    ->where(
+                        'exam_id',
+                        $examId
+                    )
                     ->get()
-                    ->keyBy('question_bank_id');
+                    ->keyBy(
+                        'question_bank_id'
+                    );
 
-                $totalQuestions = $exam->questions->count();
+
+                $totalQuestions =
+                    $exam->questions->count();
+
+
                 $correctAnswersCount = 0;
 
-                foreach ($exam->questions as $question) {
-                    $savedAnswer = $studentAnswers->get($question->id);
-                    $correctOption = $question->options->where('is_correct', 1)->first();
 
-                    if ($savedAnswer && $correctOption && $savedAnswer->selected_option_id == $correctOption->id) {
+                foreach (
+                    $exam->questions
+                    as $question
+                ) {
+
+                    $savedAnswer =
+                        $studentAnswers->get(
+                            $question->id
+                        );
+
+
+                    $correctOption =
+                        $question->options
+                        ->where(
+                            'is_correct',
+                            1
+                        )
+                        ->first();
+
+
+                    if (
+                        $savedAnswer &&
+                        $correctOption &&
+                        $savedAnswer->selected_option_id
+                        == $correctOption->id
+                    ) {
+
                         $correctAnswersCount++;
                     }
                 }
 
-                $finalScore = $totalQuestions > 0 ? ($correctAnswersCount / $totalQuestions) * 100 : 0;
 
-                // تأكد إنه ما في نتيجة سابقة قبل ما تنشئ وحدة جديدة (تجنب تكرار النتيجة كمان)
+                $finalScore =
+                    $totalQuestions > 0
+                    ? (
+                        $correctAnswersCount
+                        / $totalQuestions
+                    ) * 100
+                    : 0;
+
+
                 student_exam_result::updateOrCreate(
                     [
-                        'student_id' => $studentId,
-                        'exam_id'    => $examId,
+                        'student_id' =>
+                        $studentId,
+
+                        'exam_id' =>
+                        $examId,
                     ],
                     [
-                        'score_obtained'     => $finalScore,
-                        'status'             => 'مصحح تلقائياً',
-                        'submission_method'  => 'حساب الطالب الإلكتروني (مزامنة)',
+                        'score_obtained' =>
+                        $finalScore,
+
+                        'status' =>
+                        'مصحح تلقائياً',
+
+                        'submission_method' =>
+                        'حساب الطالب الإلكتروني (مزامنة)',
                     ]
                 );
             }
 
+
             return response()->json([
                 'success' => true,
-                'message' => 'تم حفظ الاختبار بنجاح'
+
+                'message' =>
+                $action === 'finish'
+                    ? 'تم إنهاء الاختبار بنجاح'
+                    : 'تم حفظ الإجابة بنجاح'
             ]);
         }
         return response()->json(['success' => true]);
