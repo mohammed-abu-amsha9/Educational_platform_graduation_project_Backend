@@ -83,7 +83,7 @@
 @section('scripts')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            function showToast(message, isSuccess = false) {
+            function showToast(message, isSuccess = false) {// عرض رسالة صفير بناج او فشل
                 const container = document.getElementById('toast-container');
 
                 if (container) {
@@ -106,12 +106,13 @@
             }
 
             // ربط الأزرار
-            document.querySelectorAll('#finalSubmitBtn, #nextQuestionBtn').forEach(button => {
+            document.querySelectorAll('#finalSubmitBtn, #nextQuestionBtn').forEach(button => { // اي ضغطة على هدول الازرار
                 button.addEventListener("click", function(event) {
                     if (window.isOnline()) return;
 
+                    // منع الارسال الافتراضي
                     event.preventDefault();
-                    event.stopPropagation();
+                    event.stopPropagation(); // وقف انتشار حدث الضغط
 
                     let form = this.closest('form');
 
@@ -129,6 +130,13 @@
                     // حفظ البيانات
                     window.saveActionLocally('submit_quiz', quizData);
                     showToast("تم حفظ الاختبار محلياً، سيتم رفعه عند عودة الاتصال.", false);
+                    /**
+                     * إذا كان الزر المضغوط زر السؤال التالي النظام بيجلب رقم الصفحة التالية من
+                     * data-next-page
+                     * وبعدين ينتظر300 مللي ثانية وبعدين بيغيّر رابط الصفحة الحالية إلى الصفحة التالية باستخدام
+                     * window dot location href
+                     * فينتقل الطالب للسؤال التالي. سبب هذا التأخير البسيط هو إعطاء وقت قصير عشان تنحفظ البيانات محلياً وتظهر رسالة التنبيه قبل الانتقال للصفحة التالية
+                    */
                     if (this.id === 'nextQuestionBtn') {
                         const nextPage = this.dataset.nextPage;
 
@@ -140,6 +148,7 @@
                             window.location.href = url.toString();
                         }, 300);
                     }
+                    // عند الانتهاء من الاختبار بينتظهر دقيقتين وبينتقل الى صفحة عرض الاختبارات
                     if (this.id === "finalSubmitBtn") {
                         setTimeout(() => {
                             window.location.replace("{{ route('studentExams.index') }}");
@@ -149,3 +158,4 @@
             });
         });
     </script>
+@endsection

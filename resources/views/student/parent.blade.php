@@ -491,43 +491,18 @@
     </script>
     <script>
         window.triggerSync = async function() {
-
-            // ==========================================
-            // 1. التأكد من وجود الإنترنت
-            // ==========================================
-
-            if (!window.isOnline()) {
+            if (!window.isOnline()) { // التاكد من وجود النت
                 showToast("لا يوجد اتصال بالإنترنت حالياً.", false);
                 return;
             }
 
-
-            // ==========================================
-            // 2. التأكد من قاعدة البيانات
-            // ==========================================
-
-            if (!window.localDB) {
+            if (!window.localDB) { // التاكد من قاعدة البيانات
                 showToast("قاعدة البيانات المحلية غير جاهزة.", false);
                 return;
             }
 
-
-            // منع الضغط على زر المزامنة عدة مرات
-            if (window.syncRunning) {
-                showToast("المزامنة قيد التنفيذ بالفعل.", false);
-                return;
-            }
-
-            window.syncRunning = true;
-
-
             try {
-
-                // ==========================================
-                // 3. قراءة العمليات المعلقة
-                // ==========================================
-
-                const actions = await new Promise((resolve, reject) => {
+                const actions = await new Promise((resolve, reject) => { //قراءة العمليات المعلقة
 
                     const transaction =
                         window.localDB.transaction(
@@ -550,98 +525,58 @@
                     };
                 });
 
-
                 if (actions.length === 0) {
-
                     showToast("لا توجد عمليات معلقة للمزامنة.");
-
                     return;
                 }
 
-
-                // ==========================================
-                // 4. ترتيب العمليات حسب وقت الحفظ
-                // ==========================================
-
-                actions.sort((a, b) => {
-
+                actions.sort((a, b) => { // ترتيب العمليات حسب وقت الحفظ
                     return a.id - b.id;
-
                 });
-
-
                 console.log(
                     "العمليات التي سيتم مزامنتها:",
                     actions
                 );
 
-
-                // ==========================================
-                // 5. إرسال كل عملية بالترتيب
-                // ==========================================
-
+                //إرسال كل عملية بالترتيب
                 let syncedCount = 0;
-
-
                 for (const action of actions) {
-
                     // فحص الإنترنت قبل كل عملية
                     if (!window.isOnline()) {
-
                         showToast(
                             "انقطع الاتصال أثناء المزامنة، سيتم إكمالها لاحقاً.",
                             false
                         );
-
                         break;
                     }
-
-
                     console.log(
                         "مزامنة العملية رقم:",
                         action.id,
                         action
                     );
-
-
                     let response = null;
 
-
-                    // ======================================
-                    // A. الواجب
-                    // ======================================
-
-                    if (
+                    if ( //الواجب
                         action.type ===
                         "SUBMIT_ASSIGNMENT"
                     ) {
-
                         const formData =
                             new FormData();
-
-
                         formData.append(
                             "type",
                             "SUBMIT_ASSIGNMENT"
                         );
-
-
                         formData.append(
                             "assignment_id",
                             action.payload.assignment_id
                         );
-
-
                         formData.append(
                             "comment",
                             action.payload.comment || ""
                         );
-
-
                         if (
                             action.payload.file_content
                         ) {
-
                             const fileBlob =
                                 new Blob(
                                     [
@@ -652,253 +587,162 @@
                                         type: action.payload.file_type
                                     }
                                 );
-
-
                             formData.append(
                                 "file",
                                 fileBlob,
                                 action.payload.file_name
                             );
                         }
-
-
                         response =
-                            await fetch(
+                            await fetch( // انتظار رد السيرفر لنعرفة هل تمت عملية الرفع بنجاح ام لا
                                 "{{ route('syncs.store') }}", {
                                     method: "POST",
-
                                     headers: {
                                         "X-CSRF-TOKEN": document.querySelector(
                                             'meta[name="csrf-token"]'
                                         ).content,
-
                                         "Accept": "application/json"
                                     },
-
                                     body: formData
                                 }
                             );
                     }
-
-
-                    // ======================================
-                    // B. الاختبار
-                    // ======================================
-                    else if (
+                    else if ( // الاختبار
                         action.type ===
                         "submit_quiz"
                     ) {
-
                         response =
                             await fetch(
                                 "{{ route('syncs.store') }}", {
                                     method: "POST",
-
                                     headers: {
-
                                         "Content-Type": "application/json",
-
                                         "X-CSRF-TOKEN": document.querySelector(
                                             'meta[name="csrf-token"]'
                                         ).content,
-
                                         "Accept": "application/json"
                                     },
-
                                     body: JSON.stringify(
                                         action.payload
                                     )
                                 }
                             );
                     }
-
-
-                    // ======================================
-                    // C. نوع غير معروف
-                    // ======================================
-                    else {
-
+                    else { // نوع غير معروف
                         console.warn(
                             "نوع عملية غير معروف:",
                             action.type
                         );
-
                         continue;
                     }
-
-
-                    // ==========================================
-                    // 6. التحقق من استجابة السيرفر
-                    // ==========================================
-
-                    if (!response) {
-
+                    if (!response) { // التحقق من استجابة السيرفر
                         console.error(
                             "لم يتم الحصول على استجابة للسيرفر."
                         );
-
                         break;
                     }
-
-
                     if (!response.ok) {
-
                         console.error(
                             "فشل رفع العملية:",
                             action.id,
                             response.status
                         );
-
                         // لا نحذف العملية
                         // ونوقف المزامنة
                         break;
                     }
-
-
                     let result = null;
-
                     try {
-
                         result =
                             await response.json();
-
                     } catch (e) {
-
                         console.warn(
                             "السيرفر لم يرجع JSON.",
                             e
                         );
                     }
-
-
                     // إذا السيرفر رجع success=false
                     if (
                         result &&
                         result.success === false
                     ) {
-
                         console.error(
                             "السيرفر رفض العملية:",
                             result
                         );
-
                         // لا نحذف العملية
                         break;
                     }
 
-
-                    // ==========================================
-                    // 7. تسجيل العملية في sync_logs
-                    // ==========================================
-
-                    await new Promise(
+                    await new Promise( //تسجيل العملية في sync_logs
                         (resolve, reject) => {
-
                             const transaction =
                                 window.localDB.transaction(
                                     ["sync_logs"],
                                     "readwrite"
                                 );
-
-
                             const store =
                                 transaction.objectStore(
                                     "sync_logs"
                                 );
-
-
                             const log = {
-
                                 type: action.type,
-
                                 payload: action.payload,
-
                                 synced_at: new Date().toISOString(),
-
                                 status: "تمت المزامنة بنجاح",
-
                                 response: result
                             };
-
-
                             const request =
                                 store.add(log);
-
-
                             request.onsuccess =
                                 function() {
                                     resolve();
                                 };
-
-
                             request.onerror =
                                 function() {
                                     reject(
                                         request.error
                                     );
                                 };
-
                         }
                     );
-
-
-                    // ==========================================
-                    // 8. حذف العملية بعد نجاح السيرفر
-                    // ==========================================
-
-                    await new Promise(
+                    await new Promise( // حذف العملية بعد نجاح السيرفر
                         (resolve, reject) => {
-
                             const deleteTx =
                                 window.localDB.transaction(
                                     ["pending_actions"],
                                     "readwrite"
                                 );
-
-
                             const store =
                                 deleteTx.objectStore(
                                     "pending_actions"
                                 );
-
-
                             const request =
                                 store.delete(
                                     action.id
                                 );
-
-
                             request.onsuccess =
                                 function() {
                                     resolve();
                                 };
-
-
                             request.onerror =
                                 function() {
                                     reject(
                                         request.error
                                     );
                                 };
-
                         }
                     );
-
-
                     syncedCount++;
-
-
                     console.log(
                         "تمت مزامنة وحذف العملية:",
                         action.id
                     );
 
-
                     // ==========================================
                     // مهم:
                     // إذا كانت Finish، فقد انتهى الاختبار
                     // ==========================================
-
                     if (
                         action.type ===
                         "submit_quiz" &&
@@ -906,62 +750,36 @@
                         action.payload.action ===
                         "finish"
                     ) {
-
                         console.log(
                             "تمت مزامنة عملية إنهاء الاختبار."
                         );
-
-                        // لا يوجد شيء بعد finish
-                        // لهذا الاختبار
-
                     }
-
                 }
-
-
-                // ==========================================
-                // 9. النتيجة
-                // ==========================================
-
-                if (syncedCount > 0) {
-
+                if (syncedCount > 0) { // النتيجة
                     showToast(
                         `تمت مزامنة ${syncedCount} عملية بنجاح.`
                     );
-
                 } else {
-
                     showToast(
                         "لم تتم مزامنة أي عملية.",
                         false
                     );
                 }
-
-
                 // تحديث الصفحة بعد قليل
-
                 setTimeout(
                     () => window.location.reload(),
                     2000
                 );
-
-
             } catch (error) {
-
                 console.error(
                     "خطأ أثناء المزامنة:",
                     error
                 );
-
-
                 showToast(
                     "حدث خطأ أثناء المزامنة. سيتم الاحتفاظ بالبيانات للمحاولة مرة أخرى.",
                     false
                 );
-
-
             } finally {
-
                 window.syncRunning = false;
             }
         };

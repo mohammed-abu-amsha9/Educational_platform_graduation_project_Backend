@@ -51,7 +51,7 @@
                                 $student_exam = $student_exams->get($exam->id);
                             @endphp
 
-                            @if (!$student_exam || !$student_exam->submit_time)
+                            @if (!$student_exam || $student_exam->submit_time === 'لم يسلم بعد') {{-- اذا السجل التسليم مش موجود او الطالب ليم يسلم الاختبار بعد لا يسكر الامتحان  --}}
                                 <a href="{{ route('studentExams.create', ['exam_id' => $exam->id]) }}"
                                     class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-4 py-2 rounded-xl cursor-pointer shadow-3xs shrink-0">
                                     بدء الاختبار

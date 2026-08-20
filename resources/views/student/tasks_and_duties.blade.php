@@ -211,7 +211,7 @@
         }
     </script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function() { // بعد تحميل عناصر الصفحة
             const submissionForm = document.getElementById("submitAssignmentModal");
 
             if (submissionForm) {

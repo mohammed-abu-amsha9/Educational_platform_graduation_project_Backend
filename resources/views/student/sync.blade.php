@@ -89,7 +89,7 @@
 
         // دالة قراءة الـ IndexedDB وتحديث عناصر الواجهة الخاصة بك
         function renderSyncPage() {
-            if (!localDB) return;
+            if (!localDB) return; // بفحص اذا كانت قاعدة البيانات المحلية مش موجودة
 
             // فتح ترافيك لقراءة الجدولين
             const txActions = localDB.transaction("pending_actions", "readonly");
@@ -126,7 +126,14 @@
                         pendingList.forEach(action => {
                             let icon = 'fa-file-signature';
                             if (action.type === 'chat_message') icon = 'fa-envelope';
+                            let actionTitle = 'عملية غير معروفة';
 
+                            if (action.type === 'SUBMIT_ASSIGNMENT') {
+                                actionTitle = 'تسليم واجب';
+                            } else if (action.type === 'submit_quiz') {
+                                actionTitle = 'تقديم اختبار';
+                                icon = 'fa-clipboard-question';
+                            }
                             pendingContainer.innerHTML += `
                         <div class="bg-white dark:bg-slate-900/60 border border-amber-500/20 p-4 rounded-2xl flex items-center justify-between gap-4 w-full">
                             <div class="flex items-start gap-3">
@@ -135,7 +142,7 @@
                                 </div>
                                 <div class="space-y-1">
                                     <h5 class="font-bold text-gray-700 dark:text-white">
-                                        ${action.payload.title || 'عملية غير معنونة'}
+                                        ${actionTitle}
                                     </h5>
                                     <p class="text-[11px] text-gray-600 dark:text-gray-400">
                                         تم الحفظ محلياً: ${new Date(action.created_at).toLocaleString('ar-EG')}
