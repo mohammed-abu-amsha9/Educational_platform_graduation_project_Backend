@@ -15,7 +15,7 @@ class TeacherSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('students')->insert([
+        DB::table('teachers')->insert([
             'id' => 1,
             'full_name' => 'محمود خالد عبد الله',
             'teacher_code' => 'TCH-2026-001',
