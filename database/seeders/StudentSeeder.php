@@ -5,6 +5,7 @@ use App\Models\Student;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class StudentSeeder extends Seeder
 {
@@ -13,7 +14,7 @@ class StudentSeeder extends Seeder
      */
     public function run(): void
     {
-        Student::create([
+       DB::table('students')->insert([
             'id' => 1,
             'full_name' => 'أحمد محمد علي أبو عيشة',
             'student_code' => 'STU-2026-001',
@@ -24,6 +25,6 @@ class StudentSeeder extends Seeder
             'parent_phone' => '0591234567',
             'parent_backup_phone' => '0561234567',
             'account_status' => 'active',
-        ]);
+       ]);
     }
 }
